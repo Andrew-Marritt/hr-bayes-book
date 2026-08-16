@@ -1,6 +1,5 @@
 # Welcome {.unnumbered}
 
-
 At first glance this is a book about using Bayesian statistical
 approaches to analyse the sort of problems People Analytics teams face
 all the time, with the sort of data that looks familiar to anyone who has
@@ -18,22 +17,23 @@ find a true value but instead take a series of small steps towards a
 better understanding, and in which we keep updating that understanding as
 new information arrives.
 
-What that means in practice is easier to show than to claim, so the rest
-of this chapter shows it — starting a long way from HR.
+What that means in practice is easier to show than to claim. I will get
+to the showing — by way of an aeroplane, a long way from HR — but first,
+why this book exists at all.
 
 ## Why I wrote it {.unnumbered}
 
 Many authors state a truism and I will too. I wrote this book because it is the book I always wished that I had when I was learning. In that regard it's a very personal book.
 
-I have an unusual profile for the People Analytics teams that I've worked in or worked with. I'm not an I/O psychologist. I learnt my craft via economics and especially subjects like decision making under uncertainty and econometrics. Just like I noted that being a Bayesian set my view of the world, studying micro-economics certainly did.
+I have an unusual profile for the People Analytics teams that I've worked in or worked with. I'm not an I/O psychologist. I learnt my craft via economics and especially subjects like decision making under uncertainty and econometrics. If being a Bayesian shapes how you see the world, so does studying micro-economics.
 
-At university I had a somewhat confusing statistical training. For courses like game theory and decision sciences I was taught to think like a Bayesian. In stats lessons we learnt the classical or frequentist machinery. The reason for this I learnt later was simple - the machinery to analyse data like I understood the world simply wasn't there.
+At university I had a somewhat confusing statistical training. For courses like game theory and decision sciences I was taught to think like a Bayesian. In stats lessons we learnt the classical or frequentist machinery. The reason, I learnt later, was simple — the machinery to analyse data the way I understood the world simply wasn't there.
 
-What did it feel like being an economist in a milieu of I/O psychologists? Well, pretty lonely and misunderstood if I'm honest. No, I didn't know SEM or even worse I didn't desire a copy of SPSS. "Correlation doesn't mean causation" I saw as a starting point. I was probably like the child who is told they can't have something - it increased my desire to get it. 
+What did it feel like being an economist in a milieu of I/O psychologists? Well, pretty lonely and misunderstood if I'm honest. No, I didn't know SEM — and worse, I didn't want a copy of SPSS. "Correlation doesn't mean causation" I saw as a starting point rather than a conclusion. I was probably like the child who is told they can't have something: being told only increased my desire to get it.
 
-In my newsletter, Working Ideas, I try and present a multi-disciplinary view of the world of work. A core theme I keep coming back to comprises numerous disciplines each independently researching the same topic, always in isolation, always failing to take advantage of what others have already understood.
+In my newsletter, *Working Ideas*, I try to present a multi-disciplinary view of the world of work. A core theme I keep coming back to comprises numerous disciplines each independently researching the same topic, always in isolation, always failing to take advantage of what others have already understood.
 
-This is a statistics book which I hope breaks some boundaries. I'd like to think it will promote a more multi-disciplinary approach to people analytics. If we understand more different perspectives we're better able to understand the world. If we have more tools in our cabinet we have more chance of applying the right approach to each problem.
+This is a statistics book which I hope breaks some boundaries. I'd like to think it will promote a more multi-disciplinary approach to People Analytics. The more perspectives we understand, the better able we are to understand the world. If we have more tools in our cabinet we have more chance of applying the right approach to each problem.
 
 That is the reason it exists. How it came to look the way it does is a
 different story, and a more accidental one.
@@ -49,7 +49,7 @@ There were some unusual constraints on the original course which ended up provid
 
 By chance the majority of students joined the class at the beginning of the Bayesian course. To them, for the first 20 hours Bayesian statistics *was* statistics. We followed a route similar to this book (though it's been refined over a few runs) - start with data and probability, especially conditional probability and probability distributions, and then teach the Bayesian machinery which provides the basis for all analyses.
 
-After the first full run something stood out. Every student who took the course found the Bayesian course easier. Not just more intuitive but easier to understand. Easier to apply to their problems. Easier to answer the questions that they wanted to answer. I realised that we didn't have to confine Bayesian approaches to the 'advanced' class.
+After the first full run something stood out. Every student who took both halves found the Bayesian one easier. Not just more intuitive but easier to understand. Easier to apply to their problems. Easier to answer the questions that they wanted to answer. I realised that we didn't have to confine Bayesian approaches to the 'advanced' class.
 
 This book is therefore for two audiences:
 
@@ -132,7 +132,11 @@ expensive to collect:
     by independent modellers like Nate Silver are openly Bayesian —
     combining polls with a "fundamentals" prior built from the
     economy and incumbency, updated as new polls arrive.
--   **Football.** Liverpool FC's ex-director of research, Ian Graham, writes in his book "How to win the Premier League" how he used Bayesian analysis "to counteract luck's influence over players who have played a small number of games". We'll use the same concept to compare managers more fairly in chapters 8, 14 & 15.
+-   **Football.** Ian Graham, Liverpool FC's former director of
+    research, describes in *How to Win the Premier League* how he used
+    Bayesian analysis "to counteract luck's influence over players who
+    have played a small number of games". We use the same idea to
+    compare managers fairly in Chapters 8, 14 and 15.
 -   **The everyday and invisible.** Spam filters, weather forecasts,
     and the sensors that keep a self-driving car aware of its own
     position all run on the same rule, quietly, in the background.
@@ -190,7 +194,7 @@ promotion rate or a team's engagement score.
 
 ## What I actually want you to take away {.unnumbered}
 
-The Welcome promised that this book is about a view of the world rather
+I opened by promising that this book is about a view of the world rather
 than a toolkit, and then spent a long time on an aeroplane. This is where
 that promise is delivered, because it is the thing I care about most and it
 is not what most statistics books are for.
@@ -240,7 +244,7 @@ That is also what is worth reading for.
 
 There are numerous people without whom this book wouldn't have been possible.
 
-Probably the primary ones should be my colleagues and students at the Swiss Educational College - a hospitality school in central Switzerland who were my guinea pigs for the first version of this course. If my students views hadn't been so enlightening I would never have had the courage to start a book on Bayesian Statistics for People Analytics nor have dared teaching total beginners how to do statistics using Bayesian techniques.
+The first of them are my colleagues and students at the Swiss Educational College — a hospitality school in central Switzerland — who were the guinea pigs for the first version of this course. If my students' views hadn't been so enlightening I would never have had the courage to start a book on Bayesian Statistics for People Analytics nor have dared teaching total beginners how to do statistics using Bayesian techniques.
 
 I've been in the People Analytics community for too long and with too many people to mention everyone who has influenced me. My old colleagues and clients during my OrganizationView days certainly kept me focused. Many competitors and those I met at the various conferences provided inspiration and reflection.
 
@@ -400,9 +404,33 @@ broken; it's just warming up.
 
 ------------------------------------------------------------------------
 
+## Free, unfinished, and open to correction {.unnumbered}
+
+Three things about the status of what you're reading, before you spend
+an evening on it.
+
+**It's free, and it stays free.** The online edition is the edition.
+There's no paywalled version and nothing held back. If you'd like to
+put something behind it, the last page of Chapter 24 says how — but
+nothing here depends on it.
+
+**It isn't finished.** Chapters get revised as I teach them and as I
+write about the same ideas in my newsletter. What you have is a version,
+not a final text, and a chapter you read last year may not be the one
+that's here now.
+
+**Corrections are genuinely wanted.** Every page has *Edit this page*
+and *Report an issue* links in the right-hand margin, which go straight
+to the source on GitHub, and you can always email me at
+[andrew@andrewmarritt.ch](mailto:andrew@andrewmarritt.ch). Typos are
+welcome; disagreements more so. Questioning your own assumptions is
+most of what this book is about, and that has to include mine.
+
+------------------------------------------------------------------------
+
 ## How the book is organised {.unnumbered}
 
-Five parts, twenty-three chapters. The running examples build on each other,
+Six parts, twenty-four chapters. The running examples build on each other,
 so reading in order rewards you with familiarity — but each chapter is
 self-contained enough to read on its own if you already have the basics.
 

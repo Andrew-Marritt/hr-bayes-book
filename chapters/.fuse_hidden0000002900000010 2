@@ -1,0 +1,341 @@
+# Analysing Likert and Survey Data the Bayesian Way
+
+## Welcome {.unnumbered}
+
+If you work in People Analytics, you work with Likert scales — 1–4,
+1–5, 1–7, "strongly disagree" to "strongly agree." They're everywhere:
+engagement surveys, exit interviews, pulse checks, interview scorecards.
+And they're routinely analysed in a way that quietly produces the wrong
+answer: treated as if they were ordinary continuous numbers, averaged,
+t-tested, put into a linear regression.
+
+This chapter is about the gap between "1, 2, 3, 4 are numbers" and "1,
+2, 3, 4 are *ordered categories*, not equally-spaced quantities" — and
+the Bayesian tool built specifically for the second, more accurate,
+description: **ordinal regression**.
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Explain why treating a Likert scale as continuous can mislead —
+    and when it's a harmless shortcut
+2.  Recognise the **proportional odds** idea behind ordinal regression
+3.  Fit a Bayesian ordinal model with `brms::cumulative()`
+4.  Read and plot **predicted category probabilities**, not just a
+    single coefficient
+5.  Know where to go for the classical (frequentist) and deeper
+    treatments of this topic
+
+------------------------------------------------------------------------
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(peopleanalyticsdata)
+library(brms)
+library(tidybayes)
+
+theme_set(theme_minimal(base_size = 13))
+set.seed(2026)
+
+data("employee_survey", package = "peopleanalyticsdata")
+
+# Guard against missing values before modelling (Chapter 1 found gaps
+# in a similar teaching dataset).
+employee_survey <- employee_survey |>
+  drop_na(Happiness, Ben1, Ben2, Ben3, Work1, Work2, Work3,
+          Man1, Man2, Man3, Car1, Car2, Car3, Car4)
+```
+
+`employee_survey` has 2,833 responses to an engagement survey on a
+**4-point scale**, increasingly positive: an overall `Happiness`
+rating, three benefits questions (`Ben1-3`), three work-environment
+questions (`Work1-3`), three management questions (`Man1-3`), and four
+career-prospects questions (`Car1-4`).
+
+```{r composites}
+employee_survey <- employee_survey |>
+  mutate(
+    Man_avg  = (Man1 + Man2 + Man3) / 3,
+    Work_avg = (Work1 + Work2 + Work3) / 3,
+    Ben_avg  = (Ben1 + Ben2 + Ben3) / 3,
+    Car_avg  = (Car1 + Car2 + Car3 + Car4) / 4,
+    Happiness = factor(Happiness, ordered = TRUE)
+  )
+
+glimpse(employee_survey)
+```
+
+We'll average each sub-scale's items into a single composite predictor
+to keep the model readable, and predict `Happiness` — kept as an
+**ordered factor**, which matters for everything that follows.
+
+------------------------------------------------------------------------
+
+## The problem: why "just average it" can mislead
+
+### A quick look at the shape
+
+```{r happiness-bar}
+ggplot(employee_survey, aes(x = Happiness)) +
+  geom_bar(fill = "#122a52") +
+  labs(title = "Distribution of overall happiness (1–4)",
+       x = "Happiness rating", y = "Number of responses")
+```
+
+### What "treat it as continuous" assumes
+
+A plain linear regression of `Happiness` (as a number) on `Man_avg`
+assumes the *gap* between 1 and 2 means the same thing, in the same
+units, as the gap between 3 and 4. There's no reason to believe that:
+the psychological distance between "strongly disagree" and "disagree"
+is not guaranteed to equal the distance between "agree" and "strongly
+agree."
+
+```{r naive-lm}
+naive_lm <- lm(as.numeric(Happiness) ~ Man_avg, data = employee_survey)
+summary(naive_lm)$coefficients
+```
+
+```{r naive-lm-problem}
+tibble(Man_avg = c(1, 4)) |>
+  mutate(predicted = predict(naive_lm, newdata = tibble(Man_avg = Man_avg)))
+```
+
+::: callout-important
+Watch what a linear model is willing to predict at the edges of the
+scale: values that don't correspond to any real response category, and
+a straight-line relationship that treats every one-point move as
+identical regardless of where on the scale it happens. With only four
+categories and responses piled up near the top (common in engagement
+data), this isn't a small rounding issue — it changes the conclusion.
+:::
+
+::: callout-note
+## To be fair to the shortcut
+
+Treating a Likert item as continuous isn't always wrong in practice —
+with enough categories (5–7+), a roughly symmetric distribution, and a
+large sample, results from a linear model and an ordinal model often
+point the same direction. The risk rises exactly where engagement data
+usually sits: few categories, heavily skewed toward the positive end,
+and the deltas between adjacent categories are unlikely to be equal.
+Check your own data's shape before assuming either way.
+:::
+
+------------------------------------------------------------------------
+
+## The idea behind ordinal regression
+
+### A latent variable underneath
+
+Ordinal regression imagines a continuous, unobserved "true happiness"
+for every respondent, which gets chopped into the four categories we
+observe by three **thresholds**:
+
+```
+very unhappy | threshold 1 | somewhat unhappy | threshold 2 | somewhat happy | threshold 3 | very happy
+```
+
+The model estimates where those thresholds sit, and how predictors
+shift the *whole underlying distribution* left or right. This is
+exactly the same latent-threshold idea Keith McNulty's book develops in
+depth in **Chapter 7, "Proportional Odds Logistic Regression for
+Ordered Category Outcomes"** — if you want the classical derivation and
+more worked examples of this model, that's the place to go deeper. This
+chapter gives you the Bayesian fitting and interpretation of the same
+model family — and, true to form throughout this book, fitting it is
+still `brm()` with a formula and priors, just `family = cumulative("logit")`
+in place of whatever came before.
+
+### Fitting it
+
+The same weakly-informative shape used for the log-odds slopes back in
+Chapter 9 — worth a quick look again, since it's a new model family
+even if the prior itself isn't new:
+
+```{r plot-prior-ordinal}
+tibble(b = seq(-4, 4, length.out = 400)) |>
+  mutate(density = dnorm(b, 0, 1)) |>
+  ggplot(aes(b, density)) +
+  geom_area(fill = "#122a52", alpha = 0.5) +
+  geom_vline(xintercept = 0, colour = "#d32f2f", linetype = "dashed") +
+  labs(title = "Prior for each sub-scale's effect: Normal(0, 1)",
+       x = "Effect on cumulative log-odds", y = "Prior density")
+```
+
+```{r fit-ordinal}
+fit_ord <- brm(
+  Happiness ~ Man_avg + Work_avg + Ben_avg + Car_avg,
+  data = employee_survey, family = cumulative("logit"),
+  prior = c(prior(normal(0, 1), class = b)),
+  chains = 4, iter = 2000, seed = 16, refresh = 0
+)
+
+summary(fit_ord)
+```
+
+::: callout-note
+## "Proportional odds" — the assumption in the name
+
+The model assumes each predictor's effect is the *same* across every
+threshold — moving from "very unhappy" to "somewhat unhappy" and
+moving from "somewhat happy" to "very happy" are shifted by the same
+amount for a one-point change in, say, `Man_avg`. This is a real
+assumption, not a technicality — it's checkable (compare to a model
+that relaxes it) and worth stating explicitly when you report results.
+:::
+
+### Reading the coefficients
+
+```{r ordinal-coefs}
+fixef(fit_ord) |>
+  as_tibble(rownames = "term") |>
+  filter(!str_detect(term, "Intercept"))
+```
+
+These are log-odds on the *cumulative* scale — not intuitive to read
+directly. The far more useful output is the predicted probability of
+each response category:
+
+```{r predicted-probs}
+newdata <- tibble(
+  Man_avg = seq(1, 4, length.out = 30),
+  Work_avg = mean(employee_survey$Work_avg),
+  Ben_avg  = mean(employee_survey$Ben_avg),
+  Car_avg  = mean(employee_survey$Car_avg)
+)
+
+pred_probs <- newdata |>
+  add_epred_draws(fit_ord) |>
+  group_by(Man_avg, .category) |>
+  summarise(mean_prob = mean(.epred), .groups = "drop")
+
+ggplot(pred_probs, aes(x = Man_avg, y = mean_prob, fill = .category)) +
+  geom_area(position = "stack", alpha = 0.9) +
+  scale_fill_manual(values = c("#8fabd0", "#4a6fa5", "#d32f2f", "#122a52")) +
+  labs(
+    title = "Predicted happiness category, across management perception",
+    subtitle = "Each band's height is the predicted probability of that response",
+    x = "Management sub-scale average (1–4)", y = "Predicted probability",
+    fill = "Happiness"
+  )
+```
+
+::: callout-important
+## Business translation
+
+This chart says something a single coefficient can't: as management
+perception improves, the whole distribution of happiness responses
+shifts — the "very unhappy" and "somewhat unhappy" bands shrink, and
+"very happy" grows. That's a much more useful (and honest) statement
+than "the coefficient was significant."
+:::
+
+::: callout-note
+## A different lens: the classical version, and where it strains
+
+The frequentist proportional-odds model (`MASS::polr()` or
+`ordinal::clm()` in R) fits the same model and will usually give you
+very similar point estimates to the Bayesian version above — this
+isn't an area where the two philosophies typically disagree much on the
+answer. Where the Bayesian version earns its keep: a full posterior for
+every predicted probability (not just a point estimate with a
+Wald-style standard error), and a natural extension to add a
+multilevel structure (e.g. responses nested within department or team,
+exactly as in Chapters 8 and 13) without leaving the same modelling
+framework.
+:::
+
+::: callout-tip
+## For the ML/DS crowd
+
+If you've trained a model on ordinal survey targets before, there's a
+good chance you did one of two things that quietly lose information:
+treated it as a **regression** target (implicitly assuming equal
+spacing, as above) or as **multiclass classification** with a
+categorical cross-entropy loss (which treats predicting "2" instead of
+the true "4" as no worse than predicting "3" instead of "4" — throwing
+away the fact that categories are ordered). **Ordinal regression** is
+the dedicated middle ground, and it shows up under different names
+across tooling: "ordered logit"/"ordered probit" in econometrics, cumulative
+link models in statistics, and libraries like Python's `mord` in more
+ML-flavoured toolchains. Same underlying idea as this chapter's model,
+whichever name you meet it under.
+:::
+
+------------------------------------------------------------------------
+
+## Aside: multiple raters on the same Likert scale
+
+`recruiting` — another `peopleanalyticsdata` dataset, on hiring
+decisions — has three interviewers each rating candidates 1–5 (`int1`,
+`int2` from line managers, `int3` from HR). The same ordinal framework
+applies to asking whether raters use the scale consistently:
+
+```{r recruiting-aside}
+data("recruiting", package = "peopleanalyticsdata")
+recruiting <- recruiting |> drop_na(int1, int2, int3)
+
+recruiting |>
+  summarise(
+    mean_int1 = mean(int1), mean_int2 = mean(int2), mean_int3 = mean(int3),
+    cor_12 = cor(int1, int2), cor_13 = cor(int1, int3)
+  )
+```
+
+::: callout-tip
+## Try it yourself
+
+Fit `int3 ~ int1 + int2` with `family = cumulative("logit")`. Does the
+HR interviewer's rating track the line managers' ratings closely, or
+does it look like a different scale is being applied? This is a
+lightweight, model-based way to ask an inter-rater reliability question
+you'd otherwise reach for Cohen's kappa or an ICC to answer.
+:::
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+Every engagement survey, exit interview scorecard, interview rating,
+and pulse check in your organisation is ordinal data. The habit of
+averaging Likert items and running a t-test or linear regression is
+extremely common and usually harmless when categories are numerous and
+responses spread out — and genuinely misleading exactly when survey
+data tends to look in practice: few categories, bunched toward the
+positive end. Checking your data's shape before choosing, rather than
+defaulting to the familiar tool, is the actual skill here.
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  Likert scales are **ordered categories**, not guaranteed to be
+    equally spaced — treating them as continuous is a real assumption,
+    not a neutral default.
+2.  **Ordinal regression** models a latent continuous scale cut by
+    thresholds into the categories you observe.
+3.  The **proportional odds** assumption says a predictor's effect is
+    the same across every threshold — checkable, and worth stating.
+4.  `brms::cumulative("logit")` fits this model with full posteriors;
+    plotting **predicted category probabilities** communicates far more
+    than a single coefficient.
+5.  The frequentist version (`polr()`/`clm()`) usually agrees closely on
+    the answer — the Bayesian version's edge is full uncertainty and an
+    easy path to adding multilevel structure.
+:::
+
+## Next chapter {.unnumbered}
+
+**Bayesian A/B testing for people experiments** — from describing a
+distribution of responses to comparing two groups' outcomes directly,
+with a method built for the sample sizes People Analytics teams
+actually have.

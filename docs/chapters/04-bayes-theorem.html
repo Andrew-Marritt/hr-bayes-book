@@ -412,12 +412,29 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+ <span class="menu-text">From analysis to decision</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-posterior-to-decision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">From Posterior to Decision: What an Analysis Is Worth</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A1-llms.html" class="sidebar-item-text sidebar-link">
@@ -911,7 +928,8 @@ Tip
 <section id="theory-as-a-starting-point-and-why-desk-research-earns-its-keep" class="level3" data-number="4.5.3">
 <h3 data-number="4.5.3" class="anchored" data-anchor-id="theory-as-a-starting-point-and-why-desk-research-earns-its-keep"><span class="header-section-number">4.5.3</span> Theory as a starting point — and why desk research earns its keep</h3>
 <p>This is where <strong>evidence-based management</strong> has something concrete to offer. The discipline argues that good decisions draw on several sources of evidence at once: the scientific literature, your organisation’s own data, practitioner expertise, and the concerns of the people affected. In practice the first of those is the one analysts skip. There’s a strong pull to open the data immediately and find out what’s happening, and reading around the problem first feels like a detour.</p>
-<p>It isn’t. Someone has almost certainly studied promotion rates, internal mobility, or whatever your process is — across many more organisations than you have access to. That literature is a genuine source of information about your problem, and Bayesian analysis gives you somewhere to <em>put</em> it. Desk research stops being background reading and becomes an input to the model. IT CAN ALSO HELP YOU CREATE A DAG WHICH WE COVER IN CHAPTER 20</p>
+<p>It isn’t. Someone has almost certainly studied promotion rates, internal mobility, or whatever your process is — across many more organisations than you have access to. That literature is a genuine source of information about your problem, and Bayesian analysis gives you somewhere to <em>put</em> it. Desk research stops being background reading and becomes an input to the model.</p>
+<p>It has a second use, further down the line. Chapter 21 asks you to draw what you believe causes what before deciding which variables belong in a model. The same literature that gives you a prior is usually the best available evidence for that drawing — someone else has already tested whether the arrow you are about to draw exists.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -2189,382 +2207,388 @@ Note
 <span id="cb24-440"><a href="#cb24-440" aria-hidden="true" tabindex="-1"></a>organisations than you have access to. That literature is a genuine</span>
 <span id="cb24-441"><a href="#cb24-441" aria-hidden="true" tabindex="-1"></a>source of information about your problem, and Bayesian analysis gives</span>
 <span id="cb24-442"><a href="#cb24-442" aria-hidden="true" tabindex="-1"></a>you somewhere to *put* it. Desk research stops being background</span>
-<span id="cb24-443"><a href="#cb24-443" aria-hidden="true" tabindex="-1"></a>reading and becomes an input to the model. IT CAN ALSO HELP YOU CREATE A DAG WHICH WE COVER IN CHAPTER 20</span>
+<span id="cb24-443"><a href="#cb24-443" aria-hidden="true" tabindex="-1"></a>reading and becomes an input to the model.</span>
 <span id="cb24-444"><a href="#cb24-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-445"><a href="#cb24-445" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb24-446"><a href="#cb24-446" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory in, scepticism intact</span></span>
-<span id="cb24-447"><a href="#cb24-447" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-448"><a href="#cb24-448" aria-hidden="true" tabindex="-1"></a>The point is emphatically **not** to adopt published findings and</span>
-<span id="cb24-449"><a href="#cb24-449" aria-hidden="true" tabindex="-1"></a>assume they hold in your organisation. Research on other firms in</span>
-<span id="cb24-450"><a href="#cb24-450" aria-hidden="true" tabindex="-1"></a>other sectors may or may not generalise to yours — often it doesn't.</span>
-<span id="cb24-451"><a href="#cb24-451" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-452"><a href="#cb24-452" aria-hidden="true" tabindex="-1"></a>What you're doing is:</span>
+<span id="cb24-445"><a href="#cb24-445" aria-hidden="true" tabindex="-1"></a>It has a second use, further down the line. Chapter 21 asks you to draw</span>
+<span id="cb24-446"><a href="#cb24-446" aria-hidden="true" tabindex="-1"></a>what you believe causes what before deciding which variables belong in</span>
+<span id="cb24-447"><a href="#cb24-447" aria-hidden="true" tabindex="-1"></a>a model. The same literature that gives you a prior is usually the best</span>
+<span id="cb24-448"><a href="#cb24-448" aria-hidden="true" tabindex="-1"></a>available evidence for that drawing — someone else has already tested</span>
+<span id="cb24-449"><a href="#cb24-449" aria-hidden="true" tabindex="-1"></a>whether the arrow you are about to draw exists.</span>
+<span id="cb24-450"><a href="#cb24-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-451"><a href="#cb24-451" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb24-452"><a href="#cb24-452" aria-hidden="true" tabindex="-1"></a><span class="fu">## Theory in, scepticism intact</span></span>
 <span id="cb24-453"><a href="#cb24-453" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-454"><a href="#cb24-454" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Take what the theory suggests, and encode it as a prior — a</span>
-<span id="cb24-455"><a href="#cb24-455" aria-hidden="true" tabindex="-1"></a>    **starting position**, held with a strength that reflects how much</span>
-<span id="cb24-456"><a href="#cb24-456" aria-hidden="true" tabindex="-1"></a>    you trust it.</span>
-<span id="cb24-457"><a href="#cb24-457" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Confront it with your own data.</span>
-<span id="cb24-458"><a href="#cb24-458" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Report where you ended up, and how far the data moved you.</span>
+<span id="cb24-454"><a href="#cb24-454" aria-hidden="true" tabindex="-1"></a>The point is emphatically **not** to adopt published findings and</span>
+<span id="cb24-455"><a href="#cb24-455" aria-hidden="true" tabindex="-1"></a>assume they hold in your organisation. Research on other firms in</span>
+<span id="cb24-456"><a href="#cb24-456" aria-hidden="true" tabindex="-1"></a>other sectors may or may not generalise to yours — often it doesn't.</span>
+<span id="cb24-457"><a href="#cb24-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-458"><a href="#cb24-458" aria-hidden="true" tabindex="-1"></a>What you're doing is:</span>
 <span id="cb24-459"><a href="#cb24-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-460"><a href="#cb24-460" aria-hidden="true" tabindex="-1"></a>That's a disciplined way to use the best available thinking while</span>
-<span id="cb24-461"><a href="#cb24-461" aria-hidden="true" tabindex="-1"></a>staying sceptical of it. If your data disagrees with the literature,</span>
-<span id="cb24-462"><a href="#cb24-462" aria-hidden="true" tabindex="-1"></a>a weakly-held prior will get overruled and you'll see it happen. If</span>
-<span id="cb24-463"><a href="#cb24-463" aria-hidden="true" tabindex="-1"></a>the two agree, you've earned a sharper answer than either could give</span>
-<span id="cb24-464"><a href="#cb24-464" aria-hidden="true" tabindex="-1"></a>alone. Either way the assumption was on the table from the start.</span>
+<span id="cb24-460"><a href="#cb24-460" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Take what the theory suggests, and encode it as a prior — a</span>
+<span id="cb24-461"><a href="#cb24-461" aria-hidden="true" tabindex="-1"></a>    **starting position**, held with a strength that reflects how much</span>
+<span id="cb24-462"><a href="#cb24-462" aria-hidden="true" tabindex="-1"></a>    you trust it.</span>
+<span id="cb24-463"><a href="#cb24-463" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Confront it with your own data.</span>
+<span id="cb24-464"><a href="#cb24-464" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Report where you ended up, and how far the data moved you.</span>
 <span id="cb24-465"><a href="#cb24-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-466"><a href="#cb24-466" aria-hidden="true" tabindex="-1"></a>Compare that with the alternative on offer: a method that claims to</span>
-<span id="cb24-467"><a href="#cb24-467" aria-hidden="true" tabindex="-1"></a>use no prior information at all, run by an analyst who has plenty and</span>
-<span id="cb24-468"><a href="#cb24-468" aria-hidden="true" tabindex="-1"></a>no legitimate place to declare it.</span>
-<span id="cb24-469"><a href="#cb24-469" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-470"><a href="#cb24-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-471"><a href="#cb24-471" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb24-472"><a href="#cb24-472" aria-hidden="true" tabindex="-1"></a>A prior is an assumption you **state openly and can defend** — which</span>
-<span id="cb24-473"><a href="#cb24-473" aria-hidden="true" tabindex="-1"></a>is more honest than the hidden assumptions in any other method.</span>
-<span id="cb24-474"><a href="#cb24-474" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-475"><a href="#cb24-475" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-476"><a href="#cb24-476" aria-hidden="true" tabindex="-1"></a><span class="fu">### An experienced VP of Sales' prior</span></span>
-<span id="cb24-477"><a href="#cb24-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-478"><a href="#cb24-478" aria-hidden="true" tabindex="-1"></a>Our VP believes the rate is usually around 0.3, and she's confident</span>
-<span id="cb24-479"><a href="#cb24-479" aria-hidden="true" tabindex="-1"></a>enough to argue for it but not so confident she'd bet the department.</span>
-<span id="cb24-480"><a href="#cb24-480" aria-hidden="true" tabindex="-1"></a>We encode that as Beta(9, 21) — a shape we'll unpack properly in a</span>
-<span id="cb24-481"><a href="#cb24-481" aria-hidden="true" tabindex="-1"></a>moment:</span>
-<span id="cb24-482"><a href="#cb24-482" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-483"><a href="#cb24-483" aria-hidden="true" tabindex="-1"></a>Note how that happened: we listened to her, and chose two numbers.</span>
-<span id="cb24-484"><a href="#cb24-484" aria-hidden="true" tabindex="-1"></a>It works, and you should be slightly uncomfortable with it — a</span>
-<span id="cb24-485"><a href="#cb24-485" aria-hidden="true" tabindex="-1"></a>different analyst in the same conversation could easily have landed on</span>
-<span id="cb24-486"><a href="#cb24-486" aria-hidden="true" tabindex="-1"></a>Beta(6, 14). Chapter 23 replaces this with a structured elicitation</span>
-<span id="cb24-487"><a href="#cb24-487" aria-hidden="true" tabindex="-1"></a>process that asks her answerable questions and derives the shape from</span>
-<span id="cb24-488"><a href="#cb24-488" aria-hidden="true" tabindex="-1"></a>her answers, so the prior belongs to her rather than to your</span>
-<span id="cb24-489"><a href="#cb24-489" aria-hidden="true" tabindex="-1"></a>interpretation of her.</span>
-<span id="cb24-490"><a href="#cb24-490" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-491"><a href="#cb24-491" aria-hidden="true" tabindex="-1"></a><span class="in">```{r informed-prior-plot}</span></span>
-<span id="cb24-492"><a href="#cb24-492" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">p =</span> p_grid, <span class="at">informed =</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> <span class="dv">9</span>, <span class="at">shape2 =</span> <span class="dv">21</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb24-493"><a href="#cb24-493" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p, informed)) <span class="sc">+</span></span>
-<span id="cb24-494"><a href="#cb24-494" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="st">"#8fabd0"</span>, <span class="at">alpha =</span> <span class="fl">0.30</span>) <span class="sc">+</span></span>
-<span id="cb24-495"><a href="#cb24-495" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"#8fabd0"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb24-496"><a href="#cb24-496" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"An informed prior: Beta(9, 21)"</span>,</span>
-<span id="cb24-497"><a href="#cb24-497" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Most belief between about 0.15 and 0.45"</span>,</span>
-<span id="cb24-498"><a href="#cb24-498" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Prior density"</span>)</span>
-<span id="cb24-499"><a href="#cb24-499" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-500"><a href="#cb24-500" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-501"><a href="#cb24-501" aria-hidden="true" tabindex="-1"></a><span class="fu">### What it does to the answer</span></span>
-<span id="cb24-502"><a href="#cb24-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-503"><a href="#cb24-503" aria-hidden="true" tabindex="-1"></a><span class="in">```{r compare-posteriors}</span></span>
-<span id="cb24-504"><a href="#cb24-504" aria-hidden="true" tabindex="-1"></a>post_informed <span class="ot">&lt;-</span> likelihood <span class="sc">*</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> <span class="dv">9</span>, <span class="at">shape2 =</span> <span class="dv">21</span>)</span>
-<span id="cb24-505"><a href="#cb24-505" aria-hidden="true" tabindex="-1"></a>post_informed <span class="ot">&lt;-</span> post_informed <span class="sc">/</span> <span class="fu">sum</span>(post_informed)</span>
+<span id="cb24-466"><a href="#cb24-466" aria-hidden="true" tabindex="-1"></a>That's a disciplined way to use the best available thinking while</span>
+<span id="cb24-467"><a href="#cb24-467" aria-hidden="true" tabindex="-1"></a>staying sceptical of it. If your data disagrees with the literature,</span>
+<span id="cb24-468"><a href="#cb24-468" aria-hidden="true" tabindex="-1"></a>a weakly-held prior will get overruled and you'll see it happen. If</span>
+<span id="cb24-469"><a href="#cb24-469" aria-hidden="true" tabindex="-1"></a>the two agree, you've earned a sharper answer than either could give</span>
+<span id="cb24-470"><a href="#cb24-470" aria-hidden="true" tabindex="-1"></a>alone. Either way the assumption was on the table from the start.</span>
+<span id="cb24-471"><a href="#cb24-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-472"><a href="#cb24-472" aria-hidden="true" tabindex="-1"></a>Compare that with the alternative on offer: a method that claims to</span>
+<span id="cb24-473"><a href="#cb24-473" aria-hidden="true" tabindex="-1"></a>use no prior information at all, run by an analyst who has plenty and</span>
+<span id="cb24-474"><a href="#cb24-474" aria-hidden="true" tabindex="-1"></a>no legitimate place to declare it.</span>
+<span id="cb24-475"><a href="#cb24-475" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-476"><a href="#cb24-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-477"><a href="#cb24-477" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb24-478"><a href="#cb24-478" aria-hidden="true" tabindex="-1"></a>A prior is an assumption you **state openly and can defend** — which</span>
+<span id="cb24-479"><a href="#cb24-479" aria-hidden="true" tabindex="-1"></a>is more honest than the hidden assumptions in any other method.</span>
+<span id="cb24-480"><a href="#cb24-480" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-481"><a href="#cb24-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-482"><a href="#cb24-482" aria-hidden="true" tabindex="-1"></a><span class="fu">### An experienced VP of Sales' prior</span></span>
+<span id="cb24-483"><a href="#cb24-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-484"><a href="#cb24-484" aria-hidden="true" tabindex="-1"></a>Our VP believes the rate is usually around 0.3, and she's confident</span>
+<span id="cb24-485"><a href="#cb24-485" aria-hidden="true" tabindex="-1"></a>enough to argue for it but not so confident she'd bet the department.</span>
+<span id="cb24-486"><a href="#cb24-486" aria-hidden="true" tabindex="-1"></a>We encode that as Beta(9, 21) — a shape we'll unpack properly in a</span>
+<span id="cb24-487"><a href="#cb24-487" aria-hidden="true" tabindex="-1"></a>moment:</span>
+<span id="cb24-488"><a href="#cb24-488" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-489"><a href="#cb24-489" aria-hidden="true" tabindex="-1"></a>Note how that happened: we listened to her, and chose two numbers.</span>
+<span id="cb24-490"><a href="#cb24-490" aria-hidden="true" tabindex="-1"></a>It works, and you should be slightly uncomfortable with it — a</span>
+<span id="cb24-491"><a href="#cb24-491" aria-hidden="true" tabindex="-1"></a>different analyst in the same conversation could easily have landed on</span>
+<span id="cb24-492"><a href="#cb24-492" aria-hidden="true" tabindex="-1"></a>Beta(6, 14). Chapter 23 replaces this with a structured elicitation</span>
+<span id="cb24-493"><a href="#cb24-493" aria-hidden="true" tabindex="-1"></a>process that asks her answerable questions and derives the shape from</span>
+<span id="cb24-494"><a href="#cb24-494" aria-hidden="true" tabindex="-1"></a>her answers, so the prior belongs to her rather than to your</span>
+<span id="cb24-495"><a href="#cb24-495" aria-hidden="true" tabindex="-1"></a>interpretation of her.</span>
+<span id="cb24-496"><a href="#cb24-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-497"><a href="#cb24-497" aria-hidden="true" tabindex="-1"></a><span class="in">```{r informed-prior-plot}</span></span>
+<span id="cb24-498"><a href="#cb24-498" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">p =</span> p_grid, <span class="at">informed =</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> <span class="dv">9</span>, <span class="at">shape2 =</span> <span class="dv">21</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb24-499"><a href="#cb24-499" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p, informed)) <span class="sc">+</span></span>
+<span id="cb24-500"><a href="#cb24-500" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="st">"#8fabd0"</span>, <span class="at">alpha =</span> <span class="fl">0.30</span>) <span class="sc">+</span></span>
+<span id="cb24-501"><a href="#cb24-501" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"#8fabd0"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb24-502"><a href="#cb24-502" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"An informed prior: Beta(9, 21)"</span>,</span>
+<span id="cb24-503"><a href="#cb24-503" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Most belief between about 0.15 and 0.45"</span>,</span>
+<span id="cb24-504"><a href="#cb24-504" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Prior density"</span>)</span>
+<span id="cb24-505"><a href="#cb24-505" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb24-506"><a href="#cb24-506" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-507"><a href="#cb24-507" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">p =</span> p_grid, <span class="at">flat =</span> posterior, <span class="at">informed =</span> post_informed) <span class="sc">|&gt;</span></span>
-<span id="cb24-508"><a href="#cb24-508" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>p, <span class="at">names_to =</span> <span class="st">"which"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-509"><a href="#cb24-509" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p, density, <span class="at">colour =</span> which)) <span class="sc">+</span></span>
-<span id="cb24-510"><a href="#cb24-510" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb24-511"><a href="#cb24-511" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> k_promoted <span class="sc">/</span> n_people, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb24-512"><a href="#cb24-512" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#122a52"</span>, <span class="st">"#d32f2f"</span>)) <span class="sc">+</span></span>
-<span id="cb24-513"><a href="#cb24-513" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The prior nudges the posterior"</span>,</span>
-<span id="cb24-514"><a href="#cb24-514" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = observed rate in our 40 salespeople"</span>,</span>
-<span id="cb24-515"><a href="#cb24-515" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Posterior density"</span>, <span class="at">colour =</span> <span class="st">"prior"</span>)</span>
-<span id="cb24-516"><a href="#cb24-516" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-517"><a href="#cb24-517" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-518"><a href="#cb24-518" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb24-519"><a href="#cb24-519" aria-hidden="true" tabindex="-1"></a><span class="fu">## The teaching point</span></span>
-<span id="cb24-520"><a href="#cb24-520" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-521"><a href="#cb24-521" aria-hidden="true" tabindex="-1"></a>With only 40 salespeople, the prior still has a visible say. Get to a</span>
-<span id="cb24-522"><a href="#cb24-522" aria-hidden="true" tabindex="-1"></a>few hundred and the likelihood dominates — the prior's influence</span>
-<span id="cb24-523"><a href="#cb24-523" aria-hidden="true" tabindex="-1"></a>fades away without you having to do anything about it.</span>
-<span id="cb24-524"><a href="#cb24-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-525"><a href="#cb24-525" aria-hidden="true" tabindex="-1"></a>Priors matter most exactly when data is **scarce**, which is often the</span>
-<span id="cb24-526"><a href="#cb24-526" aria-hidden="true" tabindex="-1"></a>case in People Analytics — a new office, a new role, a pilot</span>
-<span id="cb24-527"><a href="#cb24-527" aria-hidden="true" tabindex="-1"></a>programme.</span>
-<span id="cb24-528"><a href="#cb24-528" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-529"><a href="#cb24-529" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-530"><a href="#cb24-530" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your turn {.unnumbered}</span></span>
-<span id="cb24-531"><a href="#cb24-531" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-532"><a href="#cb24-532" aria-hidden="true" tabindex="-1"></a>Try a **sceptical** prior centred on 0.5,</span>
-<span id="cb24-533"><a href="#cb24-533" aria-hidden="true" tabindex="-1"></a><span class="in">`dbeta(p_grid, shape1 = 20, shape2 = 20)`</span>.</span>
-<span id="cb24-534"><a href="#cb24-534" aria-hidden="true" tabindex="-1"></a>Compute and plot its posterior alongside the others. Where does it</span>
-<span id="cb24-535"><a href="#cb24-535" aria-hidden="true" tabindex="-1"></a>land?</span>
-<span id="cb24-536"><a href="#cb24-536" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-537"><a href="#cb24-537" aria-hidden="true" tabindex="-1"></a><span class="in">```{r your-turn-prior}</span></span>
-<span id="cb24-538"><a href="#cb24-538" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span>
-<span id="cb24-539"><a href="#cb24-539" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-540"><a href="#cb24-540" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-541"><a href="#cb24-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-542"><a href="#cb24-542" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb24-543"><a href="#cb24-543" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-544"><a href="#cb24-544" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Beta-Binomial shortcut</span></span>
+<span id="cb24-507"><a href="#cb24-507" aria-hidden="true" tabindex="-1"></a><span class="fu">### What it does to the answer</span></span>
+<span id="cb24-508"><a href="#cb24-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-509"><a href="#cb24-509" aria-hidden="true" tabindex="-1"></a><span class="in">```{r compare-posteriors}</span></span>
+<span id="cb24-510"><a href="#cb24-510" aria-hidden="true" tabindex="-1"></a>post_informed <span class="ot">&lt;-</span> likelihood <span class="sc">*</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> <span class="dv">9</span>, <span class="at">shape2 =</span> <span class="dv">21</span>)</span>
+<span id="cb24-511"><a href="#cb24-511" aria-hidden="true" tabindex="-1"></a>post_informed <span class="ot">&lt;-</span> post_informed <span class="sc">/</span> <span class="fu">sum</span>(post_informed)</span>
+<span id="cb24-512"><a href="#cb24-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-513"><a href="#cb24-513" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">p =</span> p_grid, <span class="at">flat =</span> posterior, <span class="at">informed =</span> post_informed) <span class="sc">|&gt;</span></span>
+<span id="cb24-514"><a href="#cb24-514" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>p, <span class="at">names_to =</span> <span class="st">"which"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-515"><a href="#cb24-515" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p, density, <span class="at">colour =</span> which)) <span class="sc">+</span></span>
+<span id="cb24-516"><a href="#cb24-516" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb24-517"><a href="#cb24-517" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> k_promoted <span class="sc">/</span> n_people, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb24-518"><a href="#cb24-518" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#122a52"</span>, <span class="st">"#d32f2f"</span>)) <span class="sc">+</span></span>
+<span id="cb24-519"><a href="#cb24-519" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The prior nudges the posterior"</span>,</span>
+<span id="cb24-520"><a href="#cb24-520" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = observed rate in our 40 salespeople"</span>,</span>
+<span id="cb24-521"><a href="#cb24-521" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Posterior density"</span>, <span class="at">colour =</span> <span class="st">"prior"</span>)</span>
+<span id="cb24-522"><a href="#cb24-522" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-523"><a href="#cb24-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-524"><a href="#cb24-524" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb24-525"><a href="#cb24-525" aria-hidden="true" tabindex="-1"></a><span class="fu">## The teaching point</span></span>
+<span id="cb24-526"><a href="#cb24-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-527"><a href="#cb24-527" aria-hidden="true" tabindex="-1"></a>With only 40 salespeople, the prior still has a visible say. Get to a</span>
+<span id="cb24-528"><a href="#cb24-528" aria-hidden="true" tabindex="-1"></a>few hundred and the likelihood dominates — the prior's influence</span>
+<span id="cb24-529"><a href="#cb24-529" aria-hidden="true" tabindex="-1"></a>fades away without you having to do anything about it.</span>
+<span id="cb24-530"><a href="#cb24-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-531"><a href="#cb24-531" aria-hidden="true" tabindex="-1"></a>Priors matter most exactly when data is **scarce**, which is often the</span>
+<span id="cb24-532"><a href="#cb24-532" aria-hidden="true" tabindex="-1"></a>case in People Analytics — a new office, a new role, a pilot</span>
+<span id="cb24-533"><a href="#cb24-533" aria-hidden="true" tabindex="-1"></a>programme.</span>
+<span id="cb24-534"><a href="#cb24-534" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-535"><a href="#cb24-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-536"><a href="#cb24-536" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your turn {.unnumbered}</span></span>
+<span id="cb24-537"><a href="#cb24-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-538"><a href="#cb24-538" aria-hidden="true" tabindex="-1"></a>Try a **sceptical** prior centred on 0.5,</span>
+<span id="cb24-539"><a href="#cb24-539" aria-hidden="true" tabindex="-1"></a><span class="in">`dbeta(p_grid, shape1 = 20, shape2 = 20)`</span>.</span>
+<span id="cb24-540"><a href="#cb24-540" aria-hidden="true" tabindex="-1"></a>Compute and plot its posterior alongside the others. Where does it</span>
+<span id="cb24-541"><a href="#cb24-541" aria-hidden="true" tabindex="-1"></a>land?</span>
+<span id="cb24-542"><a href="#cb24-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-543"><a href="#cb24-543" aria-hidden="true" tabindex="-1"></a><span class="in">```{r your-turn-prior}</span></span>
+<span id="cb24-544"><a href="#cb24-544" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span>
 <span id="cb24-545"><a href="#cb24-545" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-546"><a href="#cb24-546" aria-hidden="true" tabindex="-1"></a><span class="fu">### Two distributions, two different jobs</span></span>
+<span id="cb24-546"><a href="#cb24-546" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb24-547"><a href="#cb24-547" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-548"><a href="#cb24-548" aria-hidden="true" tabindex="-1"></a>We've now used both of these, so it's worth being precise about what</span>
-<span id="cb24-549"><a href="#cb24-549" aria-hidden="true" tabindex="-1"></a>each one is for. They're easy to confuse because both involve</span>
-<span id="cb24-550"><a href="#cb24-550" aria-hidden="true" tabindex="-1"></a>proportions — but they describe different things.</span>
+<span id="cb24-548"><a href="#cb24-548" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb24-549"><a href="#cb24-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-550"><a href="#cb24-550" aria-hidden="true" tabindex="-1"></a><span class="fu">## The Beta-Binomial shortcut</span></span>
 <span id="cb24-551"><a href="#cb24-551" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-552"><a href="#cb24-552" aria-hidden="true" tabindex="-1"></a>**The Binomial is a distribution over counts.** Fix a rate and a</span>
-<span id="cb24-553"><a href="#cb24-553" aria-hidden="true" tabindex="-1"></a>number of people, and it tells you how many promotions to expect:</span>
-<span id="cb24-554"><a href="#cb24-554" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-555"><a href="#cb24-555" aria-hidden="true" tabindex="-1"></a><span class="in">```{r binomial-shape}</span></span>
-<span id="cb24-556"><a href="#cb24-556" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">promotions =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">40</span>,</span>
-<span id="cb24-557"><a href="#cb24-557" aria-hidden="true" tabindex="-1"></a>       <span class="at">probability =</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">40</span>, <span class="at">size =</span> <span class="dv">40</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb24-558"><a href="#cb24-558" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(promotions, probability)) <span class="sc">+</span></span>
-<span id="cb24-559"><a href="#cb24-559" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#d32f2f"</span>, <span class="at">alpha =</span> <span class="fl">0.45</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb24-560"><a href="#cb24-560" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Binomial: if the true rate really were 0.30, what would we see?"</span>,</span>
-<span id="cb24-561"><a href="#cb24-561" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"40 salespeople — counts near 12 are common, but 8 or 17 wouldn't be strange"</span>,</span>
-<span id="cb24-562"><a href="#cb24-562" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Number promoted out of 40"</span>, <span class="at">y =</span> <span class="st">"Probability"</span>)</span>
-<span id="cb24-563"><a href="#cb24-563" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-564"><a href="#cb24-564" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-565"><a href="#cb24-565" aria-hidden="true" tabindex="-1"></a>Notice it's made of **bars**, not a curve. You can promote 11 people</span>
-<span id="cb24-566"><a href="#cb24-566" aria-hidden="true" tabindex="-1"></a>or 12, never 11.5. This is the distribution that generates data, which</span>
-<span id="cb24-567"><a href="#cb24-567" aria-hidden="true" tabindex="-1"></a>is why it plays the role of the likelihood.</span>
-<span id="cb24-568"><a href="#cb24-568" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-569"><a href="#cb24-569" aria-hidden="true" tabindex="-1"></a>**The Beta is a distribution over rates.** It lives strictly between 0</span>
-<span id="cb24-570"><a href="#cb24-570" aria-hidden="true" tabindex="-1"></a>and 1 and describes how plausible each possible *rate* is — belief</span>
-<span id="cb24-571"><a href="#cb24-571" aria-hidden="true" tabindex="-1"></a>about a parameter, not a count of people. That makes it the natural</span>
-<span id="cb24-572"><a href="#cb24-572" aria-hidden="true" tabindex="-1"></a>shape for a prior or a posterior about a proportion.</span>
-<span id="cb24-573"><a href="#cb24-573" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-574"><a href="#cb24-574" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reading a Beta</span></span>
-<span id="cb24-575"><a href="#cb24-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-576"><a href="#cb24-576" aria-hidden="true" tabindex="-1"></a><span class="in">`Beta(a, b)`</span> has two parameters and the useful way to read them is as</span>
-<span id="cb24-577"><a href="#cb24-577" aria-hidden="true" tabindex="-1"></a>**imaginary observations**: roughly, <span class="in">`a − 1`</span> successes and <span class="in">`b − 1`</span></span>
-<span id="cb24-578"><a href="#cb24-578" aria-hidden="true" tabindex="-1"></a>failures.</span>
+<span id="cb24-552"><a href="#cb24-552" aria-hidden="true" tabindex="-1"></a><span class="fu">### Two distributions, two different jobs</span></span>
+<span id="cb24-553"><a href="#cb24-553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-554"><a href="#cb24-554" aria-hidden="true" tabindex="-1"></a>We've now used both of these, so it's worth being precise about what</span>
+<span id="cb24-555"><a href="#cb24-555" aria-hidden="true" tabindex="-1"></a>each one is for. They're easy to confuse because both involve</span>
+<span id="cb24-556"><a href="#cb24-556" aria-hidden="true" tabindex="-1"></a>proportions — but they describe different things.</span>
+<span id="cb24-557"><a href="#cb24-557" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-558"><a href="#cb24-558" aria-hidden="true" tabindex="-1"></a>**The Binomial is a distribution over counts.** Fix a rate and a</span>
+<span id="cb24-559"><a href="#cb24-559" aria-hidden="true" tabindex="-1"></a>number of people, and it tells you how many promotions to expect:</span>
+<span id="cb24-560"><a href="#cb24-560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-561"><a href="#cb24-561" aria-hidden="true" tabindex="-1"></a><span class="in">```{r binomial-shape}</span></span>
+<span id="cb24-562"><a href="#cb24-562" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">promotions =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">40</span>,</span>
+<span id="cb24-563"><a href="#cb24-563" aria-hidden="true" tabindex="-1"></a>       <span class="at">probability =</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">40</span>, <span class="at">size =</span> <span class="dv">40</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb24-564"><a href="#cb24-564" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(promotions, probability)) <span class="sc">+</span></span>
+<span id="cb24-565"><a href="#cb24-565" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#d32f2f"</span>, <span class="at">alpha =</span> <span class="fl">0.45</span>, <span class="at">width =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb24-566"><a href="#cb24-566" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Binomial: if the true rate really were 0.30, what would we see?"</span>,</span>
+<span id="cb24-567"><a href="#cb24-567" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"40 salespeople — counts near 12 are common, but 8 or 17 wouldn't be strange"</span>,</span>
+<span id="cb24-568"><a href="#cb24-568" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Number promoted out of 40"</span>, <span class="at">y =</span> <span class="st">"Probability"</span>)</span>
+<span id="cb24-569"><a href="#cb24-569" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-570"><a href="#cb24-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-571"><a href="#cb24-571" aria-hidden="true" tabindex="-1"></a>Notice it's made of **bars**, not a curve. You can promote 11 people</span>
+<span id="cb24-572"><a href="#cb24-572" aria-hidden="true" tabindex="-1"></a>or 12, never 11.5. This is the distribution that generates data, which</span>
+<span id="cb24-573"><a href="#cb24-573" aria-hidden="true" tabindex="-1"></a>is why it plays the role of the likelihood.</span>
+<span id="cb24-574"><a href="#cb24-574" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-575"><a href="#cb24-575" aria-hidden="true" tabindex="-1"></a>**The Beta is a distribution over rates.** It lives strictly between 0</span>
+<span id="cb24-576"><a href="#cb24-576" aria-hidden="true" tabindex="-1"></a>and 1 and describes how plausible each possible *rate* is — belief</span>
+<span id="cb24-577"><a href="#cb24-577" aria-hidden="true" tabindex="-1"></a>about a parameter, not a count of people. That makes it the natural</span>
+<span id="cb24-578"><a href="#cb24-578" aria-hidden="true" tabindex="-1"></a>shape for a prior or a posterior about a proportion.</span>
 <span id="cb24-579"><a href="#cb24-579" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-580"><a href="#cb24-580" aria-hidden="true" tabindex="-1"></a>The awkward <span class="in">`− 1`</span> is bookkeeping, and it comes from where the counting</span>
-<span id="cb24-581"><a href="#cb24-581" aria-hidden="true" tabindex="-1"></a>starts. The no-evidence Beta is <span class="in">`Beta(1, 1)`</span>, not <span class="in">`Beta(0, 0)`</span> — the</span>
-<span id="cb24-582"><a href="#cb24-582" aria-hidden="true" tabindex="-1"></a>1s are already there before you've seen anything. Since each real</span>
-<span id="cb24-583"><a href="#cb24-583" aria-hidden="true" tabindex="-1"></a>observation adds 1 to <span class="in">`a`</span> or to <span class="in">`b`</span> (that's the update rule two</span>
-<span id="cb24-584"><a href="#cb24-584" aria-hidden="true" tabindex="-1"></a>sections below), reading the counts back out means subtracting the 1</span>
-<span id="cb24-585"><a href="#cb24-585" aria-hidden="true" tabindex="-1"></a>you began with.</span>
-<span id="cb24-586"><a href="#cb24-586" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-587"><a href="#cb24-587" aria-hidden="true" tabindex="-1"></a>If you want the reason underneath: the Beta density is proportional to</span>
-<span id="cb24-588"><a href="#cb24-588" aria-hidden="true" tabindex="-1"></a>$p^{a-1}(1-p)^{b-1}$, and a Binomial likelihood for <span class="in">`k`</span> successes in</span>
-<span id="cb24-589"><a href="#cb24-589" aria-hidden="true" tabindex="-1"></a><span class="in">`n`</span> trials is proportional to $p^{k}(1-p)^{n-k}$. Line those two up</span>
-<span id="cb24-590"><a href="#cb24-590" aria-hidden="true" tabindex="-1"></a>and the exponents *are* the counts — so <span class="in">`a − 1 = k`</span> and <span class="in">`b − 1 = n − k`</span>.</span>
-<span id="cb24-591"><a href="#cb24-591" aria-hidden="true" tabindex="-1"></a>The <span class="in">`− 1`</span> isn't a convention someone picked; it's the offset between a</span>
-<span id="cb24-592"><a href="#cb24-592" aria-hidden="true" tabindex="-1"></a>parameter and the exponent it sits in.</span>
-<span id="cb24-593"><a href="#cb24-593" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-594"><a href="#cb24-594" aria-hidden="true" tabindex="-1"></a>So:</span>
-<span id="cb24-595"><a href="#cb24-595" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-596"><a href="#cb24-596" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Beta(1, 1)`</span> — nothing observed at all. Perfectly flat, which is</span>
-<span id="cb24-597"><a href="#cb24-597" aria-hidden="true" tabindex="-1"></a>    the flat prior we started the chapter with.</span>
-<span id="cb24-598"><a href="#cb24-598" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Beta(9, 21)`</span> — as if you'd watched 8 promotions among 28</span>
-<span id="cb24-599"><a href="#cb24-599" aria-hidden="true" tabindex="-1"></a>    salespeople. Centred near 0.3, and about as confident as 28</span>
-<span id="cb24-600"><a href="#cb24-600" aria-hidden="true" tabindex="-1"></a>    people's worth of evidence would justify. That's our VP.</span>
+<span id="cb24-580"><a href="#cb24-580" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reading a Beta</span></span>
+<span id="cb24-581"><a href="#cb24-581" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-582"><a href="#cb24-582" aria-hidden="true" tabindex="-1"></a><span class="in">`Beta(a, b)`</span> has two parameters and the useful way to read them is as</span>
+<span id="cb24-583"><a href="#cb24-583" aria-hidden="true" tabindex="-1"></a>**imaginary observations**: roughly, <span class="in">`a − 1`</span> successes and <span class="in">`b − 1`</span></span>
+<span id="cb24-584"><a href="#cb24-584" aria-hidden="true" tabindex="-1"></a>failures.</span>
+<span id="cb24-585"><a href="#cb24-585" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-586"><a href="#cb24-586" aria-hidden="true" tabindex="-1"></a>The awkward <span class="in">`− 1`</span> is bookkeeping, and it comes from where the counting</span>
+<span id="cb24-587"><a href="#cb24-587" aria-hidden="true" tabindex="-1"></a>starts. The no-evidence Beta is <span class="in">`Beta(1, 1)`</span>, not <span class="in">`Beta(0, 0)`</span> — the</span>
+<span id="cb24-588"><a href="#cb24-588" aria-hidden="true" tabindex="-1"></a>1s are already there before you've seen anything. Since each real</span>
+<span id="cb24-589"><a href="#cb24-589" aria-hidden="true" tabindex="-1"></a>observation adds 1 to <span class="in">`a`</span> or to <span class="in">`b`</span> (that's the update rule two</span>
+<span id="cb24-590"><a href="#cb24-590" aria-hidden="true" tabindex="-1"></a>sections below), reading the counts back out means subtracting the 1</span>
+<span id="cb24-591"><a href="#cb24-591" aria-hidden="true" tabindex="-1"></a>you began with.</span>
+<span id="cb24-592"><a href="#cb24-592" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-593"><a href="#cb24-593" aria-hidden="true" tabindex="-1"></a>If you want the reason underneath: the Beta density is proportional to</span>
+<span id="cb24-594"><a href="#cb24-594" aria-hidden="true" tabindex="-1"></a>$p^{a-1}(1-p)^{b-1}$, and a Binomial likelihood for <span class="in">`k`</span> successes in</span>
+<span id="cb24-595"><a href="#cb24-595" aria-hidden="true" tabindex="-1"></a><span class="in">`n`</span> trials is proportional to $p^{k}(1-p)^{n-k}$. Line those two up</span>
+<span id="cb24-596"><a href="#cb24-596" aria-hidden="true" tabindex="-1"></a>and the exponents *are* the counts — so <span class="in">`a − 1 = k`</span> and <span class="in">`b − 1 = n − k`</span>.</span>
+<span id="cb24-597"><a href="#cb24-597" aria-hidden="true" tabindex="-1"></a>The <span class="in">`− 1`</span> isn't a convention someone picked; it's the offset between a</span>
+<span id="cb24-598"><a href="#cb24-598" aria-hidden="true" tabindex="-1"></a>parameter and the exponent it sits in.</span>
+<span id="cb24-599"><a href="#cb24-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-600"><a href="#cb24-600" aria-hidden="true" tabindex="-1"></a>So:</span>
 <span id="cb24-601"><a href="#cb24-601" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-602"><a href="#cb24-602" aria-hidden="true" tabindex="-1"></a>Start from flat and add real data, and you can watch belief take</span>
-<span id="cb24-603"><a href="#cb24-603" aria-hidden="true" tabindex="-1"></a>shape:</span>
-<span id="cb24-604"><a href="#cb24-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-605"><a href="#cb24-605" aria-hidden="true" tabindex="-1"></a><span class="in">```{r beta-panel}</span></span>
-<span id="cb24-606"><a href="#cb24-606" aria-hidden="true" tabindex="-1"></a>beta_examples <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb24-607"><a href="#cb24-607" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>label,               <span class="sc">~</span>k,  <span class="sc">~</span>n,</span>
-<span id="cb24-608"><a href="#cb24-608" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1 promoted of 7"</span>,      <span class="dv">1</span>,   <span class="dv">7</span>,</span>
-<span id="cb24-609"><a href="#cb24-609" aria-hidden="true" tabindex="-1"></a>  <span class="st">"4 promoted of 10"</span>,     <span class="dv">4</span>,  <span class="dv">10</span>,</span>
-<span id="cb24-610"><a href="#cb24-610" aria-hidden="true" tabindex="-1"></a>  <span class="st">"12 promoted of 30"</span>,   <span class="dv">12</span>,  <span class="dv">30</span>,</span>
-<span id="cb24-611"><a href="#cb24-611" aria-hidden="true" tabindex="-1"></a>  <span class="st">"40 promoted of 100"</span>,  <span class="dv">40</span>, <span class="dv">100</span></span>
-<span id="cb24-612"><a href="#cb24-612" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb24-613"><a href="#cb24-613" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">fct_inorder</span>(label)) <span class="sc">|&gt;</span></span>
-<span id="cb24-614"><a href="#cb24-614" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">p =</span> p_grid) <span class="sc">|&gt;</span></span>
-<span id="cb24-615"><a href="#cb24-615" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">density =</span> <span class="fu">dbeta</span>(p, <span class="at">shape1 =</span> <span class="dv">1</span> <span class="sc">+</span> k, <span class="at">shape2 =</span> <span class="dv">1</span> <span class="sc">+</span> n <span class="sc">-</span> k))  <span class="co"># &lt;1&gt;</span></span>
-<span id="cb24-616"><a href="#cb24-616" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-617"><a href="#cb24-617" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(beta_examples, <span class="fu">aes</span>(p, density)) <span class="sc">+</span></span>
-<span id="cb24-618"><a href="#cb24-618" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="st">"#8fabd0"</span>, <span class="at">alpha =</span> <span class="fl">0.30</span>) <span class="sc">+</span></span>
-<span id="cb24-619"><a href="#cb24-619" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"#8fabd0"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb24-620"><a href="#cb24-620" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> k <span class="sc">/</span> n),                             <span class="co"># &lt;2&gt;</span></span>
-<span id="cb24-621"><a href="#cb24-621" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
-<span id="cb24-622"><a href="#cb24-622" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> label) <span class="sc">+</span></span>
-<span id="cb24-623"><a href="#cb24-623" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The same evidence, in increasing quantity"</span>,</span>
-<span id="cb24-624"><a href="#cb24-624" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = the raw observed rate"</span>,</span>
-<span id="cb24-625"><a href="#cb24-625" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Density"</span>)</span>
-<span id="cb24-626"><a href="#cb24-626" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-627"><a href="#cb24-627" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-628"><a href="#cb24-628" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Each panel starts from a flat <span class="in">`Beta(1, 1)`</span> and adds that panel's</span>
-<span id="cb24-629"><a href="#cb24-629" aria-hidden="true" tabindex="-1"></a>    data — <span class="in">`k`</span> successes and <span class="in">`n - k`</span> failures. This *is* the update</span>
-<span id="cb24-630"><a href="#cb24-630" aria-hidden="true" tabindex="-1"></a>    rule stated below; the panel is just showing it four times.</span>
-<span id="cb24-631"><a href="#cb24-631" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The raw rate, for comparison with where the distribution actually</span>
-<span id="cb24-632"><a href="#cb24-632" aria-hidden="true" tabindex="-1"></a>    puts its weight.</span>
+<span id="cb24-602"><a href="#cb24-602" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Beta(1, 1)`</span> — nothing observed at all. Perfectly flat, which is</span>
+<span id="cb24-603"><a href="#cb24-603" aria-hidden="true" tabindex="-1"></a>    the flat prior we started the chapter with.</span>
+<span id="cb24-604"><a href="#cb24-604" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`Beta(9, 21)`</span> — as if you'd watched 8 promotions among 28</span>
+<span id="cb24-605"><a href="#cb24-605" aria-hidden="true" tabindex="-1"></a>    salespeople. Centred near 0.3, and about as confident as 28</span>
+<span id="cb24-606"><a href="#cb24-606" aria-hidden="true" tabindex="-1"></a>    people's worth of evidence would justify. That's our VP.</span>
+<span id="cb24-607"><a href="#cb24-607" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-608"><a href="#cb24-608" aria-hidden="true" tabindex="-1"></a>Start from flat and add real data, and you can watch belief take</span>
+<span id="cb24-609"><a href="#cb24-609" aria-hidden="true" tabindex="-1"></a>shape:</span>
+<span id="cb24-610"><a href="#cb24-610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-611"><a href="#cb24-611" aria-hidden="true" tabindex="-1"></a><span class="in">```{r beta-panel}</span></span>
+<span id="cb24-612"><a href="#cb24-612" aria-hidden="true" tabindex="-1"></a>beta_examples <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb24-613"><a href="#cb24-613" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>label,               <span class="sc">~</span>k,  <span class="sc">~</span>n,</span>
+<span id="cb24-614"><a href="#cb24-614" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1 promoted of 7"</span>,      <span class="dv">1</span>,   <span class="dv">7</span>,</span>
+<span id="cb24-615"><a href="#cb24-615" aria-hidden="true" tabindex="-1"></a>  <span class="st">"4 promoted of 10"</span>,     <span class="dv">4</span>,  <span class="dv">10</span>,</span>
+<span id="cb24-616"><a href="#cb24-616" aria-hidden="true" tabindex="-1"></a>  <span class="st">"12 promoted of 30"</span>,   <span class="dv">12</span>,  <span class="dv">30</span>,</span>
+<span id="cb24-617"><a href="#cb24-617" aria-hidden="true" tabindex="-1"></a>  <span class="st">"40 promoted of 100"</span>,  <span class="dv">40</span>, <span class="dv">100</span></span>
+<span id="cb24-618"><a href="#cb24-618" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb24-619"><a href="#cb24-619" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">fct_inorder</span>(label)) <span class="sc">|&gt;</span></span>
+<span id="cb24-620"><a href="#cb24-620" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_grid</span>(<span class="at">p =</span> p_grid) <span class="sc">|&gt;</span></span>
+<span id="cb24-621"><a href="#cb24-621" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">density =</span> <span class="fu">dbeta</span>(p, <span class="at">shape1 =</span> <span class="dv">1</span> <span class="sc">+</span> k, <span class="at">shape2 =</span> <span class="dv">1</span> <span class="sc">+</span> n <span class="sc">-</span> k))  <span class="co"># &lt;1&gt;</span></span>
+<span id="cb24-622"><a href="#cb24-622" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-623"><a href="#cb24-623" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(beta_examples, <span class="fu">aes</span>(p, density)) <span class="sc">+</span></span>
+<span id="cb24-624"><a href="#cb24-624" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="st">"#8fabd0"</span>, <span class="at">alpha =</span> <span class="fl">0.30</span>) <span class="sc">+</span></span>
+<span id="cb24-625"><a href="#cb24-625" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"#8fabd0"</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb24-626"><a href="#cb24-626" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> k <span class="sc">/</span> n),                             <span class="co"># &lt;2&gt;</span></span>
+<span id="cb24-627"><a href="#cb24-627" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
+<span id="cb24-628"><a href="#cb24-628" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> label) <span class="sc">+</span></span>
+<span id="cb24-629"><a href="#cb24-629" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The same evidence, in increasing quantity"</span>,</span>
+<span id="cb24-630"><a href="#cb24-630" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = the raw observed rate"</span>,</span>
+<span id="cb24-631"><a href="#cb24-631" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Density"</span>)</span>
+<span id="cb24-632"><a href="#cb24-632" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb24-633"><a href="#cb24-633" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-634"><a href="#cb24-634" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb24-635"><a href="#cb24-635" aria-hidden="true" tabindex="-1"></a><span class="fu">## What the panel is telling you</span></span>
-<span id="cb24-636"><a href="#cb24-636" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-637"><a href="#cb24-637" aria-hidden="true" tabindex="-1"></a>Three of those four panels describe the same observed rate — 4 in 10,</span>
-<span id="cb24-638"><a href="#cb24-638" aria-hidden="true" tabindex="-1"></a>12 in 30 and 40 in 100 are all 0.4 — and they are emphatically not</span>
-<span id="cb24-639"><a href="#cb24-639" aria-hidden="true" tabindex="-1"></a>the same conclusion.</span>
-<span id="cb24-640"><a href="#cb24-640" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-641"><a href="#cb24-641" aria-hidden="true" tabindex="-1"></a>**Where the distribution sits is set by the ratio. How narrow it is</span>
-<span id="cb24-642"><a href="#cb24-642" aria-hidden="true" tabindex="-1"></a>comes from the count.** Ten observations leave you barely able to</span>
-<span id="cb24-643"><a href="#cb24-643" aria-hidden="true" tabindex="-1"></a>rule anything out between 0.2 and 0.7; a hundred pins you to roughly</span>
-<span id="cb24-644"><a href="#cb24-644" aria-hidden="true" tabindex="-1"></a>0.3–0.5. A percentage on a slide can't distinguish those two</span>
-<span id="cb24-645"><a href="#cb24-645" aria-hidden="true" tabindex="-1"></a>situations. This can.</span>
+<span id="cb24-634"><a href="#cb24-634" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Each panel starts from a flat <span class="in">`Beta(1, 1)`</span> and adds that panel's</span>
+<span id="cb24-635"><a href="#cb24-635" aria-hidden="true" tabindex="-1"></a>    data — <span class="in">`k`</span> successes and <span class="in">`n - k`</span> failures. This *is* the update</span>
+<span id="cb24-636"><a href="#cb24-636" aria-hidden="true" tabindex="-1"></a>    rule stated below; the panel is just showing it four times.</span>
+<span id="cb24-637"><a href="#cb24-637" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The raw rate, for comparison with where the distribution actually</span>
+<span id="cb24-638"><a href="#cb24-638" aria-hidden="true" tabindex="-1"></a>    puts its weight.</span>
+<span id="cb24-639"><a href="#cb24-639" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-640"><a href="#cb24-640" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb24-641"><a href="#cb24-641" aria-hidden="true" tabindex="-1"></a><span class="fu">## What the panel is telling you</span></span>
+<span id="cb24-642"><a href="#cb24-642" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-643"><a href="#cb24-643" aria-hidden="true" tabindex="-1"></a>Three of those four panels describe the same observed rate — 4 in 10,</span>
+<span id="cb24-644"><a href="#cb24-644" aria-hidden="true" tabindex="-1"></a>12 in 30 and 40 in 100 are all 0.4 — and they are emphatically not</span>
+<span id="cb24-645"><a href="#cb24-645" aria-hidden="true" tabindex="-1"></a>the same conclusion.</span>
 <span id="cb24-646"><a href="#cb24-646" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-647"><a href="#cb24-647" aria-hidden="true" tabindex="-1"></a>One detail worth noticing: at small counts the peak sits slightly</span>
-<span id="cb24-648"><a href="#cb24-648" aria-hidden="true" tabindex="-1"></a>inside the dashed line, pulled towards 0.5. That's the flat prior</span>
-<span id="cb24-649"><a href="#cb24-649" aria-hidden="true" tabindex="-1"></a>still exerting a little influence, and it fades as the data grows —</span>
-<span id="cb24-650"><a href="#cb24-650" aria-hidden="true" tabindex="-1"></a>the same effect you saw with the VP's prior a few sections ago.</span>
-<span id="cb24-651"><a href="#cb24-651" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-647"><a href="#cb24-647" aria-hidden="true" tabindex="-1"></a>**Where the distribution sits is set by the ratio. How narrow it is</span>
+<span id="cb24-648"><a href="#cb24-648" aria-hidden="true" tabindex="-1"></a>comes from the count.** Ten observations leave you barely able to</span>
+<span id="cb24-649"><a href="#cb24-649" aria-hidden="true" tabindex="-1"></a>rule anything out between 0.2 and 0.7; a hundred pins you to roughly</span>
+<span id="cb24-650"><a href="#cb24-650" aria-hidden="true" tabindex="-1"></a>0.3–0.5. A percentage on a slide can't distinguish those two</span>
+<span id="cb24-651"><a href="#cb24-651" aria-hidden="true" tabindex="-1"></a>situations. This can.</span>
 <span id="cb24-652"><a href="#cb24-652" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-653"><a href="#cb24-653" aria-hidden="true" tabindex="-1"></a><span class="fu">### The shortcut itself</span></span>
-<span id="cb24-654"><a href="#cb24-654" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-655"><a href="#cb24-655" aria-hidden="true" tabindex="-1"></a>Here's the payoff. When the prior is a **Beta** and the data is</span>
-<span id="cb24-656"><a href="#cb24-656" aria-hidden="true" tabindex="-1"></a>**Binomial**, the posterior is *always* another Beta, and you can</span>
-<span id="cb24-657"><a href="#cb24-657" aria-hidden="true" tabindex="-1"></a>write it down without any grid, any sampling, or any calculus:</span>
+<span id="cb24-653"><a href="#cb24-653" aria-hidden="true" tabindex="-1"></a>One detail worth noticing: at small counts the peak sits slightly</span>
+<span id="cb24-654"><a href="#cb24-654" aria-hidden="true" tabindex="-1"></a>inside the dashed line, pulled towards 0.5. That's the flat prior</span>
+<span id="cb24-655"><a href="#cb24-655" aria-hidden="true" tabindex="-1"></a>still exerting a little influence, and it fades as the data grows —</span>
+<span id="cb24-656"><a href="#cb24-656" aria-hidden="true" tabindex="-1"></a>the same effect you saw with the VP's prior a few sections ago.</span>
+<span id="cb24-657"><a href="#cb24-657" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb24-658"><a href="#cb24-658" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-659"><a href="#cb24-659" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Prior Beta(a, b) + data (k promotions out of n) → Posterior</span></span>
-<span id="cb24-660"><a href="#cb24-660" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Beta(a + k, b + n − k)**</span></span>
-<span id="cb24-661"><a href="#cb24-661" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-662"><a href="#cb24-662" aria-hidden="true" tabindex="-1"></a>Add your successes to the first parameter and your failures to the</span>
-<span id="cb24-663"><a href="#cb24-663" aria-hidden="true" tabindex="-1"></a>second. That's the whole update. Distribution pairs that behave this</span>
-<span id="cb24-664"><a href="#cb24-664" aria-hidden="true" tabindex="-1"></a>neatly are called **conjugate**, and while there are only a handful of</span>
-<span id="cb24-665"><a href="#cb24-665" aria-hidden="true" tabindex="-1"></a>them, this one covers a great deal of People Analytics.</span>
-<span id="cb24-666"><a href="#cb24-666" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-667"><a href="#cb24-667" aria-hidden="true" tabindex="-1"></a><span class="in">```{r beta-binomial}</span></span>
-<span id="cb24-668"><a href="#cb24-668" aria-hidden="true" tabindex="-1"></a>a_prior <span class="ot">&lt;-</span> <span class="dv">1</span>   <span class="co"># flat prior = Beta(1, 1)</span></span>
-<span id="cb24-669"><a href="#cb24-669" aria-hidden="true" tabindex="-1"></a>b_prior <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb24-670"><a href="#cb24-670" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-671"><a href="#cb24-671" aria-hidden="true" tabindex="-1"></a>a_post <span class="ot">&lt;-</span> a_prior <span class="sc">+</span> k_promoted</span>
-<span id="cb24-672"><a href="#cb24-672" aria-hidden="true" tabindex="-1"></a>b_post <span class="ot">&lt;-</span> b_prior <span class="sc">+</span> (n_people <span class="sc">-</span> k_promoted)</span>
-<span id="cb24-673"><a href="#cb24-673" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-674"><a href="#cb24-674" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Posterior: Beta("</span>, a_post, <span class="st">","</span>, b_post, <span class="st">")</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb24-675"><a href="#cb24-675" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Posterior mean:"</span>, <span class="fu">round</span>(a_post <span class="sc">/</span> (a_post <span class="sc">+</span> b_post), <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb24-676"><a href="#cb24-676" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"95% credible interval: ["</span>,</span>
-<span id="cb24-677"><a href="#cb24-677" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">qbeta</span>(<span class="fl">0.025</span>, <span class="at">shape1 =</span> a_post, <span class="at">shape2 =</span> b_post), <span class="dv">3</span>), <span class="st">","</span>,</span>
-<span id="cb24-678"><a href="#cb24-678" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">qbeta</span>(<span class="fl">0.975</span>, <span class="at">shape1 =</span> a_post, <span class="at">shape2 =</span> b_post), <span class="dv">3</span>), <span class="st">"]</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb24-679"><a href="#cb24-679" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-680"><a href="#cb24-680" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-681"><a href="#cb24-681" aria-hidden="true" tabindex="-1"></a>Compare these to the grid results above — they match.</span>
-<span id="cb24-682"><a href="#cb24-682" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-683"><a href="#cb24-683" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb24-684"><a href="#cb24-684" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-685"><a href="#cb24-685" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sequential updating</span></span>
+<span id="cb24-659"><a href="#cb24-659" aria-hidden="true" tabindex="-1"></a><span class="fu">### The shortcut itself</span></span>
+<span id="cb24-660"><a href="#cb24-660" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-661"><a href="#cb24-661" aria-hidden="true" tabindex="-1"></a>Here's the payoff. When the prior is a **Beta** and the data is</span>
+<span id="cb24-662"><a href="#cb24-662" aria-hidden="true" tabindex="-1"></a>**Binomial**, the posterior is *always* another Beta, and you can</span>
+<span id="cb24-663"><a href="#cb24-663" aria-hidden="true" tabindex="-1"></a>write it down without any grid, any sampling, or any calculus:</span>
+<span id="cb24-664"><a href="#cb24-664" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-665"><a href="#cb24-665" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; Prior Beta(a, b) + data (k promotions out of n) → Posterior</span></span>
+<span id="cb24-666"><a href="#cb24-666" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Beta(a + k, b + n − k)**</span></span>
+<span id="cb24-667"><a href="#cb24-667" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-668"><a href="#cb24-668" aria-hidden="true" tabindex="-1"></a>Add your successes to the first parameter and your failures to the</span>
+<span id="cb24-669"><a href="#cb24-669" aria-hidden="true" tabindex="-1"></a>second. That's the whole update. Distribution pairs that behave this</span>
+<span id="cb24-670"><a href="#cb24-670" aria-hidden="true" tabindex="-1"></a>neatly are called **conjugate**, and while there are only a handful of</span>
+<span id="cb24-671"><a href="#cb24-671" aria-hidden="true" tabindex="-1"></a>them, this one covers a great deal of People Analytics.</span>
+<span id="cb24-672"><a href="#cb24-672" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-673"><a href="#cb24-673" aria-hidden="true" tabindex="-1"></a><span class="in">```{r beta-binomial}</span></span>
+<span id="cb24-674"><a href="#cb24-674" aria-hidden="true" tabindex="-1"></a>a_prior <span class="ot">&lt;-</span> <span class="dv">1</span>   <span class="co"># flat prior = Beta(1, 1)</span></span>
+<span id="cb24-675"><a href="#cb24-675" aria-hidden="true" tabindex="-1"></a>b_prior <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb24-676"><a href="#cb24-676" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-677"><a href="#cb24-677" aria-hidden="true" tabindex="-1"></a>a_post <span class="ot">&lt;-</span> a_prior <span class="sc">+</span> k_promoted</span>
+<span id="cb24-678"><a href="#cb24-678" aria-hidden="true" tabindex="-1"></a>b_post <span class="ot">&lt;-</span> b_prior <span class="sc">+</span> (n_people <span class="sc">-</span> k_promoted)</span>
+<span id="cb24-679"><a href="#cb24-679" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-680"><a href="#cb24-680" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Posterior: Beta("</span>, a_post, <span class="st">","</span>, b_post, <span class="st">")</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-681"><a href="#cb24-681" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Posterior mean:"</span>, <span class="fu">round</span>(a_post <span class="sc">/</span> (a_post <span class="sc">+</span> b_post), <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-682"><a href="#cb24-682" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"95% credible interval: ["</span>,</span>
+<span id="cb24-683"><a href="#cb24-683" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">qbeta</span>(<span class="fl">0.025</span>, <span class="at">shape1 =</span> a_post, <span class="at">shape2 =</span> b_post), <span class="dv">3</span>), <span class="st">","</span>,</span>
+<span id="cb24-684"><a href="#cb24-684" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="fu">qbeta</span>(<span class="fl">0.975</span>, <span class="at">shape1 =</span> a_post, <span class="at">shape2 =</span> b_post), <span class="dv">3</span>), <span class="st">"]</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-685"><a href="#cb24-685" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb24-686"><a href="#cb24-686" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-687"><a href="#cb24-687" aria-hidden="true" tabindex="-1"></a><span class="fu">### Today's posterior is tomorrow's prior</span></span>
+<span id="cb24-687"><a href="#cb24-687" aria-hidden="true" tabindex="-1"></a>Compare these to the grid results above — they match.</span>
 <span id="cb24-688"><a href="#cb24-688" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-689"><a href="#cb24-689" aria-hidden="true" tabindex="-1"></a>Suppose **60 more salespeople** join, and 18 are eventually promoted.</span>
+<span id="cb24-689"><a href="#cb24-689" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb24-690"><a href="#cb24-690" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-691"><a href="#cb24-691" aria-hidden="true" tabindex="-1"></a><span class="in">```{r sequential}</span></span>
-<span id="cb24-692"><a href="#cb24-692" aria-hidden="true" tabindex="-1"></a>n_new <span class="ot">&lt;-</span> <span class="dv">60</span></span>
-<span id="cb24-693"><a href="#cb24-693" aria-hidden="true" tabindex="-1"></a>k_new <span class="ot">&lt;-</span> <span class="dv">18</span></span>
+<span id="cb24-691"><a href="#cb24-691" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sequential updating</span></span>
+<span id="cb24-692"><a href="#cb24-692" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-693"><a href="#cb24-693" aria-hidden="true" tabindex="-1"></a><span class="fu">### Today's posterior is tomorrow's prior</span></span>
 <span id="cb24-694"><a href="#cb24-694" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-695"><a href="#cb24-695" aria-hidden="true" tabindex="-1"></a>a_post2 <span class="ot">&lt;-</span> a_post <span class="sc">+</span> k_new</span>
-<span id="cb24-696"><a href="#cb24-696" aria-hidden="true" tabindex="-1"></a>b_post2 <span class="ot">&lt;-</span> b_post <span class="sc">+</span> (n_new <span class="sc">-</span> k_new)</span>
-<span id="cb24-697"><a href="#cb24-697" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-698"><a href="#cb24-698" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">p =</span> p_grid,</span>
-<span id="cb24-699"><a href="#cb24-699" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">after 40 people</span><span class="st">`</span>  <span class="ot">=</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> a_post,  <span class="at">shape2 =</span> b_post),</span>
-<span id="cb24-700"><a href="#cb24-700" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">after 100 people</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> a_post2, <span class="at">shape2 =</span> b_post2)) <span class="sc">|&gt;</span></span>
-<span id="cb24-701"><a href="#cb24-701" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>p, <span class="at">names_to =</span> <span class="st">"stage"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb24-702"><a href="#cb24-702" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p, density, <span class="at">colour =</span> stage)) <span class="sc">+</span></span>
-<span id="cb24-703"><a href="#cb24-703" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb24-704"><a href="#cb24-704" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#8fabd0"</span>, <span class="st">"#122a52"</span>)) <span class="sc">+</span></span>
-<span id="cb24-705"><a href="#cb24-705" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The posterior sharpens as data accumulates"</span>,</span>
-<span id="cb24-706"><a href="#cb24-706" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Posterior density"</span>, <span class="at">colour =</span> <span class="cn">NULL</span>)</span>
-<span id="cb24-707"><a href="#cb24-707" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-708"><a href="#cb24-708" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-709"><a href="#cb24-709" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb24-710"><a href="#cb24-710" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning never restarts — provided the process doesn't either</span></span>
-<span id="cb24-711"><a href="#cb24-711" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-712"><a href="#cb24-712" aria-hidden="true" tabindex="-1"></a>You never have to go back to the raw data. Last quarter's conclusion</span>
-<span id="cb24-713"><a href="#cb24-713" aria-hidden="true" tabindex="-1"></a>becomes this quarter's starting point — and analysing data in batches</span>
-<span id="cb24-714"><a href="#cb24-714" aria-hidden="true" tabindex="-1"></a>gives exactly the same answer as analysing it all at once.</span>
-<span id="cb24-715"><a href="#cb24-715" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-716"><a href="#cb24-716" aria-hidden="true" tabindex="-1"></a>That equivalence rests on an assumption worth saying out loud: that</span>
-<span id="cb24-717"><a href="#cb24-717" aria-hidden="true" tabindex="-1"></a>there is one true rate θ, and it isn't moving. Here we'll take that as</span>
-<span id="cb24-718"><a href="#cb24-718" aria-hidden="true" tabindex="-1"></a>given. In a real organisation it often isn't — a reorganisation, a new</span>
-<span id="cb24-719"><a href="#cb24-719" aria-hidden="true" tabindex="-1"></a>promotion policy or a change of leadership can genuinely shift the</span>
-<span id="cb24-720"><a href="#cb24-720" aria-hidden="true" tabindex="-1"></a>rate, and then evidence from three years ago is describing a process</span>
-<span id="cb24-721"><a href="#cb24-721" aria-hidden="true" tabindex="-1"></a>that no longer exists. Piling it in as though it were current makes</span>
-<span id="cb24-722"><a href="#cb24-722" aria-hidden="true" tabindex="-1"></a>you confidently wrong, and the more history you have the more</span>
-<span id="cb24-723"><a href="#cb24-723" aria-hidden="true" tabindex="-1"></a>confidently.</span>
-<span id="cb24-724"><a href="#cb24-724" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-725"><a href="#cb24-725" aria-hidden="true" tabindex="-1"></a>There are ways to handle it — dropping history that predates a known</span>
-<span id="cb24-726"><a href="#cb24-726" aria-hidden="true" tabindex="-1"></a>change, or letting older observations count for less as they age. Both</span>
-<span id="cb24-727"><a href="#cb24-727" aria-hidden="true" tabindex="-1"></a>are ways of asking *how much should the past still count?* instead of</span>
-<span id="cb24-728"><a href="#cb24-728" aria-hidden="true" tabindex="-1"></a>assuming the answer is "fully", and Chapter 14 comes back to them once</span>
-<span id="cb24-729"><a href="#cb24-729" aria-hidden="true" tabindex="-1"></a>you've seen where a prior's strength comes from. For now, assume θ is</span>
-<span id="cb24-730"><a href="#cb24-730" aria-hidden="true" tabindex="-1"></a>stable — and keep an eye on whether that's still true.</span>
-<span id="cb24-731"><a href="#cb24-731" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-732"><a href="#cb24-732" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-733"><a href="#cb24-733" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb24-734"><a href="#cb24-734" aria-hidden="true" tabindex="-1"></a><span class="fu">## For the ML/DS crowd</span></span>
-<span id="cb24-735"><a href="#cb24-735" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-736"><a href="#cb24-736" aria-hidden="true" tabindex="-1"></a>This is the same principle behind **online / incremental learning** —</span>
-<span id="cb24-737"><a href="#cb24-737" aria-hidden="true" tabindex="-1"></a>updating a model as new data streams in without retraining from</span>
-<span id="cb24-738"><a href="#cb24-738" aria-hidden="true" tabindex="-1"></a>scratch. Bayesian sequential updating is one of the cleanest</span>
-<span id="cb24-739"><a href="#cb24-739" aria-hidden="true" tabindex="-1"></a>mathematical justifications for why that works: the posterior already</span>
-<span id="cb24-740"><a href="#cb24-740" aria-hidden="true" tabindex="-1"></a>captures everything the model learned so far, so it's a legitimate</span>
-<span id="cb24-741"><a href="#cb24-741" aria-hidden="true" tabindex="-1"></a>starting point for the next batch.</span>
-<span id="cb24-742"><a href="#cb24-742" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-743"><a href="#cb24-743" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-744"><a href="#cb24-744" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb24-745"><a href="#cb24-745" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-746"><a href="#cb24-746" aria-hidden="true" tabindex="-1"></a><span class="fu">## Making a decision</span></span>
-<span id="cb24-747"><a href="#cb24-747" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-748"><a href="#cb24-748" aria-hidden="true" tabindex="-1"></a>Managers ask concrete questions. *"What's the probability the true</span>
-<span id="cb24-749"><a href="#cb24-749" aria-hidden="true" tabindex="-1"></a>promotion rate exceeds 25%?"* With a posterior, that's one line:</span>
-<span id="cb24-750"><a href="#cb24-750" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-751"><a href="#cb24-751" aria-hidden="true" tabindex="-1"></a><span class="in">```{r decision}</span></span>
-<span id="cb24-752"><a href="#cb24-752" aria-hidden="true" tabindex="-1"></a>prob_over_25 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pbeta</span>(<span class="fl">0.25</span>, <span class="at">shape1 =</span> a_post2, <span class="at">shape2 =</span> b_post2)</span>
-<span id="cb24-753"><a href="#cb24-753" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"P(rate &gt; 0.25) ="</span>, <span class="fu">round</span>(prob_over_25, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
-<span id="cb24-754"><a href="#cb24-754" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-755"><a href="#cb24-755" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-756"><a href="#cb24-756" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb24-757"><a href="#cb24-757" aria-hidden="true" tabindex="-1"></a>Try phrasing that from a confidence interval — you can't, at least not</span>
-<span id="cb24-758"><a href="#cb24-758" aria-hidden="true" tabindex="-1"></a>without a caveat. Direct probability answers are the Bayesian</span>
-<span id="cb24-759"><a href="#cb24-759" aria-hidden="true" tabindex="-1"></a>superpower.</span>
-<span id="cb24-760"><a href="#cb24-760" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-695"><a href="#cb24-695" aria-hidden="true" tabindex="-1"></a>Suppose **60 more salespeople** join, and 18 are eventually promoted.</span>
+<span id="cb24-696"><a href="#cb24-696" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-697"><a href="#cb24-697" aria-hidden="true" tabindex="-1"></a><span class="in">```{r sequential}</span></span>
+<span id="cb24-698"><a href="#cb24-698" aria-hidden="true" tabindex="-1"></a>n_new <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb24-699"><a href="#cb24-699" aria-hidden="true" tabindex="-1"></a>k_new <span class="ot">&lt;-</span> <span class="dv">18</span></span>
+<span id="cb24-700"><a href="#cb24-700" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-701"><a href="#cb24-701" aria-hidden="true" tabindex="-1"></a>a_post2 <span class="ot">&lt;-</span> a_post <span class="sc">+</span> k_new</span>
+<span id="cb24-702"><a href="#cb24-702" aria-hidden="true" tabindex="-1"></a>b_post2 <span class="ot">&lt;-</span> b_post <span class="sc">+</span> (n_new <span class="sc">-</span> k_new)</span>
+<span id="cb24-703"><a href="#cb24-703" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-704"><a href="#cb24-704" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">p =</span> p_grid,</span>
+<span id="cb24-705"><a href="#cb24-705" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">after 40 people</span><span class="st">`</span>  <span class="ot">=</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> a_post,  <span class="at">shape2 =</span> b_post),</span>
+<span id="cb24-706"><a href="#cb24-706" aria-hidden="true" tabindex="-1"></a>       <span class="st">`</span><span class="at">after 100 people</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">dbeta</span>(p_grid, <span class="at">shape1 =</span> a_post2, <span class="at">shape2 =</span> b_post2)) <span class="sc">|&gt;</span></span>
+<span id="cb24-707"><a href="#cb24-707" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>p, <span class="at">names_to =</span> <span class="st">"stage"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb24-708"><a href="#cb24-708" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(p, density, <span class="at">colour =</span> stage)) <span class="sc">+</span></span>
+<span id="cb24-709"><a href="#cb24-709" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb24-710"><a href="#cb24-710" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#8fabd0"</span>, <span class="st">"#122a52"</span>)) <span class="sc">+</span></span>
+<span id="cb24-711"><a href="#cb24-711" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The posterior sharpens as data accumulates"</span>,</span>
+<span id="cb24-712"><a href="#cb24-712" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Promotion rate"</span>, <span class="at">y =</span> <span class="st">"Posterior density"</span>, <span class="at">colour =</span> <span class="cn">NULL</span>)</span>
+<span id="cb24-713"><a href="#cb24-713" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-714"><a href="#cb24-714" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-715"><a href="#cb24-715" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb24-716"><a href="#cb24-716" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learning never restarts — provided the process doesn't either</span></span>
+<span id="cb24-717"><a href="#cb24-717" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-718"><a href="#cb24-718" aria-hidden="true" tabindex="-1"></a>You never have to go back to the raw data. Last quarter's conclusion</span>
+<span id="cb24-719"><a href="#cb24-719" aria-hidden="true" tabindex="-1"></a>becomes this quarter's starting point — and analysing data in batches</span>
+<span id="cb24-720"><a href="#cb24-720" aria-hidden="true" tabindex="-1"></a>gives exactly the same answer as analysing it all at once.</span>
+<span id="cb24-721"><a href="#cb24-721" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-722"><a href="#cb24-722" aria-hidden="true" tabindex="-1"></a>That equivalence rests on an assumption worth saying out loud: that</span>
+<span id="cb24-723"><a href="#cb24-723" aria-hidden="true" tabindex="-1"></a>there is one true rate θ, and it isn't moving. Here we'll take that as</span>
+<span id="cb24-724"><a href="#cb24-724" aria-hidden="true" tabindex="-1"></a>given. In a real organisation it often isn't — a reorganisation, a new</span>
+<span id="cb24-725"><a href="#cb24-725" aria-hidden="true" tabindex="-1"></a>promotion policy or a change of leadership can genuinely shift the</span>
+<span id="cb24-726"><a href="#cb24-726" aria-hidden="true" tabindex="-1"></a>rate, and then evidence from three years ago is describing a process</span>
+<span id="cb24-727"><a href="#cb24-727" aria-hidden="true" tabindex="-1"></a>that no longer exists. Piling it in as though it were current makes</span>
+<span id="cb24-728"><a href="#cb24-728" aria-hidden="true" tabindex="-1"></a>you confidently wrong, and the more history you have the more</span>
+<span id="cb24-729"><a href="#cb24-729" aria-hidden="true" tabindex="-1"></a>confidently.</span>
+<span id="cb24-730"><a href="#cb24-730" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-731"><a href="#cb24-731" aria-hidden="true" tabindex="-1"></a>There are ways to handle it — dropping history that predates a known</span>
+<span id="cb24-732"><a href="#cb24-732" aria-hidden="true" tabindex="-1"></a>change, or letting older observations count for less as they age. Both</span>
+<span id="cb24-733"><a href="#cb24-733" aria-hidden="true" tabindex="-1"></a>are ways of asking *how much should the past still count?* instead of</span>
+<span id="cb24-734"><a href="#cb24-734" aria-hidden="true" tabindex="-1"></a>assuming the answer is "fully", and Chapter 14 comes back to them once</span>
+<span id="cb24-735"><a href="#cb24-735" aria-hidden="true" tabindex="-1"></a>you've seen where a prior's strength comes from. For now, assume θ is</span>
+<span id="cb24-736"><a href="#cb24-736" aria-hidden="true" tabindex="-1"></a>stable — and keep an eye on whether that's still true.</span>
+<span id="cb24-737"><a href="#cb24-737" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-738"><a href="#cb24-738" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-739"><a href="#cb24-739" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb24-740"><a href="#cb24-740" aria-hidden="true" tabindex="-1"></a><span class="fu">## For the ML/DS crowd</span></span>
+<span id="cb24-741"><a href="#cb24-741" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-742"><a href="#cb24-742" aria-hidden="true" tabindex="-1"></a>This is the same principle behind **online / incremental learning** —</span>
+<span id="cb24-743"><a href="#cb24-743" aria-hidden="true" tabindex="-1"></a>updating a model as new data streams in without retraining from</span>
+<span id="cb24-744"><a href="#cb24-744" aria-hidden="true" tabindex="-1"></a>scratch. Bayesian sequential updating is one of the cleanest</span>
+<span id="cb24-745"><a href="#cb24-745" aria-hidden="true" tabindex="-1"></a>mathematical justifications for why that works: the posterior already</span>
+<span id="cb24-746"><a href="#cb24-746" aria-hidden="true" tabindex="-1"></a>captures everything the model learned so far, so it's a legitimate</span>
+<span id="cb24-747"><a href="#cb24-747" aria-hidden="true" tabindex="-1"></a>starting point for the next batch.</span>
+<span id="cb24-748"><a href="#cb24-748" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-749"><a href="#cb24-749" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-750"><a href="#cb24-750" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb24-751"><a href="#cb24-751" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-752"><a href="#cb24-752" aria-hidden="true" tabindex="-1"></a><span class="fu">## Making a decision</span></span>
+<span id="cb24-753"><a href="#cb24-753" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-754"><a href="#cb24-754" aria-hidden="true" tabindex="-1"></a>Managers ask concrete questions. *"What's the probability the true</span>
+<span id="cb24-755"><a href="#cb24-755" aria-hidden="true" tabindex="-1"></a>promotion rate exceeds 25%?"* With a posterior, that's one line:</span>
+<span id="cb24-756"><a href="#cb24-756" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-757"><a href="#cb24-757" aria-hidden="true" tabindex="-1"></a><span class="in">```{r decision}</span></span>
+<span id="cb24-758"><a href="#cb24-758" aria-hidden="true" tabindex="-1"></a>prob_over_25 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pbeta</span>(<span class="fl">0.25</span>, <span class="at">shape1 =</span> a_post2, <span class="at">shape2 =</span> b_post2)</span>
+<span id="cb24-759"><a href="#cb24-759" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"P(rate &gt; 0.25) ="</span>, <span class="fu">round</span>(prob_over_25, <span class="dv">3</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb24-760"><a href="#cb24-760" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb24-761"><a href="#cb24-761" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-762"><a href="#cb24-762" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your turn {.unnumbered}</span></span>
-<span id="cb24-763"><a href="#cb24-763" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-764"><a href="#cb24-764" aria-hidden="true" tabindex="-1"></a>Using the same posterior, compute the probability the rate is **below</span>
-<span id="cb24-765"><a href="#cb24-765" aria-hidden="true" tabindex="-1"></a>20%**. What would you tell a VP of Sales worried the pipeline isn't</span>
-<span id="cb24-766"><a href="#cb24-766" aria-hidden="true" tabindex="-1"></a>converting well enough?</span>
+<span id="cb24-762"><a href="#cb24-762" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb24-763"><a href="#cb24-763" aria-hidden="true" tabindex="-1"></a>Try phrasing that from a confidence interval — you can't, at least not</span>
+<span id="cb24-764"><a href="#cb24-764" aria-hidden="true" tabindex="-1"></a>without a caveat. Direct probability answers are the Bayesian</span>
+<span id="cb24-765"><a href="#cb24-765" aria-hidden="true" tabindex="-1"></a>superpower.</span>
+<span id="cb24-766"><a href="#cb24-766" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb24-767"><a href="#cb24-767" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-768"><a href="#cb24-768" aria-hidden="true" tabindex="-1"></a><span class="in">```{r your-turn-decision}</span></span>
-<span id="cb24-769"><a href="#cb24-769" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span>
-<span id="cb24-770"><a href="#cb24-770" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-771"><a href="#cb24-771" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb24-772"><a href="#cb24-772" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-773"><a href="#cb24-773" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb24-774"><a href="#cb24-774" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-775"><a href="#cb24-775" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
+<span id="cb24-768"><a href="#cb24-768" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your turn {.unnumbered}</span></span>
+<span id="cb24-769"><a href="#cb24-769" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-770"><a href="#cb24-770" aria-hidden="true" tabindex="-1"></a>Using the same posterior, compute the probability the rate is **below</span>
+<span id="cb24-771"><a href="#cb24-771" aria-hidden="true" tabindex="-1"></a>20%**. What would you tell a VP of Sales worried the pipeline isn't</span>
+<span id="cb24-772"><a href="#cb24-772" aria-hidden="true" tabindex="-1"></a>converting well enough?</span>
+<span id="cb24-773"><a href="#cb24-773" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-774"><a href="#cb24-774" aria-hidden="true" tabindex="-1"></a><span class="in">```{r your-turn-decision}</span></span>
+<span id="cb24-775"><a href="#cb24-775" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span>
 <span id="cb24-776"><a href="#cb24-776" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-777"><a href="#cb24-777" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb24-778"><a href="#cb24-778" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
-<span id="cb24-779"><a href="#cb24-779" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-780"><a href="#cb24-780" aria-hidden="true" tabindex="-1"></a>Any "what proportion / what rate?" question — the share of new hires</span>
-<span id="cb24-781"><a href="#cb24-781" aria-hidden="true" tabindex="-1"></a>who pass probation, the fraction of applicants who accept an offer,</span>
-<span id="cb24-782"><a href="#cb24-782" aria-hidden="true" tabindex="-1"></a>the conversion rate of a hiring channel — is a Beta-Binomial problem.</span>
-<span id="cb24-783"><a href="#cb24-783" aria-hidden="true" tabindex="-1"></a>You'll be able to report a full posterior and make direct probability</span>
-<span id="cb24-784"><a href="#cb24-784" aria-hidden="true" tabindex="-1"></a>statements ("there's an 80% chance the acceptance rate is above 60%"),</span>
-<span id="cb24-785"><a href="#cb24-785" aria-hidden="true" tabindex="-1"></a>which reads far more naturally to a business stakeholder than a</span>
-<span id="cb24-786"><a href="#cb24-786" aria-hidden="true" tabindex="-1"></a>p-value.</span>
-<span id="cb24-787"><a href="#cb24-787" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-788"><a href="#cb24-788" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-789"><a href="#cb24-789" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb24-790"><a href="#cb24-790" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-791"><a href="#cb24-791" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
-<span id="cb24-792"><a href="#cb24-792" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-793"><a href="#cb24-793" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb24-794"><a href="#cb24-794" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
-<span id="cb24-795"><a href="#cb24-795" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-796"><a href="#cb24-796" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The hardest step is usually the first one: turning a hunch into a</span>
-<span id="cb24-797"><a href="#cb24-797" aria-hidden="true" tabindex="-1"></a>    **question with one unknown number in it**.</span>
-<span id="cb24-798"><a href="#cb24-798" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Bayes' theorem**: posterior ∝ likelihood × prior.</span>
-<span id="cb24-799"><a href="#cb24-799" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Grid approximation** computes a posterior by scoring candidate</span>
-<span id="cb24-800"><a href="#cb24-800" aria-hidden="true" tabindex="-1"></a>    values — perfect for seeing the mechanism, useless beyond two or</span>
-<span id="cb24-801"><a href="#cb24-801" aria-hidden="true" tabindex="-1"></a>    three unknowns.</span>
-<span id="cb24-802"><a href="#cb24-802" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>A **prior** can come from limits, past data, domain knowledge or</span>
-<span id="cb24-803"><a href="#cb24-803" aria-hidden="true" tabindex="-1"></a>    published research. You have one either way; stating it is the</span>
-<span id="cb24-804"><a href="#cb24-804" aria-hidden="true" tabindex="-1"></a>    honest move. Always visualise it.</span>
-<span id="cb24-805"><a href="#cb24-805" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>The **Binomial** is a distribution over counts, the **Beta** a</span>
-<span id="cb24-806"><a href="#cb24-806" aria-hidden="true" tabindex="-1"></a>    distribution over rates. Location comes from the ratio,</span>
-<span id="cb24-807"><a href="#cb24-807" aria-hidden="true" tabindex="-1"></a>    confidence from the count.</span>
-<span id="cb24-808"><a href="#cb24-808" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>The **Beta-Binomial** shortcut gives the exact posterior for a</span>
-<span id="cb24-809"><a href="#cb24-809" aria-hidden="true" tabindex="-1"></a>    proportion instantly: add successes to <span class="in">`a`</span>, failures to <span class="in">`b`</span>.</span>
-<span id="cb24-810"><a href="#cb24-810" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>Updating is **sequential**, and the posterior answers decision</span>
-<span id="cb24-811"><a href="#cb24-811" aria-hidden="true" tabindex="-1"></a>    questions directly — a credible interval means what it sounds</span>
-<span id="cb24-812"><a href="#cb24-812" aria-hidden="true" tabindex="-1"></a>    like, unlike a confidence interval.</span>
-<span id="cb24-813"><a href="#cb24-813" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb24-814"><a href="#cb24-814" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-815"><a href="#cb24-815" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
-<span id="cb24-816"><a href="#cb24-816" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-817"><a href="#cb24-817" aria-hidden="true" tabindex="-1"></a>**Posteriors, priors and credible intervals** — and your first <span class="in">`brms`</span></span>
-<span id="cb24-818"><a href="#cb24-818" aria-hidden="true" tabindex="-1"></a>model, the tool you'll use for the rest of the book.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb24-777"><a href="#cb24-777" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-778"><a href="#cb24-778" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-779"><a href="#cb24-779" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb24-780"><a href="#cb24-780" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-781"><a href="#cb24-781" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
+<span id="cb24-782"><a href="#cb24-782" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-783"><a href="#cb24-783" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb24-784"><a href="#cb24-784" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
+<span id="cb24-785"><a href="#cb24-785" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-786"><a href="#cb24-786" aria-hidden="true" tabindex="-1"></a>Any "what proportion / what rate?" question — the share of new hires</span>
+<span id="cb24-787"><a href="#cb24-787" aria-hidden="true" tabindex="-1"></a>who pass probation, the fraction of applicants who accept an offer,</span>
+<span id="cb24-788"><a href="#cb24-788" aria-hidden="true" tabindex="-1"></a>the conversion rate of a hiring channel — is a Beta-Binomial problem.</span>
+<span id="cb24-789"><a href="#cb24-789" aria-hidden="true" tabindex="-1"></a>You'll be able to report a full posterior and make direct probability</span>
+<span id="cb24-790"><a href="#cb24-790" aria-hidden="true" tabindex="-1"></a>statements ("there's an 80% chance the acceptance rate is above 60%"),</span>
+<span id="cb24-791"><a href="#cb24-791" aria-hidden="true" tabindex="-1"></a>which reads far more naturally to a business stakeholder than a</span>
+<span id="cb24-792"><a href="#cb24-792" aria-hidden="true" tabindex="-1"></a>p-value.</span>
+<span id="cb24-793"><a href="#cb24-793" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-794"><a href="#cb24-794" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-795"><a href="#cb24-795" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb24-796"><a href="#cb24-796" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-797"><a href="#cb24-797" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
+<span id="cb24-798"><a href="#cb24-798" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-799"><a href="#cb24-799" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb24-800"><a href="#cb24-800" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
+<span id="cb24-801"><a href="#cb24-801" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-802"><a href="#cb24-802" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The hardest step is usually the first one: turning a hunch into a</span>
+<span id="cb24-803"><a href="#cb24-803" aria-hidden="true" tabindex="-1"></a>    **question with one unknown number in it**.</span>
+<span id="cb24-804"><a href="#cb24-804" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Bayes' theorem**: posterior ∝ likelihood × prior.</span>
+<span id="cb24-805"><a href="#cb24-805" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Grid approximation** computes a posterior by scoring candidate</span>
+<span id="cb24-806"><a href="#cb24-806" aria-hidden="true" tabindex="-1"></a>    values — perfect for seeing the mechanism, useless beyond two or</span>
+<span id="cb24-807"><a href="#cb24-807" aria-hidden="true" tabindex="-1"></a>    three unknowns.</span>
+<span id="cb24-808"><a href="#cb24-808" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>A **prior** can come from limits, past data, domain knowledge or</span>
+<span id="cb24-809"><a href="#cb24-809" aria-hidden="true" tabindex="-1"></a>    published research. You have one either way; stating it is the</span>
+<span id="cb24-810"><a href="#cb24-810" aria-hidden="true" tabindex="-1"></a>    honest move. Always visualise it.</span>
+<span id="cb24-811"><a href="#cb24-811" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>The **Binomial** is a distribution over counts, the **Beta** a</span>
+<span id="cb24-812"><a href="#cb24-812" aria-hidden="true" tabindex="-1"></a>    distribution over rates. Location comes from the ratio,</span>
+<span id="cb24-813"><a href="#cb24-813" aria-hidden="true" tabindex="-1"></a>    confidence from the count.</span>
+<span id="cb24-814"><a href="#cb24-814" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>The **Beta-Binomial** shortcut gives the exact posterior for a</span>
+<span id="cb24-815"><a href="#cb24-815" aria-hidden="true" tabindex="-1"></a>    proportion instantly: add successes to <span class="in">`a`</span>, failures to <span class="in">`b`</span>.</span>
+<span id="cb24-816"><a href="#cb24-816" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>Updating is **sequential**, and the posterior answers decision</span>
+<span id="cb24-817"><a href="#cb24-817" aria-hidden="true" tabindex="-1"></a>    questions directly — a credible interval means what it sounds</span>
+<span id="cb24-818"><a href="#cb24-818" aria-hidden="true" tabindex="-1"></a>    like, unlike a confidence interval.</span>
+<span id="cb24-819"><a href="#cb24-819" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb24-820"><a href="#cb24-820" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-821"><a href="#cb24-821" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
+<span id="cb24-822"><a href="#cb24-822" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-823"><a href="#cb24-823" aria-hidden="true" tabindex="-1"></a>**Posteriors, priors and credible intervals** — and your first <span class="in">`brms`</span></span>
+<span id="cb24-824"><a href="#cb24-824" aria-hidden="true" tabindex="-1"></a>model, the tool you'll use for the rest of the book.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

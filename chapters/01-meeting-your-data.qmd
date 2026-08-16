@@ -118,7 +118,7 @@ by someone who didn't look at their data first.
 
 We load the tidyverse, set a consistent plot theme, and load our two
 running datasets from the `peopleanalyticsdata` package (created by
-Keith McNulty — see the [Welcome](index.qmd) chapter for the full
+Keith McNulty — see the [Welcome](../index.qmd) chapter for the full
 credit). **This same setup block appears, in spirit, at the top of
 every chapter in this book.**
 

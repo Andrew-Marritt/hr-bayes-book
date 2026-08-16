@@ -3,6 +3,7 @@ project:
   output-dir: docs
   execute-dir: project
   resources:
+    - CNAME
     - figures/        # hand-built SVGs; see figures/build-decision-trees.py
 
 book:

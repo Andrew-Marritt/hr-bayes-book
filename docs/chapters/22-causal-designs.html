@@ -369,12 +369,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+ <span class="menu-text">From analysis to decision</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/24-posterior-to-decision.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">From Posterior to Decision: What an Analysis Is Worth</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../appendices/A1-llms.html" class="sidebar-item-text sidebar-link">
@@ -1243,49 +1260,6 @@ posterior means and medians may be unreliable.</code></pre>
 <section id="next-chapter" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="next-chapter">Next chapter</h2>
 <p><strong>The elicitation workflow: building priors with your stakeholders</strong> — the closing chapter, and the one that ties Part V together. Chapter 21 made your causal assumptions explicit as a graph; this chapter made your design assumptions explicit as a simulation. Both are things you should be building <em>with</em> the people who know the organisation, not presenting to them at the end. The elicitation workflow is how.</p>
-<hr>
-<!-- NOTE FOR REVISION (not rendered)
-
-## Note for revision
-
-Two open questions for a later pass:
-
-**A real dataset.** Everything here is simulated, which is defensible
-(and Chapter 21 sets the precedent) but means the chapter never touches
-organisational data. If a public panel with a policy change can be found —
-or if an anonymised extract becomes available, as with `turnover` in
-Chapter 17 — the difference-in-differences section would be stronger with
-it. The simulation should stay regardless; it's what lets us check the
-method against a known answer.
-
-**Housekeeping item, now resolved.** The YAML header that used to sit at
-the top of this file (`warning: false` / `message: false`) has been removed
-— `_quarto.yml` sets both project-wide.
-
-**A book-wide refactor, half done.** `_setup.R` defines the colour tokens
-(`navy`, `red`, `navy_light`) and the shared `theme_set()`, but no chapter
-sources it. Chapters 16–23 now define the tokens in their own setup chunk
-and reference them by name instead of repeating hex literals inline, which
-gets most of the benefit — the palette is legible and consistent, and each
-chapter still renders standalone from `drafts/`. Chapters 1–15 still have
-the hex values inline and should be brought into line.
-
-The fully tidy arrangement is still the standard Quarto book pattern: one
-`source("_setup.R")` line per chapter, which works because `_quarto.yml`
-sets `execute-dir: project`. Two things to sort out before doing it:
-`_setup.R` currently loads `skimr` and `rstanarm`, which most chapters
-don't need and which would make every chapter fail if either package is
-missing; and sourcing it breaks standalone rendering from `drafts/`. Trim
-the library list first, then it's genuinely a one-line change per chapter.
-
-**Where the design section belongs.** It sits here because experiments
-only entered scope with this chapter, and because it shares the
-simulation machinery. But it's equally at home in Chapter 20 (A/B
-testing), which is where a reader planning a people experiment would
-naturally look. Worth revisiting once both chapters are integrated —
-splitting it would duplicate the machinery, so it's one or the other.
-
--->
 
 
 <!-- -->
@@ -2654,52 +2628,7 @@ splitting it would duplicate the machinery, so it's one or the other.
 <span id="cb18-896"><a href="#cb18-896" aria-hidden="true" tabindex="-1"></a>made your causal assumptions explicit as a graph; this chapter made your</span>
 <span id="cb18-897"><a href="#cb18-897" aria-hidden="true" tabindex="-1"></a>design assumptions explicit as a simulation. Both are things you should</span>
 <span id="cb18-898"><a href="#cb18-898" aria-hidden="true" tabindex="-1"></a>be building *with* the people who know the organisation, not presenting</span>
-<span id="cb18-899"><a href="#cb18-899" aria-hidden="true" tabindex="-1"></a>to them at the end. The elicitation workflow is how.</span>
-<span id="cb18-900"><a href="#cb18-900" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-901"><a href="#cb18-901" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb18-902"><a href="#cb18-902" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-903"><a href="#cb18-903" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- </span><span class="al">NOTE</span><span class="co"> FOR REVISION (not rendered)</span></span>
-<span id="cb18-904"><a href="#cb18-904" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-905"><a href="#cb18-905" aria-hidden="true" tabindex="-1"></a><span class="co">## Note for revision</span></span>
-<span id="cb18-906"><a href="#cb18-906" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-907"><a href="#cb18-907" aria-hidden="true" tabindex="-1"></a><span class="co">Two open questions for a later pass:</span></span>
-<span id="cb18-908"><a href="#cb18-908" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-909"><a href="#cb18-909" aria-hidden="true" tabindex="-1"></a><span class="co">**A real dataset.** Everything here is simulated, which is defensible</span></span>
-<span id="cb18-910"><a href="#cb18-910" aria-hidden="true" tabindex="-1"></a><span class="co">(and Chapter 21 sets the precedent) but means the chapter never touches</span></span>
-<span id="cb18-911"><a href="#cb18-911" aria-hidden="true" tabindex="-1"></a><span class="co">organisational data. If a public panel with a policy change can be found —</span></span>
-<span id="cb18-912"><a href="#cb18-912" aria-hidden="true" tabindex="-1"></a><span class="co">or if an anonymised extract becomes available, as with `turnover` in</span></span>
-<span id="cb18-913"><a href="#cb18-913" aria-hidden="true" tabindex="-1"></a><span class="co">Chapter 17 — the difference-in-differences section would be stronger with</span></span>
-<span id="cb18-914"><a href="#cb18-914" aria-hidden="true" tabindex="-1"></a><span class="co">it. The simulation should stay regardless; it's what lets us check the</span></span>
-<span id="cb18-915"><a href="#cb18-915" aria-hidden="true" tabindex="-1"></a><span class="co">method against a known answer.</span></span>
-<span id="cb18-916"><a href="#cb18-916" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-917"><a href="#cb18-917" aria-hidden="true" tabindex="-1"></a><span class="co">**Housekeeping item, now resolved.** The YAML header that used to sit at</span></span>
-<span id="cb18-918"><a href="#cb18-918" aria-hidden="true" tabindex="-1"></a><span class="co">the top of this file (`warning: false` / `message: false`) has been removed</span></span>
-<span id="cb18-919"><a href="#cb18-919" aria-hidden="true" tabindex="-1"></a><span class="co">— `_quarto.yml` sets both project-wide.</span></span>
-<span id="cb18-920"><a href="#cb18-920" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-921"><a href="#cb18-921" aria-hidden="true" tabindex="-1"></a><span class="co">**A book-wide refactor, half done.** `_setup.R` defines the colour tokens</span></span>
-<span id="cb18-922"><a href="#cb18-922" aria-hidden="true" tabindex="-1"></a><span class="co">(`navy`, `red`, `navy_light`) and the shared `theme_set()`, but no chapter</span></span>
-<span id="cb18-923"><a href="#cb18-923" aria-hidden="true" tabindex="-1"></a><span class="co">sources it. Chapters 16–23 now define the tokens in their own setup chunk</span></span>
-<span id="cb18-924"><a href="#cb18-924" aria-hidden="true" tabindex="-1"></a><span class="co">and reference them by name instead of repeating hex literals inline, which</span></span>
-<span id="cb18-925"><a href="#cb18-925" aria-hidden="true" tabindex="-1"></a><span class="co">gets most of the benefit — the palette is legible and consistent, and each</span></span>
-<span id="cb18-926"><a href="#cb18-926" aria-hidden="true" tabindex="-1"></a><span class="co">chapter still renders standalone from `drafts/`. Chapters 1–15 still have</span></span>
-<span id="cb18-927"><a href="#cb18-927" aria-hidden="true" tabindex="-1"></a><span class="co">the hex values inline and should be brought into line.</span></span>
-<span id="cb18-928"><a href="#cb18-928" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-929"><a href="#cb18-929" aria-hidden="true" tabindex="-1"></a><span class="co">The fully tidy arrangement is still the standard Quarto book pattern: one</span></span>
-<span id="cb18-930"><a href="#cb18-930" aria-hidden="true" tabindex="-1"></a><span class="co">`source("_setup.R")` line per chapter, which works because `_quarto.yml`</span></span>
-<span id="cb18-931"><a href="#cb18-931" aria-hidden="true" tabindex="-1"></a><span class="co">sets `execute-dir: project`. Two things to sort out before doing it:</span></span>
-<span id="cb18-932"><a href="#cb18-932" aria-hidden="true" tabindex="-1"></a><span class="co">`_setup.R` currently loads `skimr` and `rstanarm`, which most chapters</span></span>
-<span id="cb18-933"><a href="#cb18-933" aria-hidden="true" tabindex="-1"></a><span class="co">don't need and which would make every chapter fail if either package is</span></span>
-<span id="cb18-934"><a href="#cb18-934" aria-hidden="true" tabindex="-1"></a><span class="co">missing; and sourcing it breaks standalone rendering from `drafts/`. Trim</span></span>
-<span id="cb18-935"><a href="#cb18-935" aria-hidden="true" tabindex="-1"></a><span class="co">the library list first, then it's genuinely a one-line change per chapter.</span></span>
-<span id="cb18-936"><a href="#cb18-936" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-937"><a href="#cb18-937" aria-hidden="true" tabindex="-1"></a><span class="co">**Where the design section belongs.** It sits here because experiments</span></span>
-<span id="cb18-938"><a href="#cb18-938" aria-hidden="true" tabindex="-1"></a><span class="co">only entered scope with this chapter, and because it shares the</span></span>
-<span id="cb18-939"><a href="#cb18-939" aria-hidden="true" tabindex="-1"></a><span class="co">simulation machinery. But it's equally at home in Chapter 20 (A/B</span></span>
-<span id="cb18-940"><a href="#cb18-940" aria-hidden="true" tabindex="-1"></a><span class="co">testing), which is where a reader planning a people experiment would</span></span>
-<span id="cb18-941"><a href="#cb18-941" aria-hidden="true" tabindex="-1"></a><span class="co">naturally look. Worth revisiting once both chapters are integrated —</span></span>
-<span id="cb18-942"><a href="#cb18-942" aria-hidden="true" tabindex="-1"></a><span class="co">splitting it would duplicate the machinery, so it's one or the other.</span></span>
-<span id="cb18-943"><a href="#cb18-943" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-944"><a href="#cb18-944" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb18-899"><a href="#cb18-899" aria-hidden="true" tabindex="-1"></a>to them at the end. The elicitation workflow is how.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

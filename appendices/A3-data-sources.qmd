@@ -26,9 +26,6 @@ data(package = "peopleanalyticsdata")   # everything available
 | `recruiting` | 966 rows — hiring decisions, test scores, three interviewer ratings | exercises |
 | `learning` | 4,974 rows — repeated feedback from 326 participants | 12 (crossed effects) |
 
-<!-- TODO (Andrew): confirm the row counts and the chapter list once the
-     renumbering has settled. -->
-
 ## Downloaded separately
 
 **`turnover`** — real, anonymised company data originally shared by

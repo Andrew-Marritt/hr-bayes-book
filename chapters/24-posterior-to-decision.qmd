@@ -247,7 +247,7 @@ tibble(net_cost = net_cost_draws) |>
   scale_x_continuous(labels = scales::comma) +
   labs(
     title = "The elicited net cost of one departure",
-    subtitle = "Red dashed = break even. Mass to the left is where losing someone saved us money.",
+    subtitle = "Red dashed = break even. Mass to its left: departures that saved us money.",
     x = "Net cost per departure (£)", y = "Density"
   )
 ```
@@ -513,29 +513,31 @@ example_id <- managers |>
 
 one_manager <- decision_draws |> filter(employee_id == example_id)
 
-x_hi       <- quantile(one_manager$net_benefit, 0.99)          # <1>
-off_screen <- mean(one_manager$net_benefit > x_hi)
+x_lo <- quantile(one_manager$net_benefit, 0.005)               # <1>
+x_hi <- quantile(one_manager$net_benefit, 0.99)
+off_screen <- mean(one_manager$net_benefit < x_lo |
+                   one_manager$net_benefit > x_hi)
 
 ggplot(one_manager, aes(x = net_benefit)) +
   geom_histogram(bins = 90, fill = navy_light, colour = "white") +
   geom_vline(xintercept = 0, linetype = "dashed", colour = red) +
   geom_vline(xintercept = mean(one_manager$net_benefit),
              linetype = "dotted", colour = navy) +
-  coord_cartesian(xlim = c(min(one_manager$net_benefit), x_hi)) +  # <2>
+  coord_cartesian(xlim = c(x_lo, x_hi)) +                          # <2>
   scale_x_continuous(labels = scales::comma) +
   labs(
     title = "Net benefit of coaching one manager",
     subtitle = paste0(
-      "Red dashed = break even. Navy dotted = the expected value you'd have reported.\n",
-      "Axis clipped at the 99th percentile; ",
-      scales::percent(off_screen, accuracy = 0.1),
-      " of draws sit off the right-hand edge."),
+      "Red dashed = break even. Navy dotted = the expected value.\n",
+      "Axis clipped; ", scales::percent(off_screen, accuracy = 0.1),
+      " of draws sit outside it, nearly all in the right tail."),
     x = "Net benefit (£ per year)", y = "Draws"
   )
 ```
 
-1.  This distribution has a long right tail, and left alone it squashes
-    the part you need to read into the left-hand fifth of the plot.
+1.  This distribution has a long right tail and a thin left one, and
+    left alone they squash the part you need to read into a narrow band
+    in the middle. Clip both ends, not just the ugly one.
 2.  `coord_cartesian()` zooms rather than filters — the bars and the
     mean are still computed on every draw, so the dotted line stays in
     the right place. Using `xlim()` instead would silently *drop* the
@@ -957,14 +959,22 @@ evppi_table |>
 ```
 
 ::: callout-important
-The chart usually surprises people, and the surprise is the point.
-Analysts assume the effect estimate is the thing worth improving,
-because that is the part they own. Frequently it isn't — the cost
-input is wider, and it is much cheaper to narrow, because narrowing it
-means an afternoon with finance rather than a controlled pilot.
+Read it for the gaps, not the order. The programme effect comes top,
+which is the answer an analyst would have guessed — but the **net cost
+is barely behind it**, and the manager's own rate, the only one of the
+three we have a fitted model for, is worth markedly less to resolve
+than either.
 
-A People Analytics function that ran this chart before commissioning
-work would reorder its own queue.
+That second place is the useful finding. Resolving the effect means
+running a pilot: months, a budget, and Chapter 22's design work.
+Resolving the cost means a better afternoon with finance. Almost the
+same value, at a fraction of the cost — and it is the one nobody puts
+on a research plan.
+
+So the question the chart really answers is not *which uncertainty is
+largest* but **which is largest per pound of effort to reduce**. A
+People Analytics function that asked that before commissioning work
+would reorder its own queue.
 :::
 
 ### The two you'll need names for
@@ -1191,3 +1201,77 @@ you analyse, ask what you would do differently depending on the
 answer, and what each wrong turn would cost.** Ask it out loud, in the
 meeting, before anyone opens R. Most of what matters follows from
 that, and the arithmetic is the easy part.
+
+------------------------------------------------------------------------
+
+## Before you go {.unnumbered}
+
+### This one is still being written
+
+You have reached the end of a book that isn't finished. Chapters get
+revised as I teach them and as I write about the same ideas elsewhere,
+so what you have just read is a version rather than a final text.
+
+That makes corrections genuinely useful rather than merely polite. If
+something is wrong, unclear, or simply doesn't work when you run it,
+I would rather hear about it. There are three ways, in ascending order
+of effort:
+
+-   **Edit this page.** Every page has an *Edit this page* link in the
+    right-hand margin, which takes you to the source on GitHub.
+-   **Open an issue**, using the *Report an issue* link beside it — best
+    for "this is wrong" or "this didn't run", where a fix isn't obvious.
+-   **Email me**, at
+    [andrew@andrewmarritt.ch](mailto:andrew@andrewmarritt.ch).
+
+Typos are welcome. Arguments are more welcome. If you think a chapter
+reaches the wrong conclusion, that is the most useful message I can
+receive, and it will not be the first time.
+
+### Working Ideas
+
+Much of the thinking here started as writing in my newsletter,
+**Working Ideas**, at
+[andrewmarritt.substack.com](https://andrewmarritt.substack.com). It
+takes a deliberately multi-disciplinary view of work — personnel
+economics, psychology, decision analysis, and statistics tend to study
+the same problems in isolation from each other, and a lot of what looks
+novel in People Analytics turns out to be well understood somewhere
+else.
+
+Several chapters here have a newsletter essay behind them, and the two
+will keep feeding each other. If this book was useful, that is the
+place to carry on.
+
+### Teaching it
+
+I teach this material, and I do it in two settings. As an **academic
+course** — the first version of this book was the course my students
+sat through, and their questions shaped most of it. And **inside
+organisations**, with People Analytics and HR teams who want to work
+this way but have nobody to get them started.
+
+The company version is usually the more interesting one, because we can
+run it on your problems rather than on the `salespeople` dataset. If
+either would be useful to you, do get in touch.
+
+### Free, and how to support it if you want to
+
+The online version of this book is free, and will stay free. There is
+no paywalled edition and no upsell — I would rather it were read.
+
+If it saved you time and you would like to put something behind it, the
+simplest way is a **paid subscription to Working Ideas**. You get the
+newsletter, and it funds the time that goes into projects like this one.
+There is no obligation whatsoever, and nothing in the book is withheld
+from anyone who doesn't.
+
+### Getting in touch
+
+For teaching enquiries, corrections, disagreements, or anything else:
+
+> **Andrew Marritt**\
+> [andrew@andrewmarritt.ch](mailto:andrew@andrewmarritt.ch)\
+> [andrewmarritt.substack.com](https://andrewmarritt.substack.com)
+
+I read everything, and I reply to most of it.

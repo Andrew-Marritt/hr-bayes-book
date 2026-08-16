@@ -1,0 +1,198 @@
+# Further reading {#sec-further-reading}
+
+Books and papers referred to in the text, plus a few that are not but
+should be. Grouped by what you would be reaching for them *for*, rather
+than alphabetically, because the useful question is usually "where do I
+go next on this" rather than "who wrote that".
+
+## If you want the Bayesian foundations
+
+**Richard McElreath**, *Statistical Rethinking: A Bayesian Course with
+Examples in R and Stan* (2nd edition, Chapman & Hall/CRC, 2020).
+
+If you are starting from scratch today, this is probably where I would
+send you. It builds the whole apparatus from first principles rather than
+presenting it as a set of recipes, and it takes causal reasoning
+seriously from early on instead of bolting it on at the end — the DAG
+material in Chapter 21 here is a short version of an argument he makes at
+length. The accompanying lecture course is free on his YouTube channel
+and covers much of the same ground; if you learn better by watching than
+by reading, you can do the course and treat the book as the reference.
+
+Two practical notes. The book uses his own `rethinking` package rather
+than `brms`, so the code in it will not run against what we use here —
+Solomon Kurz's free translation into `brms` and the tidyverse
+(<https://bookdown.org/content/4857/>) closes that gap chapter by
+chapter. And it is a long book. It rewards being worked through, not
+skimmed.
+
+**John K. Kruschke**, *Doing Bayesian Data Analysis: A Tutorial with R,
+JAGS, and Stan* (2nd edition, Academic Press, 2015).
+
+The puppy book — so called for the dogs on the cover, and the book I
+actually learnt Bayesian analysis from, in its first edition. It is
+patient in a way few statistics books are: it will spend a whole chapter
+on something another author would dispatch in a paragraph, and if you
+have bounced off Bayesian methods once already, that patience is the
+thing that gets you through. The first edition used BUGS; the second
+replaces that with JAGS and Stan, so the code is closer to current
+practice.
+
+Where it differs from this book: Kruschke is a psychologist writing for
+researchers, so the worked problems are experimental rather than
+organisational, and he is a strong advocate for the ROPE-and-HDI approach
+to decisions, which we do not use here.
+
+**Peter E. Rossi, Greg M. Allenby and Sanjog Misra**, *Bayesian
+Statistics and Marketing* (2nd edition, Wiley, 2024).
+
+My first Bayesian book. I had a handful of specific problems and this
+helped me solve them, so I have a lasting affection for it — but I would
+not send anyone here first. It assumes you already accept the Bayesian
+case and want the machinery, and the machinery is presented at a level
+that expects comfort with the mathematics. Come to it when you have a
+hierarchical problem that looks like a marketing problem — heterogeneous
+individuals, repeated choices, information to be pooled across units —
+which, if you squint, describes rather a lot of People Analytics.
+
+**Andrew Gelman, John Carlin, Hal Stern, David Dunson, Aki Vehtari and
+Donald Rubin**, *Bayesian Data Analysis* (3rd edition, Chapman &
+Hall/CRC, 2013). Free PDF at
+<http://www.stat.columbia.edu/~gelman/book/>.
+
+The reference work, usually just called BDA3. This is not a book to read
+through; it is a book to own and consult when you need to know what is
+actually going on underneath something. Considerably more mathematical
+than anything above.
+
+## If you want the regression frameworks in depth
+
+**Keith McNulty**, *Handbook of Regression Modeling in People Analytics:
+With Examples in R and Python* (2nd edition, Chapman & Hall/CRC Press,
+2026). Free online edition at
+<https://peopleanalytics-regression-book.org/>.
+
+The reference work for regression in this field, and the book to go to
+when a chapter here has given you one worked example and you want the
+model family developed properly — the mathematics, the assumptions, the
+diagnostics, and exercises to practise on. It covers linear, logistic,
+multinomial, ordinal, count, hierarchical and survival models, each from
+first principles, in both R and Python.
+
+Three specific reasons to reach for it alongside this one. It gives the
+**classical version** of most of what is here, which is what you need
+when a colleague asks why your answer differs from theirs. It covers
+**structural equation modelling**, which this book only points at
+(@sec-latent-variables in Chapter 19). And the **Python** implementations
+make it the better recommendation for a data science team that does not
+work in R.
+
+The `peopleanalyticsdata` package that accompanies it supplies nearly all
+the data used here — see @sec-data-appendix.
+
+## If you want more on Empirical Bayes
+
+**David Robinson**, *Introduction to Empirical Bayes: Examples from
+Baseball Statistics* (self-published, 2017). Announcement and links at
+<http://varianceexplained.org/r/empirical-bayes-book/>; the blog series
+it grew out of is free on the same site.
+
+Really approachable, and short. We used Empirical Bayes extensively in
+OrganizationView's text analysis — for example which themes genuinely distinguish one
+group's comments from another's, when some themes appear five times and
+others five thousand — and this book was the inspiration for it. The
+examples are all baseball batting averages, which sounds like a barrier
+and is not: a batting average is a proportion estimated from a small and
+uneven number of attempts, and so is almost every rate you will meet in
+People Analytics. Read it after Chapter 14 if you want the method
+developed further than we take it, or before Chapter 14 if you would
+rather meet the idea somewhere with no organisational politics attached.
+
+It is also where I first met the technique in Chapter 5 for comparing
+two posteriors by subtracting their draws. His chapter on Bayesian A/B
+testing gives four ways to answer "is player A genuinely better than
+player B" — simulation, numerical integration, an exact closed form
+derived by Evan Miller, and a normal approximation — and is worth
+reading for the argument that the crude simulation answer is usually
+the one to reach for first.
+
+## If you want the causal toolkit
+
+**Joshua D. Angrist and Jörn-Steffen Pischke**, *Mostly Harmless
+Econometrics: An Empiricist's Companion* (Princeton University Press,
+2009).
+
+A book I go back to time after time. It is the standard reference for the
+design-based tradition that Chapter 22 draws on — difference-in-
+differences, instrumental variables, regression discontinuity — and its
+real contribution is less the techniques than the attitude: start from
+the question of where your comparison actually comes from, and only then
+worry about the estimator. It is classical rather than Bayesian
+throughout, which matters less than you might expect, because
+identification is not a Bayesian or frequentist question.
+
+**Joshua D. Angrist and Jörn-Steffen Pischke**, *Mastering 'Metrics: The
+Path from Cause to Effect* (Princeton University Press, 2014).
+
+The easier of the two — the same ideas with the mathematics stripped back
+and built around a handful of famous studies. *Mostly Harmless* is far
+from a difficult book, but if you have no econometrics background this is
+the sensible entry point, and it is short enough to read in a week.
+
+**Nick Huntington-Klein**, *The Effect: An Introduction to Research
+Design and Causality* (2nd edition, Chapman & Hall/CRC, 2025). Free
+online edition at <https://theeffectbook.net/>.
+
+The best single place to go for the DAG material in Chapter 21. Where
+Angrist and Pischke give you the designs, Huntington-Klein gives you the
+step before them — how to state what you believe about the causal
+structure, and how that statement determines which variables belong in
+the model. Code is given in R, Stata and Python. Free online, which makes
+it an easy thing to point a colleague at.
+
+## On measurement and judgement
+
+**Douglas W. Hubbard**, *How to Measure Anything: Finding the Value of
+Intangibles in Business* (3rd edition, Wiley, 2014).
+
+This should be on every People Analyst's desk. It is crammed with
+techniques for doing an analysis in the real world, where the objection
+you get is not "your posterior is misspecified" but "you can't measure
+that". Hubbard's answer — that a measurement is anything that reduces
+uncertainty, and that you almost always know more before you start than
+you think you do — is Bayesian-first, whether or not the reader notices,
+and his material on calibrating your own estimates is the practical
+groundwork for the elicitation workflow in Chapter 23.
+
+**Howard Wainer**, *Truth or Truthiness: Distinguishing Fact from Fiction
+by Learning to Think Like a Data Scientist* (Cambridge University Press,
+2016).
+
+Short essays on causal claims that do not survive contact with the data.
+This is where I met Rubin's manipulability idea in the form it takes in
+Chapter 13 — that a variable you cannot intervene on cannot be a cause in
+any useful sense — and it is much more entertaining than that description
+makes it sound.
+
+**Daniel Kahneman, Olivier Sibony and Cass R. Sunstein**, *Noise: A Flaw
+in Human Judgment* (Little, Brown Spark, 2021).
+
+The noise-versus-bias distinction that Chapter 19 is built on: two
+assessors disagreeing at random is a different problem from every
+assessor being wrong in the same direction, it is usually the larger of
+the two, and organisations almost never measure it.
+
+## If you want the history
+
+**Sharon Bertsch McGrayne**, *The Theory That Would Not Die* (Yale
+University Press, 2011).
+
+The AF447 story in the Welcome, plus the U-boat hunts and lost-submarine
+searches that used the same logic decades earlier. Worth reading for the
+long stretch in the middle of the twentieth century when the method was
+professionally disreputable and being used anyway, by people who needed
+an answer rather than an argument.
+
+## Papers referred to in the text
+
+<!-- TODO (Andrew): pull these from the chapters as they settle. -->

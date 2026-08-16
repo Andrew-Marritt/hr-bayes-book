@@ -440,7 +440,13 @@ internal mobility, or whatever your process is — across many more
 organisations than you have access to. That literature is a genuine
 source of information about your problem, and Bayesian analysis gives
 you somewhere to *put* it. Desk research stops being background
-reading and becomes an input to the model. IT CAN ALSO HELP YOU CREATE A DAG WHICH WE COVER IN CHAPTER 20
+reading and becomes an input to the model.
+
+It has a second use, further down the line. Chapter 21 asks you to draw
+what you believe causes what before deciding which variables belong in
+a model. The same literature that gives you a prior is usually the best
+available evidence for that drawing — someone else has already tested
+whether the arrow you are about to draw exists.
 
 ::: callout-important
 ## Theory in, scepticism intact

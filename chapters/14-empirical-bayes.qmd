@@ -60,7 +60,7 @@ We'll use the `managers` dataset: 571 managers, one row each, with a
 complaint), their `city`, and a handful of other characteristics. This
 data — and every other dataset used in Part V of this book — comes from
 Keith McNulty's `peopleanalyticsdata` package; see the
-[Welcome](index.qmd) chapter for the full credit.
+[Welcome](../index.qmd) chapter for the full credit.
 
 ------------------------------------------------------------------------
 

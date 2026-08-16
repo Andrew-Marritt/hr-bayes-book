@@ -229,25 +229,24 @@ Plot it to check the shape makes sense — and, more
 importantly, to **show the expert**:
 
 ```{r plot-fit}
-# plotfit() returns a ggplot object (returnPlot = TRUE; showPlot =
-# FALSE stops it printing its own copy first), so we can style it like
-# every other chart in this book, and add two reference lines: the
-# lower limit we gave fitdist() (solid), and the fitted Normal
-# distribution's mean (dashed) - a useful comparison point, since the
-# curve on display is the "best" fit (often skew-normal for exactly
-# three elicited points) and its mean needn't sit at the same spot.
 plotfit(judgements, d = "best", lp = TRUE,
-        showPlot = FALSE, returnPlot = TRUE) +
+        showPlot = FALSE, returnPlot = TRUE) +      # <1>
   geom_vline(xintercept = judgements$limits$lower,
              linetype = "solid", colour = "grey40") +
   geom_vline(xintercept = judgements$Normal$mean,
              linetype = "dashed", colour = red) +
   theme_minimal(base_size = 13)
 
-# plotfit() also resets ggplot's global default theme as a side effect
-# - reset it back so later plots in the book aren't affected.
-theme_set(theme_minimal(base_size = 13))
+theme_set(theme_minimal(base_size = 13))     # <2>
 ```
+
+1.  The dashed red line is the **Normal** fit's mean, drawn against the
+    *best-fitting* curve. With only three elicited points the best fit
+    is often skew-normal, and a skewed distribution's mean does not sit
+    at its peak — so the two deliberately disagree. That gap is the
+    skew, made visible.
+2.  `plotfit()` resets ggplot's global theme as a side effect. Put it
+    back, or every later chart in the chapter changes appearance.
 
 ```{r feedback}
 feedback(judgements, quantiles = c(0.1, 0.25, 0.5, 0.75, 0.9))
@@ -319,21 +318,7 @@ probs <- c(0.25, 0.5, 0.75)
 
 group_fit <- fitdist(vals = vals_matrix, probs = probs, lower = 0)
 
-# We only gave `lower`, not `upper`, so every expert's fitted upper
-# bound is +Inf. plotfit() then tries to work out a sensible right-hand
-# edge for the x-axis itself - and in some SHELF versions that internal
-# calculation silently fails and hands back -Inf instead. seq() then
-# refuses to draw an axis running from 0 to -Inf. Supplying `xu`
-# ourselves sidesteps that entirely; a little more than the highest
-# elicited upper quartile (10) gives the curves room to breathe - and
-# with only quartiles supplied the fitted tails run well past it.
-#
-# As above: return the ggplot object so we can restyle it, and mark
-# the shared lower limit (solid) and each expert's fitted Normal mean
-# (dashed) against their individual curves - here the curves themselves
-# are also Normal (d = "normal"), so the dashed line does line up with
-# each curve's peak.
-plotfit(group_fit, d = "normal", lp = TRUE, xu = 20,
+plotfit(group_fit, d = "normal", lp = TRUE, xu = 20,   # <1>
         showPlot = FALSE, returnPlot = TRUE) +
   geom_vline(xintercept = group_fit$limits$lower,
              linetype = "solid", colour = "grey40") +
@@ -343,6 +328,12 @@ plotfit(group_fit, d = "normal", lp = TRUE, xu = 20,
 
 theme_set(theme_minimal(base_size = 13))
 ```
+
+1.  `xu` sets the right-hand edge of the axis by hand. We gave
+    `fitdist()` a lower limit but no upper one, so the fitted curves run
+    to infinity and `plotfit()`'s own choice of axis limit fails on some
+    SHELF versions. Any finite value a little above the largest elicited
+    number works; there is nothing statistical in the choice.
 
 ::: callout-important
 ## A practical trap: don't let an elicited value sit exactly on the bound
@@ -738,6 +729,12 @@ properly: an elicited prior doesn't just feed a model — its **width**
 tells you something about whether the analysis is worth commissioning
 at all.
 
+This section is the informal version of something Chapter 24 does
+arithmetically. Here you compare prior widths by eye to decide what to
+work on next; there, the same question is answered in pounds, computed
+from the posterior draws themselves. If the idea below appeals, that is
+where it is finished.
+
 ::: callout-tip
 ## The logic, in plain terms
 
@@ -778,7 +775,12 @@ this order:
 The one people reach for when they mean "what is this piece of
 research worth" is **EVSI**, not EVPPI. EVPPI tells you which
 *parameter* to go after; EVSI tells you what a particular attempt to
-go after it would be worth. Chapter 24 computes them.
+go after it would be worth.
+
+Chapter 24 computes the first two directly from posterior draws — both
+turn out to be a couple of lines of R — and shows why the answer often
+points at a cost input rather than at the effect the analyst wanted to
+improve.
 :::
 
 ::: callout-note

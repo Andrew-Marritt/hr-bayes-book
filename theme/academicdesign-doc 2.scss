@@ -1,0 +1,151 @@
+/*-- scss:defaults --*/
+// =====================================================================
+//  AcademicDesign — HTML document theme (workbooks & handouts)
+//  Pair with a Bootswatch base:  theme: [cosmo, academicdesign-doc.scss]
+//  Same identity as the slide theme: navy headings, coral-red accent,
+//  Inter + JetBrains Mono, warm paper feel.
+// =====================================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+// ---- tokens ----------------------------------------------------------
+$navy-900: #0a1e3f;
+$navy-800: #122a52;
+$navy-50:  #f0f4f9;
+$red-700:  #a8241f;
+$red-600:  #d32f2f;
+$red-100:  #f8dad9;
+$red-50:   #fcefee;
+$paper:    #f7f5f0;
+$ink:      #111417;
+$ink-soft: #3a4048;
+$gray-300: #c3c8ce;
+
+// Callout accents — one colour per recurring box role (see BOOK_PLAN 1a)
+$teal-700:  #1a6b5f;   // "For the ML/DS crowd"
+$teal-50:   #eef6f4;
+$amber-700: #8a5a00;   // "Try it yourself"
+$amber-50:  #fdf6e8;
+$slate-600: #5b6470;   // "When you can skip this"
+$slate-50:  #f2f3f5;
+
+// ---- Bootstrap variable overrides -----------------------------------
+$font-family-sans-serif: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif !default;
+$font-family-monospace:  'JetBrains Mono', 'SFMono-Regular', Consolas, monospace !default;
+
+$body-color: $ink;
+$body-bg:    #ffffff;
+
+$link-color:       $red-600;
+$link-hover-color: $red-700;
+
+$headings-font-weight: 700;
+$headings-color:       $navy-900;
+
+$code-color: $red-600;
+$border-color: $gray-300;
+
+// TOC / sidebar accent
+$toc-color: $red-600;
+
+/*-- scss:rules --*/
+// =====================================================================
+body { letter-spacing: -0.005em; }
+
+// ---- Headings: navy, tight ------------------------------------------
+h1, h2, h3, h4 { color: $navy-900; letter-spacing: -0.02em; }
+h1 { font-weight: 800; }
+
+// section-numbered headings: keep the number subtle
+.header-section-number { color: $ink-soft; font-weight: 500; }
+
+// A red rule under the main title area
+#title-block-header .quarto-title h1.title,
+h1.title {
+  border-bottom: 3px solid $red-600;
+  padding-bottom: 0.3em;
+}
+
+// ---- Links -----------------------------------------------------------
+a { text-decoration: none; }
+a:hover { text-decoration: underline; text-decoration-color: rgba($red-600, 0.5); }
+
+// ---- Inline + block code (light red, matches slides) ----------------
+code:not(.sourceCode), p code, li code {
+  color: $red-600;
+  background: $red-50;
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+  font-size: 0.88em;
+}
+div.sourceCode, pre.sourceCode {
+  background: $red-50;
+  border: 1px solid $red-100;
+  border-radius: 6px;
+}
+pre.sourceCode code { background: transparent; }
+
+// ---- Disable font ligatures in code ----------------------------------
+// JetBrains Mono renders coding ligatures by default, which visually
+// merges R's `<-` into a left-arrow glyph and `|>` into a triangle —
+// confusing for students reading rendered HTML rather than typing the
+// code themselves. Turn that off everywhere code appears.
+code, pre, kbd, samp, .sourceCode, .cell-code {
+  font-variant-ligatures: none;
+  -webkit-font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+
+// ---- Tables: minimal Swiss ------------------------------------------
+.table > :not(caption) > * > * { padding: 0.5rem 0.75rem; }
+thead th {
+  color: $red-600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.82em;
+  border-bottom: 2px solid $ink !important;
+}
+tbody td { border-bottom: 1px solid $gray-300; }
+
+// ---- Blockquote ------------------------------------------------------
+blockquote {
+  border-left: 4px solid $red-600;
+  background: $navy-50;
+  padding: 0.6em 1em;
+  color: $ink;
+}
+
+// ---- Quarto callouts: recoloured to the identity --------------------
+.callout { border-radius: 6px; }
+.callout.callout-style-default .callout-title { font-weight: 700; }
+
+// One colour per role. note = "A different lens" and plain asides;
+// tip = "For the ML/DS crowd"; important = "the point";
+// caution = "Try it yourself"; warning = "When you can skip this".
+.callout-note      { border-left-color: $navy-800 !important; }
+.callout-note      .callout-title { background-color: $navy-50 !important;  color: $navy-900; }
+
+.callout-tip       { border-left-color: $teal-700 !important; }
+.callout-tip       .callout-title { background-color: $teal-50 !important;  color: $teal-700; }
+
+.callout-important { border-left-color: $red-600 !important; }
+.callout-important .callout-title { background-color: $red-50 !important;   color: $red-700; }
+
+.callout-caution   { border-left-color: $amber-700 !important; }
+.callout-caution   .callout-title { background-color: $amber-50 !important; color: $amber-700; }
+
+.callout-warning   { border-left-color: $slate-600 !important; }
+.callout-warning   .callout-title { background-color: $slate-50 !important; color: $slate-600; }
+
+// Quarto ships a warning triangle for both caution and warning. It is
+// wrong on an exercise and misleading on "you can skip this", and the
+// custom title already says what the box is. Hide it for those two only.
+.callout-caution .callout-icon-container,
+.callout-warning .callout-icon-container { display: none !important; }
+
+// ---- TOC active accent ----------------------------------------------
+.sidebar nav[role="doc-toc"] ul > li > a.active,
+#TOC a.active { color: $red-600; border-left-color: $red-600; font-weight: 600; }
+
+// ---- Learning-objective / header numbering polish -------------------
+.quarto-title-block .subtitle { color: $ink-soft; font-weight: 500; }

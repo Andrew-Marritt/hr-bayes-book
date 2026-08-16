@@ -1,0 +1,225 @@
+# The Complete Workflow: From Question to Recommendation
+
+## The finish line! {.unnumbered}
+
+A few chapters ago some of you had never opened R. You can now describe
+data, reason with probability, understand sampling, compute a posterior
+by hand, fit regressions, compare groups, choose between models, handle
+grouped data, and model a yes/no outcome.
+
+There is no new statistics in this chapter. There is something more
+useful: the order to do it all in, and how to hand over the result.
+
+### Twenty minutes with the exec committee {.unnumbered}
+
+Here's where the VP of Sales has got to. She has your promotion
+analysis, and she's taking it upstairs.
+
+> *"You've got twenty minutes on the agenda. They want to know what
+> actually drives promotion here — and whether the process is doing
+> what we say it does."*
+
+Notice what's being asked for, and what isn't. Nobody wants a model.
+They want a **recommendation they can act on**, and enough confidence
+in how it was produced to sign off on acting.
+
+::: callout-note
+Everything in Parts I to III has been building one analysis. This
+chapter turns it into a slide — and into a recipe you can re-run on
+whatever you're asked next.
+:::
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Run the **complete Bayesian workflow** end to end, in order
+2.  Recognise which two steps everyone skips, and why a reviewer asks
+    about them first
+3.  Choose the right **model family for your outcome**, using a map of
+    the whole book
+4.  Apply a **project checklist** to your own question
+5.  Present a finding as **one chart and one sentence**
+
+------------------------------------------------------------------------
+
+## What the deliverable looks like
+
+Before the recipe, the destination. Chapter 9 ended with a chart of
+predicted promotion probability by performance tier and customer
+rating, and a sentence to go with it.
+
+That pairing — **one chart, one sentence, a number attached to every
+claim** — is what lands in the meeting. No coefficients, no log-odds,
+no p-values, no mention of `brms`.
+
+::: callout-important
+The rigour lives in **how the number was produced**, not in how much
+of the machinery you show. Everything below is that production
+process. The exec committee will never see any of it, and the whole
+analysis depends on you having done it.
+:::
+
+------------------------------------------------------------------------
+
+## The complete Bayesian workflow
+
+::: callout-important
+Every analysis you do from now on follows the same eleven steps. Working
+through them deliberately is what separates a defensible analysis from
+a lucky one.
+:::
+
+::: callout-note
+## The workflow, start to finish
+
+1.  **Question** — a clear, answerable question about a quantity or
+    relationship.
+2.  **Claim** — decide what kind of answer you are being asked for.
+    *Describing* what is true of the people you have, *predicting* what
+    happens next, or *estimating what would change if you intervened*.
+    These need different models and licence different sentences, and the
+    third is the one usually being asked for (Chapters 21–22).
+3.  **Data** — describe it, plot it, and ask not just how much is
+    missing but **why** (Chapters 1 and 19).
+4.  **Model** — pick an outcome family (Normal, Bernoulli, …), and
+    decide which predictors belong. That second half is a question about
+    cause and effect, not about fit — no statistic will answer it for
+    you (Chapter 21).
+5.  **Priors** — choose weakly-informative priors; **visualise** them;
+    run a **prior predictive check** (Chapter 5).
+6.  **Fit** — with `brms`.
+7.  **Diagnose** — check `Rhat` ≈ 1 and healthy `ESS` (Chapter 11).
+8.  **Check** — posterior predictive check: does the model reproduce
+    the data?
+9.  **Interpret** — report posteriors as estimates + credible
+    intervals; prefer probabilities to jargon.
+10. **Temper** — say what your measures can and cannot support. A noisy
+    measure understates effects; a sample that is only the people you
+    hired and kept cannot speak for anyone else (Chapters 19 and 21).
+11. **Communicate** — one clear chart and one plain-English sentence
+    per finding.
+:::
+
+::: callout-tip
+Steps 7 and 8 are the ones people skip, and the ones a technical
+reviewer asks about first. Steps 2 and 10 are the ones nobody skips
+deliberately — they get left out because no software prompts for them.
+:::
+
+------------------------------------------------------------------------
+
+## Matching model to outcome: the whole book's toolkit
+
+::: callout-important
+## Your project checklist
+
+-   **What is my outcome**, and so which model?
+-   **What are my predictors**, and why those?
+-   **What priors** can I defend? (visualise + prior predictive check,
+    or a full elicitation session per Chapter 23)
+-   **Did the sampler converge?** (Rhat, ESS)
+-   **Does the model fit?** (posterior predictive check)
+-   **What do I conclude?** (estimates + credible intervals, one chart
+    per finding)
+
+Answer these and you have a rigorous, defensible Bayesian analysis.
+:::
+
+| Your outcome | The model | `brm(..., family = )` | Chapter |
+|---|---|---|---|
+| Continuous | Normal regression | `gaussian()` | 6–7 |
+| Yes / no | Logistic | `bernoulli()` | 9 |
+| A rate or proportion | Beta-Binomial | *conjugate shortcut* | 4 |
+| Grouped / nested data | add `(1 \| group)` | *(same family, new formula)* | 8 |
+| A rate needing a fast, closed-form fix | Empirical Bayes | *conjugate shortcut* | 13 |
+| Ranking many small groups fairly | Shrinkage / partial pooling | `poisson()` + offset | 14 |
+| Variance across levels of structure | Hierarchical variance components | `gaussian()` | 15 |
+| Time until an event | Survival model | `weibull()` + `cens()` | 16 |
+| Likert / ordered-category | Ordinal (proportional-odds) | `cumulative("logit")` | 17 |
+| Comparing two rates | Bayesian A/B test | *conjugate shortcut* | 19 |
+| A predictor measured with error | Measurement-error model | `me()` wrapper | 18 |
+| Missing values in a predictor | In-model imputation | `mi()` wrapper | 18 |
+| Counts | Poisson / negative binomial | `poisson()` / `negbinomial()` | 12 (optional) |
+| An effect that may vary by group | Varying slopes | *(same family, new formula)* | 12 (optional) |
+| Several unordered categories | Multinomial | `categorical()` | 12 (optional) |
+| One person measured many times | Crossed effects | *(same family, new formula)* | 12 (optional) |
+
+::: callout-important
+## What this table cannot tell you
+
+Every row answers the same question: *what shape is my outcome?* That is
+the right first question, and it is not the only one.
+
+Nothing in this table says whether your answer is allowed to be causal.
+Two analyses can use the identical row — `bernoulli()`, say — and one is
+a fair description of who gets promoted while the other is a claim about
+what would happen if you changed something. The family is the same; the
+sentence you are entitled to say is not.
+
+Chapters 21 and 22 are about that second question, and they do not fit
+in a table organised by outcome type. Pick your row here. Then go and
+decide what you are claiming.
+:::
+
+::: callout-important
+## Notice what doesn't change
+
+Read down that third column and the real pattern in this book shows
+up: it's the same `brm(formula, family = ..., prior = ...)` call,
+chapter after chapter. A continuous outcome, a yes/no, a count, an
+ordered survey response, a time-to-event — none of them need a
+different tool, a different function, or a different mental model.
+Only the `family`, the formula, and the priors change. The rows marked
+*conjugate shortcut* are the deliberate exceptions (Chapters 4, 14, and 19) — simple enough to solve exactly by hand, which is precisely why
+they're taught that way before `brms` takes over as the one tool for
+everything else.
+:::
+
+This table is the map for the rest of the book — Part IV goes deeper
+on trusting a fit and richer model families, and Part V is built
+specifically around the People Analytics questions this table's later
+rows point to.
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+This is the checklist to pin up. Almost every analysis you're asked to
+do is a version of "pick the model that matches the outcome, state
+your assumptions, check your work, report uncertainty honestly." Doing
+that consistently — and being able to explain each step in one
+sentence — is what makes an analysis something a stakeholder can act
+on rather than something they have to take on faith.
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  The **complete Bayesian workflow** ties every chapter so far into
+    one repeatable recipe: question, data, model, priors, fit,
+    diagnose, check, interpret, communicate.
+2.  **Steps 6 and 7 — diagnose and check — are the ones people skip**,
+    and the first two a technical reviewer asks about.
+3.  Choosing a model is mostly choosing a **family to match your
+    outcome**. The formula and the workflow barely change.
+4.  You have a **project checklist** you can run against any question
+    you're handed.
+5.  The deliverable is **one chart and one sentence**. None of the
+    machinery goes on the slide — the rigour is in how the number was
+    produced, not in how much of it you display.
+:::
+
+## Next chapter {.unnumbered}
+
+Part IV goes further: **Chapter 11** on MCMC diagnostics (trusting your
+model), and **Chapter 12** on richer models (varying slopes and count
+outcomes). Part V, from Chapter 14, is built specifically around
+People Analytics — empirical Bayes, shrinkage, survival analysis,
+Likert data, A/B testing, and the elicitation workflow that closes the
+book.

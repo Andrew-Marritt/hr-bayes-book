@@ -1,0 +1,446 @@
+# Distributions, Sampling & the Idea of a Model
+
+## Welcome back {.unnumbered}
+
+This is the **bridge** chapter. Today we meet the handful of
+**distributions** that describe most People Analytics data, and we
+discover the single most important fact in statistics: **every sample
+is a little different from the last.**
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Recognise the **Normal**, **Binomial** and **Poisson** distributions
+2.  Explain the difference between a **population** and a **sample**
+3.  Describe **sampling variation** and the **sampling distribution**
+4.  Explain what it means to say a **model** is "signal + noise"
+
+## The question behind today {.unnumbered}
+
+::: callout-important
+You survey **50 employees** and find average happiness of **3.2** (on a
+4-point scale). A colleague surveys **50 different employees** at the
+same company and gets **2.9**.
+
+Who is right? And how would you know how much to trust *either*
+number?
+:::
+
+Everything today builds toward answering that.
+
+------------------------------------------------------------------------
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(peopleanalyticsdata)
+
+theme_set(theme_minimal(base_size = 13))
+set.seed(2026)
+
+data("salespeople", package = "peopleanalyticsdata")
+
+# Chapter 1 showed this dataset has a few gaps in `sales`; drop_na()
+# here keeps the rest of this chapter's code simple.
+salespeople <- salespeople |> drop_na(sales, customer_rate, performance, promoted)
+data("managers", package = "peopleanalyticsdata")
+```
+
+------------------------------------------------------------------------
+
+## What a distribution tells you
+
+A **distribution** describes which values are common, which are rare,
+and how spread out they are — where the **middle** is, how **wide** the
+spread is, whether it **leans**.
+
+::: callout-note
+Name the shape and you get a lot for free: a way to summarise it in a
+couple of numbers, and a way to judge whether any observation is
+surprising.
+:::
+
+Three shapes cover most People Analytics data: **Normal**, **Binomial**,
+**Poisson**.
+
+------------------------------------------------------------------------
+
+## The Normal distribution
+
+### Why the bell curve appears *everywhere*
+
+Because most things are pushed around by **many small, independent
+influences that add up**. A salesperson's total sales are nudged by
+territory, client mix, timing of deals, effort, luck… No single factor
+dominates.
+
+::: callout-important
+Add lots of little nudges together and you almost always get a bell.
+:::
+
+You already meet Normals every day:
+
+| **In daily life** | **In People Analytics** |
+|---|---|
+| Adult heights | Sales figures |
+| Exam marks in a big cohort | Time to fill a role |
+| Blood pressure readings | Daily applications received |
+| Errors in careful measurement | Time to productivity for new hires |
+
+### See it happen
+
+Twelve small random nudges, added up:
+
+```{r normal-emerges}
+tibble(total = replicate(5000, sum(runif(12, -1, 1)))) |>
+  ggplot(aes(total)) +
+  geom_histogram(bins = 45, fill = "#122a52", colour = "white") +
+  labs(title = "A bell emerges from nothing",
+       subtitle = "Nothing here is 'normal' by design — it simply appears",
+       x = "Sum of 12 random nudges", y = "Count")
+```
+
+### The anatomy of a Normal
+
+A Normal distribution is fully described by just **two numbers**: its
+mean (where the hump sits) and its SD (how wide it is).
+
+```{r normal-anatomy}
+x <- seq(-4, 4, length.out = 400)
+bind_rows(tibble(x, y = dnorm(x, 0, 1),   sd = "SD = 1"),
+          tibble(x, y = dnorm(x, 0, 1.8), sd = "SD = 1.8")) |>
+  ggplot(aes(x, y, colour = sd)) +
+  geom_line(linewidth = 1.1) +
+  scale_colour_manual(values = c("#122a52", "#d32f2f")) +
+  labs(title = "Same centre, different width",
+       subtitle = "The mean sets the centre; the SD sets the width. That's all.",
+       x = NULL, y = "Density", colour = NULL)
+```
+
+### The 68–95 rule
+
+```{r rule-68-95}
+d <- tibble(x = seq(-4, 4, length.out = 400), y = dnorm(x))
+ggplot(d, aes(x, y)) +
+  geom_area(data = filter(d, x >= -2, x <= 2), fill = "#8fabd0", alpha = 0.7) +
+  geom_area(data = filter(d, x >= -1, x <= 1), fill = "#122a52") +
+  geom_line(linewidth = 1) +
+  labs(title = "The 68–95 rule",
+       subtitle = "≈68% within 1 SD (navy) · ≈95% within 2 SD (light)",
+       x = "Standard deviations from the mean", y = "Density")
+```
+
+### Now our own data
+
+```{r sales-raw}
+ggplot(salespeople, aes(x = sales)) +
+  geom_histogram(bins = 30, fill = "#122a52", colour = "white") +
+  labs(title = "Sales across the sales team",
+       subtitle = "Does this look like the bell we've been drawing?",
+       x = "Sales (thousands of dollars)", y = "Number of salespeople")
+```
+
+### Does a Normal actually fit?
+
+```{r sales-normal-overlay}
+m <- mean(salespeople$sales)
+s <- sd(salespeople$sales)
+
+ggplot(salespeople, aes(x = sales)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 bins = 30, fill = "#122a52", colour = "white", alpha = 0.85) +
+  stat_function(fun = dnorm, args = list(mean = m, sd = s),
+                colour = "#d32f2f", linewidth = 1.1) +
+  labs(title = "Sales with a Normal curve laid over it",
+       subtitle = paste0("Normal with mean ", round(m), " and SD ", round(s)),
+       x = "Sales (thousands of dollars)", y = "Density")
+```
+
+::: callout-note
+The Normal describes the middle of the data reasonably well and may
+miss a little in the tails — that's fine. A distribution is a **useful
+simplification**, not a claim that reality is exactly this shape.
+:::
+
+------------------------------------------------------------------------
+
+## The Binomial distribution
+
+### When the outcome is yes or no
+
+Some observations have only two outcomes, and we care **how many** went
+one way:
+
+-   10 job offers → how many accepted?
+-   20 interviews → how many led to a hire?
+-   **50 salespeople → how many get promoted?**
+
+That count is **Binomial**, and it needs just two things:
+
+-   **n** — how many opportunities
+-   **p** — the chance each one is promoted
+
+### Promotions out of 50 salespeople
+
+```{r binomial}
+p <- mean(salespeople$promoted)
+
+tibble(promotions = 0:50) |>
+  mutate(prob = dbinom(promotions, size = 50, prob = p)) |>
+  ggplot(aes(x = promotions, y = prob)) +
+  geom_col(fill = "#122a52") +
+  labs(title = "Binomial: promotions out of 50 salespeople",
+       subtitle = paste0("Each salesperson is promoted with probability ", round(p, 2)),
+       x = "Number promoted", y = "Probability")
+```
+
+::: callout-important
+## Next chapter we run this backwards
+
+Today: *given* a rate, how likely is each count?
+
+Next chapter: we saw **13 promotions in 40 salespeople** — what is the
+true **rate**? The Binomial is what lets us answer that.
+:::
+
+------------------------------------------------------------------------
+
+## The Poisson distribution
+
+### Counting events in a window
+
+Sometimes there's no natural *n* — events just happen at some average
+rate: complaints per month, transfer requests per team, applications
+per posting. The Poisson needs only **one** number: the rate, **λ**
+(lambda).
+
+### Our data: transfer requests
+
+We'll get properly acquainted with the `managers` dataset in Chapter 8
+— for now, a first look at `transfers`, the number of transfer requests
+filed by a manager's team:
+
+```{r poisson-fit}
+lambda <- mean(managers$transfers, na.rm = TRUE)
+
+managers |>
+  count(transfers) |>
+  mutate(observed = n / sum(n),
+         poisson = dpois(transfers, lambda)) |>
+  pivot_longer(c(observed, poisson), names_to = "source", values_to = "prob") |>
+  ggplot(aes(x = transfers, y = prob, fill = source)) +
+  geom_col(position = "dodge") +
+  scale_fill_manual(values = c("#122a52", "#d32f2f")) +
+  labs(title = "Transfer requests vs a Poisson distribution",
+       subtitle = paste0("Poisson rate (lambda) = ", round(lambda, 2)),
+       x = "Number of transfer requests", y = "Probability", fill = NULL)
+```
+
+::: callout-important
+A distribution is a **model** — a useful approximation, never the
+literal truth. The skill is knowing when the approximation is good
+enough — and Chapter 13 comes back to this exact variable to show what
+happens when you don't account for how much opportunity each manager's
+team size gave for a transfer request to occur.
+:::
+
+------------------------------------------------------------------------
+
+## Population vs sample
+
+### You never see the whole picture
+
+-   The **population** is everyone you care about — every employee,
+    every candidate, ever
+-   The **sample** is the handful you actually measured
+
+::: callout-important
+You compute everything from the sample, but want to say something
+about the population. **That gap is where statistics lives.**
+:::
+
+### Today we'll cheat
+
+We'll treat all `r nrow(salespeople)` salespeople as if they were the
+whole **population**, so we know the "true" average sales figure:
+
+```{r population-mean}
+population_mean_sales <- mean(salespeople$sales)
+population_mean_sales
+```
+
+### Take a sample — then take another
+
+```{r repeated-samples}
+mean(slice_sample(salespeople, n = 50)$sales)
+mean(slice_sample(salespeople, n = 50)$sales)
+mean(slice_sample(salespeople, n = 50)$sales)
+```
+
+Three analysts, three answers — and none of them wrong.
+
+::: callout-note
+**This is the 3.2 vs 2.9 puzzle from the start of the chapter.**
+:::
+
+------------------------------------------------------------------------
+
+## Sampling variation
+
+### What if we did it a thousand times?
+
+```{r sampling-distribution}
+sample_means <- replicate(1000, mean(slice_sample(salespeople, n = 50)$sales))
+
+tibble(mean_sales = sample_means) |>
+  ggplot(aes(x = mean_sales)) +
+  geom_histogram(bins = 40, fill = "#122a52", colour = "white") +
+  geom_vline(xintercept = population_mean_sales,
+             colour = "#d32f2f", linewidth = 1) +
+  labs(title = "Sampling distribution of the mean sales figure (n = 50)",
+       subtitle = "Red = the truth. Estimates scatter around it, but centre on it.",
+       x = "Sample mean sales", y = "Number of samples")
+```
+
+::: callout-note
+## A different lens: this is a frequentist idea, on purpose
+
+Repeating an imaginary study over and over and asking how estimates
+would scatter is the **classical, frequentist** way of thinking about
+uncertainty — and it's genuinely useful for building intuition, which
+is why we've used it all chapter. Next chapter we introduce the
+Bayesian alternative: instead of imagining repeated studies we haven't
+run, we ask directly *"given the one sample I actually have, which
+values are plausible?"* Both are legitimate; they're answering subtly
+different questions, and it's worth noticing the switch when it
+happens.
+:::
+
+### Bigger samples wobble less
+
+```{r bigger-samples}
+sample_means_200 <- replicate(1000, mean(slice_sample(salespeople, n = 200, replace = TRUE)$sales))
+
+bind_rows(
+  tibble(mean_sales = sample_means,     n = "n = 50"),
+  tibble(mean_sales = sample_means_200, n = "n = 200")
+) |>
+  ggplot(aes(x = mean_sales, fill = n)) +
+  geom_histogram(bins = 45, alpha = 0.65, position = "identity") +
+  geom_vline(xintercept = population_mean_sales, colour = "#d32f2f", linewidth = 1) +
+  scale_fill_manual(values = c("#d32f2f", "#122a52")) +
+  labs(title = "Four times the data — about half the spread",
+       x = "Sample mean sales", y = "Number of samples", fill = NULL)
+```
+
+::: callout-tip
+## For the ML/DS crowd
+
+Simulating "what if I drew a different sample" by resampling from data
+you already have is exactly the **bootstrap** — a technique you've
+likely used to put a confidence interval on a model metric. The
+sampling-distribution plots above *are* a bootstrap, just aimed at
+building intuition rather than producing a specific interval.
+:::
+
+### Putting numbers on it
+
+```{r se-table}
+sample_means_500 <- replicate(1000, mean(slice_sample(salespeople, n = nrow(salespeople), replace = TRUE)$sales))
+
+tibble(
+  sample_size = c(50, 200, nrow(salespeople)),
+  spread_of_estimates = c(sd(sample_means), sd(sample_means_200), sd(sample_means_500))
+)
+```
+
+::: callout-important
+To **halve** your uncertainty you need **four times** the data — not
+twice. Precision is expensive.
+:::
+
+### Your turn {.unnumbered}
+
+Repeat the sampling-distribution experiment for the **promotion rate**
+(mean of `promoted`) instead of sales, using samples of 50. Is it
+centred on the population rate?
+
+```{r your-turn-sampling}
+# Your code here
+
+```
+
+------------------------------------------------------------------------
+
+## The idea of a model
+
+### Signal and noise
+
+Every observation can be thought of as:
+
+$$
+\text{observation} = \text{signal} + \text{noise}
+$$
+
+-   The **signal** is the systematic part we care about — the true
+    average sales figure, the true promotion rate, the real effect
+-   The **noise** is everything else — the random wobble that makes
+    each salesperson, and each sample, different
+
+::: callout-note
+A **model** says: "the signal looks like this, the noise looks like
+that." Every distribution today is a candidate description of the
+**noise**.
+:::
+
+### Where this is heading
+
+Frequentist statistics answers *"how much would my estimate wobble if
+I repeated the study?"*
+
+Bayesian statistics answers the more direct question:
+
+> *"Given the one sample I actually have, which values of the signal
+> are plausible — and how sure am I?"*
+
+Next chapter we start answering it.
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+Your engagement survey, your attrition figures, your last headcount
+report — all of it is **one sample**. Everything you report is an
+estimate that would have come out a little differently with a
+different group of respondents or a different month. That's the
+difference between "engagement is down" and the honest, defensible
+version: *"engagement is down in this survey, by roughly this much,
+give or take this much."*
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  **Normal** (continuous), **Binomial** (yes/no counts) and
+    **Poisson** (event counts) describe most People Analytics data.
+2.  A distribution is a **model** — a useful approximation, not the
+    exact truth.
+3.  A **sample** estimate is not the **population** value; it wobbles.
+4.  The **sampling distribution** is centred on the truth, and
+    **tighter with more data** — a frequentist idea we've used to build
+    intuition before switching lenses next chapter.
+5.  Data = **signal + noise**.
+:::
+
+## Next chapter {.unnumbered}
+
+**Bayesian thinking — Bayes' theorem and your first inference.** We
+finally put prior, likelihood and posterior together and estimate a
+promotion rate the Bayesian way.

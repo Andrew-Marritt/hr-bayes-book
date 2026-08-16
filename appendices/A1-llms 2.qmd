@@ -1,0 +1,26 @@
+# Using LLMs for analysis {#sec-llms}
+
+Modern AI tools can, and do, support the modern statistician, and I advise my students to use them — AI fluency is now part of the analyst's skillset. Used well, they're genuinely helpful; used carelessly, they create new problems on top of the ones they were meant to solve.
+
+Here's the advice I give my students:
+
+1. You're responsible for your code, and for guiding the analysis. The most important part of any analysis is asking the right business question — the LLM doesn't know your business, so it can't ask that question for you. You'll also be the one fielding questions about your results. Treat the LLM as a support tool (or clever but junior assistant) that needs thorough checking, not a delegate.
+2. Pay for a good model, or at least a high-end one. The gap between what you get in a free tier and a paid tier is substantial.
+3. Ask the LLM to explain what it's doing. This helps while you're learning (we're always learning), and it helps you judge whether it's actually done what you wanted.
+4. Never paste identifiable or confidential employee data into a public LLM. Check your organisation's data policy and the tool's data-handling terms before you start — the pattern in the next point is a good way to avoid the question entirely.
+5. I use the Positron Assistant inside Positron. It connects to a model of my choice via an API key (another thing the free tier won't give you), and rather than handing it my data, it generates R code and interprets the results for me. It suggests next steps, which I typically ignore, but sometimes it comes up with something I might have missed. That's an LLM working *as* an analyst would, and it gives better, faster results with fewer errors.
+6. Read every line of code an LLM gives you before you run it, especially against live data. Treat it the way you'd treat code from a junior analyst — helpful, but not yet trusted.
+7. If I'm running an analysis I'm unfamiliar with, or haven't done for some time, I ask the LLM to point me to papers or other high-quality sources that used the technique the way I intend to use it. Make a habit of triangulating LLM answers against real sources — it roughly doubles how fast you learn.
+8. Declare and document how you used the LLM.
+
+## My own AI declaration
+
+In the writing of this book I used AI - most notably but not exclusively - various versions of Claude to support my writing but not to do the core writing.
+
+The book was written using Positron and I have Claude connected via the positron assistant. The assistant mostly helped debug the inevitable number of errors and suggested code snippets which I then reviewed and either accepted, changed, or rejected.
+
+I used various LLMs; most notabaly Claude and the current 'labs' AI capability in Google Scholar to help me speed up the desk research process by finding papers that I then read.
+
+Most importantly, I asked the LLM to review all my text and code, from both the Quarto documents and the rendered versions you read here replicating some of the work of the editor that I didn't have. Again the LLM suggested changes some, but not all of which I accepted. It was particularly good at reviewing internal consistency - references within my text to other chapters or sections - which kept changing given I wrote this document asynchronously. Claude helped identify coding style guides written by others (notably Hadley Wickham) and apply them consistently across the book. Anyone who has read my code over the last 15 years will know that I've not always been so consistent.
+
+Finally, and less visibly, over the last few years LLMs have started to replace Stack Overflow and statistics websites, YouTube channels (but not interestingly books which I read more than ever) in my learning process. Hence if I was to map where an idea or mostly code patterns originally came from in many instances I can't 100% determine. I continually am learning this craft. I hope from this book that you can too.

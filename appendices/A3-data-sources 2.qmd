@@ -1,0 +1,51 @@
+# Data sources {#sec-data-appendix}
+
+Every dataset used in this book, where it came from, and what you need to
+do to get hold of it. Each is also credited at the point it first
+appears; this is the single list.
+
+## `peopleanalyticsdata`
+
+Most of the book runs on the `peopleanalyticsdata` package, created by
+Keith McNulty. MIT licensed, and on CRAN:
+
+```r
+install.packages("peopleanalyticsdata")
+library(peopleanalyticsdata)
+
+data(package = "peopleanalyticsdata")   # everything available
+```
+
+| Dataset | Shape | Used in |
+|---|---|---|
+| `salespeople` | 351 rows — sales, customer rating, performance tier, promoted | 1–9, 18, 20 |
+| `employee_survey` | 2,833 rows — four-point Likert items in blocks | 1–3, 17, 18 |
+| `managers` | 571 rows — test score, city, tenure, transfers, team size | 8, 12, 13, 14 |
+| `graduates` | 173 rows — median salary and unemployment by major | 15 |
+| `promotion` | 1,134 rows — time to promotion, flexible working, diversity programme | 16, 19 |
+| `recruiting` | 966 rows — hiring decisions, test scores, three interviewer ratings | exercises |
+| `learning` | 4,974 rows — repeated feedback from 326 participants | 12 (crossed effects) |
+
+<!-- TODO (Andrew): confirm the row counts and the chapter list once the
+     renumbering has settled. -->
+
+## Downloaded separately
+
+**`turnover`** — real, anonymised company data originally shared by
+Edward Babushkin and redistributed on Kaggle under CC BY-NC-SA 4.0.
+Genuine tenure in months, right-censored for those still employed, which
+is why Chapter 17 uses it rather than a constructed alternative.
+
+Not bundled with this book, because the licence is share-alike and the
+data is not ours to redistribute. Download it from
+<https://www.kaggle.com/datasets/davinwijaya/employee-turnover> and save
+it as `data/turnover.csv` before running Chapter 17. See `data/README.md`
+in the repository for the detail.
+
+## Simulated data
+
+Chapter 22 simulates its own panel, because no public People Analytics
+dataset has both a time dimension and a policy change. That is stated in
+the chapter and is deliberate: when you generate the data you know the
+true answer, which is the only situation in which you can check whether a
+method recovers it.

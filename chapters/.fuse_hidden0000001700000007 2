@@ -1,0 +1,307 @@
+# Groups & Categories: Comparing and Choosing Models
+
+## Welcome back {.unnumbered}
+
+Last chapter we explained sales with a *number* (customer rating). Real
+questions usually involve *categories* too: one performance tier versus
+another, one region versus another.
+
+::: callout-note
+## Why this chapter matters
+
+Most People Analytics questions are group comparisons: *Do top
+performers sell more? Does tenure differ by region? Do promoted
+employees have different customer ratings than those passed over?* —
+usually with other factors to account for at the same time.
+:::
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Include a **categorical predictor** in a `brms` model
+2.  Read a coefficient as a **difference from a reference group**
+3.  Estimate a **contrast** between groups with a credible interval
+4.  Combine categorical and continuous predictors
+5.  Compare models with **LOO cross-validation**
+
+------------------------------------------------------------------------
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(peopleanalyticsdata)
+library(brms)
+library(tidybayes)
+library(ggdist)
+library(loo)
+
+theme_set(theme_minimal(base_size = 13))
+set.seed(2026)
+
+data("salespeople", package = "peopleanalyticsdata")
+
+# Chapter 1 showed this dataset has a few gaps in `sales`; drop_na()
+# here keeps the rest of this chapter's code simple.
+salespeople <- salespeople |>
+  drop_na(sales, customer_rate, performance, promoted) |>
+  mutate(performance_f = factor(performance))
+```
+
+------------------------------------------------------------------------
+
+## Categorical predictors
+
+### How a model handles a category
+
+A model can't multiply by "performance rating 3". So it picks one level
+as the **reference** and estimates the others as **differences from
+it**.
+
+::: callout-important
+With `performance_f` (1/2/3/4), R takes the lowest level, 1, as
+reference. The model then reports **how much more or less** each other
+tier sells, on average.
+:::
+
+### Fit it
+
+The intercept and sigma priors are the same ones from Chapter 6 — but
+`b` here means something new: not a one-point change in a continuous
+rating, but the *gap between two performance tiers*, which could
+plausibly be a bigger jump. We widen it a little accordingly, and, as
+always, look at it before fitting anything:
+
+```{r plot-prior-b}
+tibble(b = seq(-600, 600, length.out = 400)) |>
+  mutate(density = dnorm(b, 0, 200)) |>
+  ggplot(aes(b, density)) +
+  geom_area(fill = "#122a52", alpha = 0.5) +
+  geom_vline(xintercept = 0, colour = "#d32f2f", linetype = "dashed") +
+  labs(title = "Prior for a performance-tier difference: Normal(0, 200)",
+       subtitle = "Wider than Chapter 6's slope prior — a tier gap could plausibly be larger",
+       x = "Difference in sales vs. reference tier (thousands of dollars)",
+       y = "Prior density")
+```
+
+```{r fit-performance}
+fit_perf <- brm(
+  sales ~ performance_f, data = salespeople, family = gaussian(),
+  prior = c(prior(normal(400, 200), class = Intercept),
+            prior(normal(0, 200),   class = b),
+            prior(exponential(0.005), class = sigma)),
+  chains = 4, iter = 2000, seed = 7, refresh = 0
+)
+
+summary(fit_perf)
+```
+
+### Reading those rows
+
+-   The **Intercept** is average sales for the reference group
+    (performance rating 1).
+-   Each `performance_fN` row is *not* that tier's average, but **how
+    much more** it sells than the reference tier.
+
+::: callout-important
+This trips everyone up once. Every non-reference row is a
+**difference**, not a level.
+:::
+
+------------------------------------------------------------------------
+
+## Estimating group averages directly
+
+Reading differences-from-reference gets awkward once you have several
+levels. Easier: estimate each group's **expected value directly**,
+then compare whichever pairs you care about.
+
+```{r group-means}
+perf_epred <- salespeople |>
+  distinct(performance_f) |>
+  add_epred_draws(fit_perf)
+
+perf_epred |>
+  ggplot(aes(x = .epred, y = fct_reorder(performance_f, .epred))) +
+  stat_pointinterval(colour = "#122a52") +
+  labs(title = "Estimated average sales by performance rating",
+       subtitle = "Dot = posterior mean, line = 95% credible interval",
+       x = "Expected sales (thousands of dollars)", y = "Performance rating")
+```
+
+### A specific contrast
+
+```{r contrast}
+perf_epred |>
+  compare_levels(.epred, by = performance_f,
+                 comparison = list(c("4", "1"))) |>
+  mean_qi(.epred, .width = 0.95)
+```
+
+If that interval sits clearly away from zero, the two tiers credibly
+differ in sales.
+
+::: callout-note
+## A different lens: this is the Bayesian version of ANOVA / a t-test
+
+Comparing group means with a categorical predictor here is doing
+exactly the same job as a classical **one-way ANOVA** (more than two
+groups) or a **t-test** (two groups) — just reported as a full
+posterior for each group and each contrast, rather than an F-statistic
+or a t-statistic and a p-value. Where a p-value tells you *"could this
+difference be zero?"*, the credible interval above tells you *"how
+big is the difference, and how sure are we"* — usually the more useful
+answer for a business audience.
+:::
+
+::: callout-note
+## A brief word on Bayes Factors here too
+
+A classically trained reader might reach for a **Bayes Factor** at
+this exact point — "is there a real difference between these two
+performance tiers, yes or no?" Chapter 5 covers why this book leans on
+the contrast-plus-credible-interval approach above instead: it answers
+"how big" directly, in the same units as the decision, rather than a
+single evidence ratio for "different vs. not."
+:::
+
+------------------------------------------------------------------------
+
+## Combining continuous and categorical
+
+Nothing stops us using both at once. Does customer rating still matter
+*after* accounting for performance tier?
+
+```{r combined}
+# Same priors just visualised above - no new prior to check here.
+fit_combined <- brm(
+  sales ~ customer_rate + performance_f, data = salespeople, family = gaussian(),
+  prior = c(prior(normal(400, 200), class = Intercept),
+            prior(normal(0, 200),   class = b),
+            prior(exponential(0.005), class = sigma)),
+  chains = 4, iter = 2000, seed = 72, refresh = 0
+)
+
+fixef(fit_combined)
+```
+
+### "Holding the other constant"
+
+Each coefficient is now read **with the other held fixed**:
+
+-   the customer-rating slope is the sales change per point **for a
+    given performance tier**
+-   the performance-tier differences are the gap **at a given customer
+    rating**
+
+::: callout-important
+This is how you rule out a rival explanation: *"top performers sell
+more — but is that just because they also happen to have happier
+customers?"* Now you can answer.
+:::
+
+------------------------------------------------------------------------
+
+## Is the bigger model worth it?
+
+### The trap
+
+Add any variable — even random noise — and the model will fit the data
+you already have *slightly* better.
+
+::: callout-important
+So "it fits better" is **not** evidence that a model is better. We need
+a fairer test.
+:::
+
+### The real question
+
+A good model should predict observations it has **never seen**. **LOO
+cross-validation** estimates exactly that: leave out one observation,
+predict it from the rest, repeat for every observation.
+
+```{r loo}
+# Same customer_rate-on-sales priors as Chapter 6 - already visualised
+# there, refit here purely for the LOO comparison below.
+fit_simple <- brm(
+  sales ~ customer_rate, data = salespeople, family = gaussian(),
+  prior = c(prior(normal(400, 200), class = Intercept),
+            prior(normal(0, 100),   class = b),
+            prior(exponential(0.005), class = sigma)),
+  chains = 4, iter = 2000, seed = 73, refresh = 0
+)
+
+loo_compare(loo(fit_simple), loo(fit_combined))
+```
+
+### Reading the output
+
+-   The model on the **top row** is the best predictor
+-   **`elpd_diff`** — how far behind each other model is
+-   **`se_diff`** — the uncertainty in that gap
+
+::: callout-note
+A model is **meaningfully** worse when `elpd_diff` is large relative
+to `se_diff` — a rough rule of thumb is a gap several times its
+standard error.
+:::
+
+::: callout-tip
+## For the ML/DS crowd
+
+**LOO cross-validation** is the Bayesian sibling of the **k-fold
+cross-validation** you already use to evaluate ML models — same
+motivation (don't trust a model's fit to data it's already seen),
+different mechanics (LOO uses each posterior's full predictive
+distribution rather than refitting the model from scratch on each
+fold, which is normally far cheaper for a Bayesian model than
+literally refitting it thousands of times).
+:::
+
+::: callout-tip
+## Try it yourself
+
+Fit `sales ~ customer_rate + performance_f + performance_f:customer_rate`
+(an interaction) and compare it to `fit_combined` with LOO. Does
+allowing the customer-rating slope to differ by performance tier
+improve prediction?
+:::
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+Most People Analytics questions are group comparisons with other
+factors to control for. Reporting the **size** of a difference with a
+credible interval — and justifying your model choice with **LOO**
+rather than "I added everything I had" — is exactly the rigour a
+sceptical stakeholder should expect, and far more informative than a
+table of p-values.
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  A categorical coefficient is a **difference from the reference
+    group**.
+2.  `add_epred_draws()` estimates each group's expected outcome;
+    subtract draws for a **contrast**.
+3.  Continuous and categorical predictors combine; each is read
+    **holding the others constant**.
+4.  **LOO** compares models by predictive accuracy — the honest way to
+    choose, and the Bayesian cousin of cross-validation.
+5.  This is another point where estimation (credible intervals on a
+    contrast) does the job a Bayes Factor or classical significance
+    test would otherwise be reached for.
+:::
+
+## Next chapter {.unnumbered}
+
+**When data has structure** — salespeople and managers nested within
+offices, and why ignoring that grouping makes you overconfident.

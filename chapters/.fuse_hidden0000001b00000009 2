@@ -1,0 +1,326 @@
+# The Complete Workflow: From Question to Recommendation
+
+## The finish line! {.unnumbered}
+
+A few chapters ago some of you had never opened R. You can now describe
+data, reason with probability, understand sampling, compute a posterior
+by hand, fit regressions, compare groups, choose between models, and
+handle grouped data.
+
+Today we add one more model family — and then tie everything into a
+single repeatable recipe.
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Fit a **logistic regression** in `brms` for a binary outcome
+2.  Interpret coefficients as **odds ratios** and as **predicted
+    probabilities**
+3.  Run the **complete Bayesian workflow** end to end
+4.  Apply a **project checklist** to your own question
+
+------------------------------------------------------------------------
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(peopleanalyticsdata)
+library(brms)
+library(tidybayes)
+library(ggdist)
+
+theme_set(theme_minimal(base_size = 13))
+set.seed(2026)
+
+data("salespeople", package = "peopleanalyticsdata")
+
+# Chapter 1 showed this dataset has a few gaps in `sales`; drop_na()
+# here keeps the rest of this chapter's code simple.
+salespeople <- salespeople |>
+  drop_na(sales, customer_rate, performance, promoted) |>
+  mutate(
+    customer_rate_s = as.numeric(scale(customer_rate)),
+    performance_f = factor(performance)
+  )
+```
+
+------------------------------------------------------------------------
+
+## Back to our opening question
+
+*What predicts who gets promoted?* We asked this in Chapter 1 and have
+been building toward it ever since.
+
+The outcome `promoted` is **0 or 1** — and that needs a different kind
+of model.
+
+### Why a straight line fails
+
+If we fit an ordinary regression to a 0/1 outcome, the line keeps
+going.
+
+::: callout-important
+Extend it far enough and it predicts a **−0.3 probability** of
+promotion, or a **1.4**. Both are nonsense — probabilities live between
+0 and 1. We need something that bends.
+:::
+
+### The fix: model the log-odds
+
+$$
+\text{promoted}_i \sim \text{Bernoulli}(p_i), \qquad
+\text{logit}(p_i) = \alpha + \beta_1 \text{customer\_rate}_i + \beta_2 \text{performance}_i
+$$
+
+### One word changes in `brms`
+
+```{r}
+#| eval: false
+brm(sales ~ customer_rate, family = gaussian())               # continuous outcome
+brm(promoted ~ customer_rate_s + performance_f, family = bernoulli())  # yes/no outcome
+```
+
+Priors, posteriors, credible intervals, checks — all identical to what
+you already know.
+
+A prior on the log-odds scale is hard to eyeball directly — `1.5`
+doesn't mean much until you translate it. As always, look before you
+fit: simulate draws from the intercept prior and translate them to a
+probability:
+
+```{r plot-prior-logit}
+set.seed(9)
+
+tibble(logit_intercept = rnorm(4000, 0, 1.5)) |>
+  mutate(prob = plogis(logit_intercept)) |>
+  ggplot(aes(prob)) +
+  geom_histogram(bins = 40, fill = "#122a52", alpha = 0.6) +
+  labs(title = "What Normal(0, 1.5) on the log-odds scale implies",
+       subtitle = "Simulated draws from the intercept prior, translated to a baseline promotion probability",
+       x = "Implied baseline promotion probability", y = "Simulated draws")
+```
+
+::: callout-note
+Spread fairly evenly across plausible promotion rates, with a little
+extra weight near the extremes — reasonable for "we don't know the
+baseline rate yet," and nowhere near committing to, say, "everyone
+gets promoted."
+:::
+
+------------------------------------------------------------------------
+
+## Fit the model
+
+```{r fit-logit}
+fit_logit <- brm(
+  promoted ~ customer_rate_s + performance_f,
+  data = salespeople, family = bernoulli(),
+  prior = c(prior(normal(0, 1.5), class = Intercept),
+            prior(normal(0, 1),   class = b)),
+  chains = 4, iter = 2000, seed = 9, refresh = 0
+)
+
+summary(fit_logit)
+```
+
+------------------------------------------------------------------------
+
+## Interpreting the results
+
+### Translation 1 — odds ratios
+
+**Odds** = the chance it happens divided by the chance it doesn't. An
+**odds ratio** says how that multiplies.
+
+```{r odds-ratios}
+fixef(fit_logit) |>
+  as_tibble(rownames = "term") |>
+  mutate(odds_ratio = exp(Estimate)) |>
+  select(term, Estimate, odds_ratio)
+```
+
+An odds ratio above 1 means *more* likely to be promoted.
+
+### Translation 2 — predicted probabilities
+
+Odds ratios are exact but abstract. **Probabilities** are what a
+manager can act on.
+
+```{r predicted-prob}
+grid <- expand_grid(
+  customer_rate_s = seq(-2, 2, by = 0.1),
+  performance_f = levels(salespeople$performance_f)
+)
+
+grid |>
+  add_epred_draws(fit_logit) |>
+  mean_qi(.epred, .width = 0.95) |>
+  ggplot(aes(customer_rate_s, .epred, colour = performance_f, fill = performance_f)) +
+  geom_ribbon(aes(ymin = .lower, ymax = .upper), alpha = 0.15, colour = NA) +
+  geom_line(linewidth = 1) +
+  scale_colour_manual(values = c("#8fabd0", "#4a6fa5", "#d32f2f", "#122a52")) +
+  scale_fill_manual(values = c("#8fabd0", "#4a6fa5", "#d32f2f", "#122a52")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Predicted promotion probability",
+       subtitle = "Rises with customer rating, and with performance tier",
+       x = "Customer rating (standardised)", y = "P(promoted)", colour = NULL, fill = NULL)
+```
+
+::: callout-important
+## This chart is the deliverable
+
+Promotion likelihood **climbs with customer rating** and is
+**dramatically higher for top performers** — with honest uncertainty
+bands around both. A talent team could act on this tomorrow: check
+whether the promotion process is weighting these factors the way
+leadership intends.
+:::
+
+### Does it fit?
+
+```{r ppc}
+pp_check(fit_logit, type = "bars", ndraws = 100) +
+  labs(title = "Posterior predictive check (binary outcome)")
+```
+
+### Your turn {.unnumbered}
+
+Add `sales` to the logistic model. Does higher sales change promotion
+odds, holding customer rating and performance tier constant? Report its
+odds ratio.
+
+```{r your-turn}
+# Your code here
+
+```
+
+------------------------------------------------------------------------
+
+## The complete Bayesian workflow
+
+::: callout-important
+Every analysis you do from now on follows the same nine steps. Working
+through them deliberately is what separates a defensible analysis from
+a lucky one.
+:::
+
+::: callout-note
+## The workflow, start to finish
+
+1.  **Question** — a clear, answerable question about a quantity or
+    relationship.
+2.  **Data** — describe it, plot it, note missingness (Chapter 1).
+3.  **Model** — pick an outcome family (Normal, Bernoulli, …) and
+    predictors.
+4.  **Priors** — choose weakly-informative priors; **visualise** them;
+    run a **prior predictive check** (Chapter 5).
+5.  **Fit** — with `brms`.
+6.  **Diagnose** — check `Rhat` ≈ 1 and healthy `ESS` (Chapter 10,
+    optional).
+7.  **Check** — posterior predictive check: does the model reproduce
+    the data?
+8.  **Interpret** — report posteriors as estimates + credible
+    intervals; prefer probabilities to jargon.
+9.  **Communicate** — one clear chart and one plain-English sentence
+    per finding.
+:::
+
+::: callout-tip
+Steps 6 and 7 are the ones people skip, and the ones a technical
+reviewer asks about first.
+:::
+
+------------------------------------------------------------------------
+
+## Matching model to outcome: the whole book's toolkit
+
+::: callout-important
+## Your project checklist
+
+-   **What is my outcome**, and so which model?
+-   **What are my predictors**, and why those?
+-   **What priors** can I defend? (visualise + prior predictive check,
+    or a full elicitation session per Chapter 18)
+-   **Did the sampler converge?** (Rhat, ESS)
+-   **Does the model fit?** (posterior predictive check)
+-   **What do I conclude?** (estimates + credible intervals, one chart
+    per finding)
+
+Answer these and you have a rigorous, defensible Bayesian analysis.
+:::
+
+| Your outcome | The model | `brm(..., family = )` | Chapter |
+|---|---|---|---|
+| Continuous | Normal regression | `gaussian()` | 6–7 |
+| Yes / no | Logistic | `bernoulli()` | 9 |
+| A rate or proportion | Beta-Binomial | *conjugate shortcut* | 4 |
+| Grouped / nested data | add `(1 \| group)` | *(same family, new formula)* | 8 |
+| A rate needing a fast, closed-form fix | Empirical Bayes | *conjugate shortcut* | 12 |
+| Ranking many small groups fairly | Shrinkage / partial pooling | `poisson()` + offset | 13 |
+| Variance across levels of structure | Hierarchical variance components | `gaussian()` | 14 |
+| Time until an event | Survival model | `weibull()` + `cens()` | 15 |
+| Likert / ordered-category | Ordinal (proportional-odds) | `cumulative("logit")` | 16 |
+| Comparing two rates | Bayesian A/B test | *conjugate shortcut* | 17 |
+| Counts | Poisson / negative binomial | `poisson()` / `negbinomial()` | 11 (optional) |
+| An effect that may vary by group | Varying slopes | *(same family, new formula)* | 11 (optional) |
+
+::: callout-important
+## Notice what doesn't change
+
+Read down that third column and the real pattern in this book shows
+up: it's the same `brm(formula, family = ..., prior = ...)` call,
+chapter after chapter. A continuous outcome, a yes/no, a count, an
+ordered survey response, a time-to-event — none of them need a
+different tool, a different function, or a different mental model.
+Only the `family`, the formula, and the priors change. The rows marked
+*conjugate shortcut* are the deliberate exceptions (Chapters 4, 12, and
+17) — simple enough to solve exactly by hand, which is precisely why
+they're taught that way before `brms` takes over as the one tool for
+everything else.
+:::
+
+This table is the map for the rest of the book — Part IV goes deeper
+on trusting a fit and richer model families, and Part V is built
+specifically around the People Analytics questions this table's later
+rows point to.
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+This is the checklist to pin up. Almost every analysis you're asked to
+do is a version of "pick the model that matches the outcome, state
+your assumptions, check your work, report uncertainty honestly." Doing
+that consistently — and being able to explain each step in one
+sentence — is what makes an analysis something a stakeholder can act
+on rather than something they have to take on faith.
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  **Logistic regression** (`family = bernoulli()`) models a yes/no
+    outcome and keeps predictions between 0 and 1.
+2.  Interpret coefficients as **odds ratios**, and — more usefully —
+    as **predicted probabilities**.
+3.  The **complete Bayesian workflow** ties every chapter together into
+    a repeatable recipe.
+4.  You have a **project checklist**, and a map of which model fits
+    which outcome across the whole book.
+:::
+
+## Next chapter {.unnumbered}
+
+Part IV goes further: **Chapter 10** on MCMC diagnostics (trusting your
+model), and **Chapter 11** on richer models (varying slopes and count
+outcomes). Part V, from Chapter 12, is built specifically around
+People Analytics — empirical Bayes, shrinkage, survival analysis,
+Likert data, A/B testing, and the elicitation workflow that closes the
+book.

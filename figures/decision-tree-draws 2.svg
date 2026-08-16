@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 430" width="860" height="430" role="img">
+<title>The same decision tree run on posterior draws</title>
+<path d="M 89 170 L 273 108" fill="none" stroke="#122a52" stroke-width="2" stroke-opacity="1.0"/>
+<path d="M 89 170 L 548 286" fill="none" stroke="#122a52" stroke-width="2" stroke-opacity="1.0"/>
+<path d="M 299 108 L 534 30.0" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 35.85185185185185" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 41.7037037037037" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 47.55555555555556" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 53.407407407407405" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 59.25925925925925" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 65.11111111111111" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 70.96296296296296" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 76.81481481481481" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 82.66666666666666" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 88.5185185185185" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 94.37037037037037" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 100.22222222222221" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 106.07407407407408" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 111.92592592592592" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 117.77777777777779" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 123.62962962962962" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 129.48148148148147" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 135.33333333333331" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 141.1851851851852" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 147.037037037037" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 152.88888888888889" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 158.74074074074073" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 164.59259259259258" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 170.44444444444443" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 176.2962962962963" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 182.14814814814815" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<path d="M 299 108 L 534 188.0" fill="none" stroke="#3d68a8" stroke-width="1.1" stroke-opacity="0.3"/>
+<rect x="63" y="157" width="26" height="26" rx="2" fill="#122a52"/>
+<circle cx="286" cy="108" r="13" fill="none" stroke="#122a52" stroke-width="2.5"/>
+<polygon points="548,274 572,286 548,298" fill="#3d68a8"/>
+<text x="76" y="130" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">Coach this</text>
+<text x="76" y="146" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">manager?</text>
+<text x="176.27042743878158" y="159.3670749796098" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">Yes</text>
+<text x="230.62031707822646" y="193.28771087150045" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">No</text>
+<text x="286" y="68" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#3d68a8" text-anchor="middle">4,000 draws,</text>
+<text x="286" y="82" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#3d68a8" text-anchor="middle">not three branches</text>
+<text x="76" y="336" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" font-style="normal" fill="#8a5a00" text-anchor="start">Each path multiplies one draw from each of:</text>
+<text x="88" y="358" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">• the manager’s transfer rate</text>
+<text x="330" y="358" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" font-weight="400" font-style="italic" fill="#3d68a8" text-anchor="start">(posterior)</text>
+<text x="88" y="377" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">• the reduction coaching achieves</text>
+<text x="330" y="377" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" font-weight="400" font-style="italic" fill="#3d68a8" text-anchor="start">(elicited)</text>
+<text x="88" y="396" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">• the net cost of one departure</text>
+<text x="330" y="396" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" font-weight="400" font-style="italic" fill="#3d68a8" text-anchor="start">(elicited)</text>
+<rect x="590.0" y="144.6" width="6.6" height="5.4" fill="#8fabd0"/>
+<rect x="598.0" y="138.1" width="6.6" height="11.9" fill="#8fabd0"/>
+<rect x="606.0" y="128.4" width="6.6" height="21.6" fill="#8fabd0"/>
+<rect x="614.0" y="116.5" width="6.6" height="33.5" fill="#8fabd0"/>
+<rect x="622.0" y="103.6" width="6.6" height="46.4" fill="#8fabd0"/>
+<rect x="630.0" y="96.0" width="6.6" height="54.0" fill="#8fabd0"/>
+<rect x="638.0" y="99.2" width="6.6" height="50.8" fill="#8fabd0"/>
+<rect x="646.0" y="111.1" width="6.6" height="38.9" fill="#8fabd0"/>
+<rect x="654.0" y="123.0" width="6.6" height="27.0" fill="#8fabd0"/>
+<rect x="662.0" y="132.7" width="6.6" height="17.3" fill="#8fabd0"/>
+<rect x="670.0" y="139.7" width="6.6" height="10.3" fill="#8fabd0"/>
+<rect x="678.0" y="144.6" width="6.6" height="5.4" fill="#8fabd0"/>
+<rect x="686.0" y="147.3" width="6.6" height="2.7" fill="#8fabd0"/>
+<path d="M 614.8 88 L 614.8 155" stroke="#d32f2f" stroke-width="1.6" stroke-dasharray="4 3"/>
+<text x="614.8" y="169" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="10.5" font-weight="400" font-style="normal" fill="#d32f2f" text-anchor="middle">£0</text>
+<text x="590" y="44" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" font-style="normal" fill="#122a52" text-anchor="start">A posterior for net benefit,</text>
+<text x="590" y="60" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" font-style="normal" fill="#122a52" text-anchor="start">not a single expected value</text>
+<text x="590" y="196" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="italic" fill="#3d68a8" text-anchor="start">Read it for how often coaching pays,</text>
+<text x="590" y="212" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="italic" fill="#3d68a8" text-anchor="start">and how badly it doesn’t</text>
+<text x="580" y="290" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">Nothing changes, nothing spent: £0</text>
+</svg>
