@@ -1,0 +1,9 @@
+# Third-party datasets under non-permissive licenses — see data/README.md.
+# Not committed pending permission from the original author (Edward Babushkin).
+data/turnover.csv
+
+.DS_Store
+.quarto/
+
+/.quarto/
+**/*.quarto_ipynb

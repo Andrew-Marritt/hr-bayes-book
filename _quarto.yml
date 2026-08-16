@@ -1,0 +1,89 @@
+project:
+  type: book
+  output-dir: docs
+  execute-dir: project
+  resources:
+    - figures/        # hand-built SVGs; see figures/build-decision-trees.py
+
+book:
+  title: "Bayesian Thinking for People Analytics"
+  subtitle: "A practitioner's guide to reasoning under uncertainty about people data"
+  author: "Andrew Marritt"
+  date: today
+  date-format: "YYYY"
+  reader-mode: true
+  page-footer:
+    left: "Bayesian Thinking for People Analytics"
+    right: "Built with [Quarto](https://quarto.org)"
+  navbar:
+    background: "#122a52"
+  sidebar:
+    style: docked
+    background: light
+  chapters:
+    - index.qmd
+    - part: "Foundations"
+      chapters:
+        - chapters/01-meeting-your-data.qmd
+        - chapters/02-thinking-in-chances.qmd
+        - chapters/03-distributions-sampling.qmd
+    - part: "Bayesian core"
+      chapters:
+        - chapters/04-bayes-theorem.qmd
+        - chapters/05-posteriors-priors-credible-intervals.qmd
+        - chapters/06-bayesian-regression.qmd
+    - part: "Applied workflow"
+      chapters:
+        - chapters/07-groups-and-categories.qmd
+        - chapters/08-multilevel-models.qmd
+        - chapters/09-logistic-regression.qmd
+        - chapters/10-complete-workflow.qmd
+    - part: "Going further"
+      chapters:
+        - chapters/11-mcmc-under-the-hood.qmd
+        - chapters/12-richer-models.qmd
+        - chapters/13-model-building-craft.qmd
+    - part: "People Analytics deep dives"
+      chapters:
+        - chapters/14-empirical-bayes.qmd
+        - chapters/15-bayesian-shrinkage-managers.qmd
+        - chapters/16-hierarchical-pay-variance.qmd
+        - chapters/17-survival-analysis.qmd
+        - chapters/18-likert-survey-analysis.qmd
+        - chapters/19-measurement-error-missing-data.qmd
+        - chapters/20-bayesian-ab-testing.qmd
+        - chapters/21-causal-structure-dags.qmd
+        - chapters/22-causal-designs.qmd
+        - chapters/23-elicitation-workflow.qmd
+    - part: "From analysis to decision"
+      chapters:
+        - chapters/24-posterior-to-decision.qmd
+  appendices:
+    - appendices/A1-llms.qmd
+    - appendices/A2-further-reading.qmd
+    - appendices/A3-data-sources.qmd
+  repo-url: "https://github.com/andrewmarritt/bayesian-people-analytics"
+  repo-actions: [edit, issue]
+  sharing: [twitter, linkedin]
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: [cosmo, theme/academicdesign-doc.scss]
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    code-copy: true
+    code-annotations: below
+    fig-width: 7
+    fig-height: 4.2
+    embed-resources: false
+    html-math-method: katex
+
+execute:
+  warning: false
+  message: false
+  freeze: auto

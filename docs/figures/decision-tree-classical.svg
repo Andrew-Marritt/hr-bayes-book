@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 430" width="860" height="430" role="img">
+<title>The coaching decision as a classical decision tree</title>
+<path d="M 89 170 L 273 108" fill="none" stroke="#122a52" stroke-width="2" stroke-opacity="1.0"/>
+<path d="M 89 170 L 548 286" fill="none" stroke="#122a52" stroke-width="2" stroke-opacity="1.0"/>
+<path d="M 299 108 L 548 44" fill="none" stroke="#122a52" stroke-width="2" stroke-opacity="1.0"/>
+<path d="M 299 108 L 548 108" fill="none" stroke="#122a52" stroke-width="2" stroke-opacity="1.0"/>
+<path d="M 299 108 L 548 172" fill="none" stroke="#122a52" stroke-width="2" stroke-opacity="1.0"/>
+<rect x="63" y="157" width="26" height="26" rx="2" fill="#122a52"/>
+<circle cx="286" cy="108" r="13" fill="none" stroke="#122a52" stroke-width="2.5"/>
+<polygon points="548,274 572,286 548,298" fill="#3d68a8"/>
+<polygon points="548,32 572,44 548,56" fill="#3d68a8"/>
+<polygon points="548,96 572,108 548,120" fill="#3d68a8"/>
+<polygon points="548,160 572,172 548,184" fill="#3d68a8"/>
+<text x="76" y="130" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">Coach this</text>
+<text x="76" y="146" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">manager?</text>
+<text x="176.27042743878158" y="159.3670749796098" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">Yes</text>
+<text x="230.62031707822646" y="193.28771087150045" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" font-style="normal" fill="#122a52" text-anchor="middle">No</text>
+<text x="286" y="68" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#3d68a8" text-anchor="middle">How well</text>
+<text x="286" y="82" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#3d68a8" text-anchor="middle">does it work?</text>
+<text x="407.5648848214706" y="69.64072375853402" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" font-style="normal" fill="#8a5a00" text-anchor="middle">0.25</text>
+<text x="580" y="48" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">Upper quartile: 35% fewer transfers</text>
+<text x="411.05" y="98.0" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" font-style="normal" fill="#8a5a00" text-anchor="middle">0.50</text>
+<text x="580" y="112" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">Median: 20% fewer</text>
+<text x="407.5648848214706" y="154.359276241466" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="600" font-style="normal" fill="#8a5a00" text-anchor="middle">0.25</text>
+<text x="580" y="176" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">Lower quartile: 12% fewer</text>
+<text x="580" y="290" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">Nothing changes, nothing spent: £0</text>
+<text x="580" y="224" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="italic" fill="#8a5a00" text-anchor="start">Each payoff = rate × team size × reduction</text>
+<text x="580" y="240" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="italic" fill="#8a5a00" text-anchor="start">× net cost per departure − £4,000 fee</text>
+<text x="76" y="336" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11" font-weight="600" font-style="normal" fill="#8a5a00" text-anchor="start">Reading the shapes</text>
+<rect x="78" y="344" width="16" height="16" rx="2" fill="#122a52"/>
+<text x="104" y="356" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">square = a choice you make</text>
+<circle cx="86" cy="377" r="8" fill="none" stroke="#122a52" stroke-width="2.5"/>
+<text x="104" y="381" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">circle = something uncertain resolves</text>
+<polygon points="78,394 94,402 78,410" fill="#3d68a8"/>
+<text x="104" y="406" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" font-style="normal" fill="#122a52" text-anchor="start">triangle = an ending, with a value</text>
+</svg>

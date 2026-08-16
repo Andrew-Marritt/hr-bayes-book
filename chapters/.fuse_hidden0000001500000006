@@ -1,0 +1,628 @@
+# Bayesian Regression: Explaining & Predicting
+
+## Welcome back {.unnumbered}
+
+So far we've estimated single numbers — a rate, an average. Today we
+take the biggest step in the book so far: **explaining one variable
+with another**.
+
+### Why you'd want to {.unnumbered}
+
+Almost every question a business asks about its people is really a
+question about a relationship between two things:
+
+-   Do people with higher engagement scores stay longer?
+-   Does the hiring source a candidate came from affect how quickly
+    they reach full productivity?
+-   Do larger teams perform worse than small ones, and from what size
+    does it start to bite?
+-   Is the pay gap between two groups still there once you account for
+    role and tenure?
+
+None of those can be answered by a single average. Each one asks how
+an outcome *moves* as something else changes — and that is exactly
+what regression measures. It's the tool underneath most quantitative
+People Analytics work, and once you have it, most of the rest of this
+book is variations on it.
+
+### Where this one comes from {.unnumbered}
+
+Your VP of Sales has taken the promotion analysis well, and she's back
+with something she wants to spend money on.
+
+> *"The best-rated reps are our best sellers. I want to put the whole
+> team through customer-service training."*
+
+There's a proposal attached, and it isn't cheap. So the question isn't
+really whether better-rated salespeople sell more — she has watched
+them for a decade and she's almost certainly right about the
+direction. The question is **how much**, because that's what decides
+whether the training pays for itself.
+
+> **For each extra point of customer rating, how much more does a
+> salesperson sell — and how confident are we in that figure?**
+
+::: callout-note
+## A yes/no question is the wrong question
+
+The instinctive framing — *"is there a relationship between rating and
+sales?"* — is answerable with a word, and the word is almost always
+"yes" if you collect enough data. It's also useless to someone holding
+a budget.
+
+This is the estimation-over-testing argument from Chapter 5, arriving
+in the place you'll meet it most often. Regression's real output isn't
+a verdict on whether an effect exists. It's a **magnitude with honest
+uncertainty attached** — and it's the uncertainty that tells your VP
+whether the business case survives its own worst-case scenario.
+:::
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Fit a **Bayesian linear regression** with `brms`
+2.  Interpret a **slope** as a posterior distribution — a magnitude,
+    not a verdict
+3.  **Centre a predictor** so the intercept means something
+4.  Distinguish **parameter uncertainty** from **prediction
+    uncertainty**
+5.  Check the model with a **posterior predictive check**
+
+------------------------------------------------------------------------
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(peopleanalyticsdata)
+library(brms)
+library(tidybayes)
+library(ggdist)
+
+theme_set(theme_minimal(base_size = 13))
+set.seed(2026)
+
+data("salespeople", package = "peopleanalyticsdata")
+
+# Chapter 1 showed this dataset has a few gaps in `sales`; drop_na()
+# here keeps the rest of this chapter's code simple.
+salespeople <- salespeople |> drop_na(sales, customer_rate, performance, promoted)
+
+# Centred version of the predictor — see "Why we centre" below.
+mean_rate <- mean(salespeople$customer_rate)
+
+salespeople <- salespeople |>
+  mutate(customer_rate_c = customer_rate - mean_rate)
+```
+
+------------------------------------------------------------------------
+
+## Look before you model
+
+The first step of any analysis is to look at the data. Not summarise
+it — *look* at it. A scatter plot takes ten seconds and will tell you
+things no table can: whether the relationship is roughly a straight
+line or a curve, whether it's tight or loose, whether a handful of
+extreme points are about to drag your answer around, and whether the
+variable is even measured the way you assumed.
+
+Fitting a model before plotting is how analysts end up confidently
+describing a relationship that isn't the shape they think it is.
+
+Each point below is one salesperson.
+
+```{r scatter}
+ggplot(salespeople, aes(x = customer_rate, y = sales)) +
+  geom_point(alpha = 0.4, colour = "#122a52") +
+  geom_smooth(method = "lm", formula = y ~ x,
+              colour = "#d32f2f", se = FALSE) +          # <1>
+  labs(title = "Sales vs customer satisfaction rating",
+       subtitle = "A gentle upward trend — happier customers, more sales",
+       x = "Customer rating", y = "Sales (thousands of dollars)")
+```
+
+1.  That red line is a **classical** least-squares fit — `lm()`,
+    dropped in by `geom_smooth()`. Note `se = FALSE`: we've explicitly
+    switched off even the uncertainty band it would have offered.
+
+### Why not just stop there?
+
+The red line is a perfectly good answer to *"which way does this
+go?"*, and it took no effort. Reaching for it early is a good habit,
+not a guilty one — it's fast, it aids comprehension, and later it
+gives you something to sanity-check your Bayesian result against.
+
+But look at what it is: **one line**. A single best guess, drawn with
+total confidence, through a cloud that clearly permits a range of
+lines. Tilt it slightly and it would still pass respectably through
+those points. That range of defensible tilts is precisely what your
+VP needs, because the business case depends on whether the effect is
+70 per point or 30.
+
+::: callout-important
+## Two honest observations
+
+1.  There **is** an upward trend — the red line slopes up.
+2.  The cloud is **noisy** — customer rating is clearly not the only
+    thing driving sales.
+
+Both are true at once. Regression's job is to put a **number** on the
+trend and an honest measure of **uncertainty** around it. The rest of
+this chapter is about replacing that one confident line with every
+line the data will support, weighted by how well each one does.
+:::
+
+------------------------------------------------------------------------
+
+## The model
+
+### Fitting a line through the cloud
+
+$$
+\text{sales}_i \sim \text{Normal}(\mu_i,\ \sigma), \qquad
+\mu_i = \alpha + \beta \times (\text{customer\_rate}_i - \overline{\text{customer\_rate}})
+$$
+
+-   **α** (intercept) — average sales for a salesperson with an
+    **average** customer rating
+-   **β** (slope) — how much sales change **per extra point** of
+    customer rating
+-   **σ** — how much individual salespeople scatter around the line
+
+::: callout-note
+**β** is the one we came for. It's the number in your VP's business
+case.
+:::
+
+### Why we centre
+
+That subtraction in the formula is doing real work, and it's a habit
+worth forming now.
+
+Written the obvious way — $\mu_i = \alpha + \beta \times
+\text{customer\_rate}_i$ — the intercept α is "expected sales when
+customer rating is **zero**". But ratings in this dataset run from 1
+to 5. A rating of zero doesn't exist and never could. The model will
+still report a number for it, obtained by running the line off the
+left-hand edge of the data, and that number is meaningless.
+
+Subtract the mean rating from every value first and the problem
+disappears. Now the predictor is zero at the *average* rating, so α
+becomes "what a typically-rated salesperson sells" — a quantity your
+VP can recognise, argue with, and sanity-check. The slope β is
+completely unaffected; centring shifts where the line is anchored, not
+how steep it is.
+
+::: callout-important
+## Something `brms` does quietly, that centring makes visible
+
+There's a second reason to do this explicitly, and it will save you a
+confusing afternoon at some point.
+
+`brms` centres your predictors internally anyway, for reasons of
+sampling efficiency. One consequence catches people out: **a prior you
+set on `class = Intercept` applies to the centred intercept** — the
+expected outcome at the *mean* of the predictors — while the
+`Intercept` reported in `summary()` is converted back to the raw
+scale, i.e. the outcome at predictor zero.
+
+On an uncentred model those are two different numbers, and you can
+spend a while trying to work out why the prior you set at 400 produced
+a posterior sitting near 270. Centring the predictor yourself collapses
+the two into one, and what you set is what you read.
+
+(If you ever need the raw-scale intercept to be the one with the
+prior on it, the formula syntax is `y ~ 0 + Intercept + x`.)
+:::
+
+### In `brms`
+
+```{r}
+#| eval: false
+brm(sales ~ 1, ...)                 # last chapter: just a mean
+brm(sales ~ customer_rate_c, ...)   # this chapter: a mean that depends on rating
+```
+
+Everything you learned about priors, posteriors and intervals carries
+straight over.
+
+::: callout-tip
+## Worth naming: this is the recipe for the rest of the book
+
+A formula, a `family`, and some priors — that's the whole thing `brm()`
+needs. Nothing about *how* you fit a Bayesian model is about to change,
+no matter how different the outcome gets. A yes/no outcome, a count, a
+time-to-event, a Likert scale — every one of those, later in this book,
+is still just `brm(formula, family = ..., prior = ...)`. Only the
+formula, the `family`, and the priors change; the workflow around them
+never does. Worth noticing now, because it stops being obvious once
+you've seen ten different-looking outcomes in a row.
+:::
+
+### Three priors now, not two
+
+Chapter 5's model had two unknowns. This one has three, and the new
+arrival — the slope — gets `class = b`, the class every predictor
+coefficient belongs to.
+
+```{r priors}
+priors <- c(
+  prior(normal(400, 200),   class = Intercept),  # <1>
+  prior(normal(0, 100),     class = b),          # <2>
+  prior(exponential(0.005), class = sigma)       # <3>
+)
+```
+
+1.  Unchanged from Chapter 5, and now unambiguous: thanks to
+    centring, this really is our belief about sales for an
+    average-rated salesperson.
+2.  The slope. Centred on **zero** — we're not telling the model which
+    way the relationship runs — with a standard deviation of 100,
+    which says a swing of more than a couple of hundred thousand
+    dollars per rating point would be surprising.
+3.  Unchanged: the spread of individual salespeople around the line.
+
+```{r plot-prior-slope}
+tibble(beta = seq(-300, 300, length.out = 400)) |>
+  mutate(density = dnorm(beta, mean = 0, sd = 100)) |>
+  ggplot(aes(beta, density)) +
+  geom_area(fill = "#8fabd0", alpha = 0.30) +
+  geom_line(colour = "#8fabd0", linewidth = 1) +
+  geom_vline(xintercept = 0, colour = "#d32f2f", linetype = "dashed") +
+  labs(title = "Prior for the slope: Normal(0, 100)",
+       subtitle = "Symmetric around zero — the data must tell us the direction",
+       x = "Slope (change in sales per point of customer rating)", y = "Prior density")
+```
+
+::: callout-note
+## Zero-centred is not the same as no opinion
+
+Putting the slope prior on zero looks like a strong claim that there's
+no effect. It isn't. It's a claim about **direction** — that we're not
+going to prejudge the sign — combined with a claim about **plausible
+magnitude**, which is what the 100 controls.
+
+A prior centred on zero is easily overruled by data that disagrees, as
+you're about to see. What it does buy you is protection against the
+model taking a small, noisy pattern and reporting an implausibly
+enormous effect.
+:::
+
+### What do these priors imply?
+
+Chapter 5 checked a prior by simulating datasets from it. For a
+regression there's a more direct version: simulate **lines**.
+
+```{r prior-predictive}
+set.seed(606)
+
+prior_lines <- tibble(
+  alpha = rnorm(100, mean = 400, sd = 200),   # <1>
+  beta  = rnorm(100, mean = 0,   sd = 100)
+)
+
+ggplot(salespeople, aes(customer_rate, sales)) +
+  geom_point(alpha = 0.2, colour = "grey60") +
+  geom_abline(data = prior_lines,
+              aes(intercept = alpha - beta * mean_rate,   # <2>
+                  slope     = beta),
+              colour = "#8fabd0", alpha = 0.25, linewidth = 0.4) +
+  coord_cartesian(xlim = c(1, 5), ylim = c(-500, 1500)) +
+  labs(title = "100 relationships our priors consider plausible",
+       subtitle = "Before seeing any data — wide, both directions, but not absurd",
+       x = "Customer rating", y = "Sales (thousands of dollars)")
+```
+
+1.  Drawing straight from the two priors, exactly as written above.
+    `brm(..., sample_prior = "only")` would do the same thing through
+    the model; by hand is faster and shows there's no trick to it.
+2.  Converting back to the raw rating scale for plotting. Our line is
+    $\alpha + \beta(x - \bar{x})$, which rearranges to an intercept of
+    $\alpha - \beta\bar{x}$ against plain $x$.
+
+::: callout-important
+That fan of lines is what we're claiming to believe before the data
+speaks. It's wide, it slopes both ways, and it comfortably contains
+anything the data might reasonably show — but it doesn't contain
+lines implying a rating point is worth half a billion dollars. That's
+what weakly-informative looks like for a slope.
+:::
+
+------------------------------------------------------------------------
+
+## Fit and interpret
+
+```{r fit}
+fit_reg <- brm(
+  sales ~ customer_rate_c, data = salespeople, family = gaussian(),
+  prior = priors,
+  chains = 4, iter = 2000, seed = 6, refresh = 0
+)
+
+summary(fit_reg)
+```
+
+Same call as Chapter 5, same argument order, one extra term in the
+formula. That's the whole difference.
+
+### The slope is a distribution
+
+```{r slope-plot}
+fit_reg |>
+  spread_draws(b_customer_rate_c) |>
+  ggplot(aes(x = b_customer_rate_c)) +
+  stat_halfeye(fill = "#122a52", alpha = 0.85) +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "#d32f2f") +
+  labs(title = "Posterior for the customer-rating slope",
+       subtitle = "Where does the mass sit relative to zero?",
+       x = "Change in sales per point of customer rating", y = NULL)
+```
+
+```{r slope-interval}
+fit_reg |>
+  spread_draws(b_customer_rate_c) |>
+  mean_qi(b_customer_rate_c, .width = 0.95)
+```
+
+That interval is the sentence your VP is waiting for: *each additional
+point of customer rating is worth roughly this much in sales, and
+we're 95% confident the true figure lies between these two numbers.*
+Run the lower bound through the training business case. If it still
+works, you have a recommendation.
+
+### Every line the data will support
+
+The single red `lm()` line from earlier was one answer. Here are a
+hundred, drawn from the posterior:
+
+```{r posterior-lines}
+set.seed(607)
+
+posterior_lines <- fit_reg |>
+  spread_draws(b_Intercept, b_customer_rate_c) |>
+  slice_sample(n = 100)                                    # <1>
+
+ggplot(salespeople, aes(customer_rate, sales)) +
+  geom_point(alpha = 0.2, colour = "grey60") +
+  geom_abline(data = posterior_lines,
+              aes(intercept = b_Intercept - b_customer_rate_c * mean_rate,
+                  slope     = b_customer_rate_c),
+              colour = "#122a52", alpha = 0.15, linewidth = 0.4) +   # <2>
+  labs(title = "100 relationships the data supports",
+       subtitle = "Compare with the prior fan above — the data has narrowed it dramatically",
+       x = "Customer rating", y = "Sales (thousands of dollars)")
+```
+
+1.  100 draws is plenty for a readable plot. Each one is a complete,
+    internally consistent pair of intercept and slope — a whole
+    candidate line, not two numbers picked independently.
+2.  Every line has the **same** low opacity, deliberately. Each
+    posterior draw is equally valid, so it would be wrong to draw some
+    more boldly than others. The darkening you see where lines
+    concentrate is honest overplotting: it's density, and density is
+    the thing you want to read.
+
+::: callout-important
+## This is the picture worth keeping
+
+Put this beside the prior fan. Same axes, same everything — but the
+data has taken a wide range of plausible relationships and narrowed
+it to a tight bundle. That narrowing *is* the learning, and the width
+of what's left is the honest uncertainty in the answer.
+
+It's also what the red `lm()` line was hiding. One line implies one
+answer. The bundle shows you the set of answers still standing.
+:::
+
+::: callout-important
+## Why "credibly positive" matters
+
+If the 95% credible interval sits entirely above zero, you can say
+plainly: *"we are confident the effect is real and positive — higher
+customer satisfaction goes with higher sales, and it's about this
+big."* No p-values, no "fail to reject" — just a direct statement about
+the size of the effect.
+:::
+
+::: callout-note
+## A different lens: this is the Bayesian version of `lm()`
+
+`brm(sales ~ customer_rate_c)` and classical `lm(sales ~ customer_rate_c)`
+will usually give very similar point estimates for the slope — this
+isn't a case where the two philosophies typically disagree on the
+number. What you gain here: a full posterior distribution for the
+slope (rather than a point estimate and a standard error built on
+asymptotic theory), and a natural way to fold in prior knowledge when
+you have it. For a quick, well-behaved regression with plenty of data,
+reaching for `lm()` first to sanity-check your `brms` result is a
+perfectly reasonable habit.
+:::
+
+------------------------------------------------------------------------
+
+## Two kinds of uncertainty
+
+### The distinction that trips people up
+
+Two very different questions:
+
+-   *"What is the **average** sales figure for a customer rating of
+    4.5?"*
+-   *"What will **this particular salesperson** sell?"*
+
+-   **Parameter uncertainty** — how unsure we are about the *line
+    itself*. Shrinks as data grows.
+-   **Prediction uncertainty** — how unsure we are about *one new
+    salesperson*. Stays wide, because individuals scatter no matter
+    how much data we have.
+
+### See both at once
+
+The distinction lives entirely in **which of two `tidybayes` functions
+you call**, so it's worth reading this chunk slowly.
+
+```{r two-uncertainties}
+rating_grid <- tibble(
+  customer_rate_c = seq(from = min(salespeople$customer_rate_c),
+                        to   = max(salespeople$customer_rate_c),
+                        length.out = 40)
+) |>
+  mutate(customer_rate = customer_rate_c + mean_rate)          # <1>
+
+epred <- rating_grid |>
+  add_epred_draws(fit_reg) |>                                  # <2>
+  mean_qi(.epred, .width = 0.95)
+
+pred <- rating_grid |>
+  add_predicted_draws(fit_reg) |>                              # <3>
+  mean_qi(.prediction, .width = 0.95)
+
+ggplot() +
+  geom_point(data = salespeople, aes(customer_rate, sales),
+             alpha = 0.3, colour = "grey50") +
+  geom_ribbon(data = pred, aes(customer_rate, ymin = .lower, ymax = .upper),
+              fill = "grey40", alpha = 0.20) +                 # <4>
+  geom_ribbon(data = epred, aes(customer_rate, ymin = .lower, ymax = .upper),
+              fill = "#122a52", alpha = 0.60) +
+  geom_line(data = epred, aes(customer_rate, .epred),
+            colour = "#122a52", linewidth = 1) +
+  labs(title = "Two bands: the line vs a single salesperson",
+       subtitle = "Navy = uncertainty in the average line; grey = range for one salesperson",
+       x = "Customer rating", y = "Sales (thousands of dollars)")
+```
+
+1.  The model is fitted on the centred predictor, so the grid has to
+    be in centred units — but we carry the raw rating along too, so
+    the plot's x-axis stays in units a reader recognises.
+2.  **`add_epred_draws()`** — "e" for *expectation*. For each rating,
+    where does the **average** sit? This uses only α and β, so it
+    inherits their uncertainty and nothing else. It is the navy band.
+3.  **`add_predicted_draws()`** — where would an actual **individual
+    salesperson** land? Same α and β, but now σ is applied on top to
+    scatter one person around the line. It is the grey band. **This
+    single line of difference is the whole point of the section.**
+4.  Grey rather than red here: in this book red means *likelihood*
+    (see the palette in Chapter 4), and this band isn't that.
+
+::: callout-important
+## Which band answers which question
+
+-   *"If we lift average ratings by a point, what happens to average
+    sales?"* → **navy**. You're asking about the line.
+-   *"Priya's rating is 4.5 — what will she sell?"* → **grey**. You're
+    asking about a person.
+
+Quoting the narrow navy band when someone asked about one specific
+salesperson is how forecasts end up embarrassingly overconfident.
+
+And note what happens as you collect more data: the navy band keeps
+shrinking, because more evidence pins the line down. The grey band
+mostly doesn't. Individual salespeople vary for reasons this model
+never observed, and no amount of extra data makes that go away. If
+your prediction interval for one person still looks uncomfortably
+wide, that is not a failure of the analysis — it's the analysis being
+honest with you.
+:::
+
+------------------------------------------------------------------------
+
+## Does the model fit?
+
+Chapter 5 ran `pp_check()` on a *prior*-only model, to see what our
+assumptions implied before the data arrived. The same function on a
+fitted model asks the opposite and more important question: **if this
+model were true, would it generate data that looks like what we
+actually collected?**
+
+```{r ppc}
+pp_check(fit_reg, ndraws = 50) +
+  labs(title = "Posterior predictive check",
+       subtitle = "Simulated sales (light) vs observed sales (dark)")
+```
+
+### What you're looking for
+
+The dark line is your real sales data. The light lines are datasets
+the fitted model invents. You want the dark line to look like it
+belongs to the family — not identical to any one light line, but not
+obviously the odd one out either.
+
+Common failures worth recognising:
+
+-   **The dark line is shifted** left or right of the pack — the model
+    is systematically over- or under-predicting.
+-   **The dark line is much narrower or wider** — σ is wrong, so the
+    model misjudges how much salespeople vary.
+-   **Real data has two humps, simulations have one** — there's a
+    group structure the model doesn't know about. That's Chapter 7.
+-   **Simulations run negative** where the real data can't — a Normal
+    likelihood on a strictly positive outcome. Tolerable if it's a
+    sliver, a signal to change family if it's substantial.
+
+::: callout-note
+A model that passes this check isn't proven correct — it's just not
+visibly contradicted by the data. That's a lower bar than it sounds,
+and still worth clearing before you present anything.
+:::
+
+### Your turn {.unnumbered}
+
+**1. A different predictor.** Fit a regression of `sales` on
+`performance` (treated here as a number, for practice). Centre it
+first. Report the slope with its credible interval — and note, for
+later, that Chapter 16 explains why treating a rating scale as a plain
+number deserves a second look.
+
+**2. Does the prior matter?** Chapter 5 insisted on a sensitivity
+analysis, and we haven't run one here. Refit the customer-rating model
+with a much vaguer slope prior — `prior(normal(0, 5000), class = b)` —
+and plot the two slope posteriors together. With 351 salespeople,
+predict what you'll see before you run it.
+
+```{r your-turn}
+# Your code here
+
+```
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+Regression is very likely the single most useful tool in this book for
+daily work. What sets a Bayesian analysis apart is honesty about
+uncertainty: you report the slope *with a credible interval*, and you
+separate "how sure am I about the effect" from "how well can I predict
+one specific person." Being able to make — and explain — that
+distinction to a business stakeholder is a mark of a mature analysis.
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  `brms` fits regression with `outcome ~ predictor` — same call as
+    last chapter, one more term.
+2.  Ask **how much**, not **whether**. The magnitude and its
+    uncertainty are what a decision needs.
+3.  **Centre your predictors** so the intercept means something — and
+    so the prior you set is the quantity you read back.
+4.  A **slope** is a posterior distribution; report its **credible
+    interval**, and plot the bundle of lines it implies.
+5.  **Parameter uncertainty** (the line, `add_epred_draws()`) shrinks
+    with more data; **prediction uncertainty** (one person,
+    `add_predicted_draws()`) largely doesn't.
+6.  A **posterior predictive check** shows whether the model
+    reproduces the data — necessary, not sufficient.
+7.  Classical `lm()` and Bayesian regression usually agree closely on
+    the point estimate — the posterior is the added value.
+:::
+
+## Next chapter {.unnumbered}
+
+**Groups and categories** — adding categorical predictors, comparing
+groups, and choosing between competing models.

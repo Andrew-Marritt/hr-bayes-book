@@ -1,0 +1,506 @@
+# Meeting Your Data
+
+## Welcome {.unnumbered}
+
+As we talk through each idea, run the code chunk next to it, change a
+number, and see what happens. This chapter follows the same rhythm
+every chapter in this book will: a little theory, a lot of code you can
+poke at.
+
+Today is deliberately gentle: **no models, no probability, no maths**.
+We meet the two datasets we'll use throughout the book, and learn to
+*describe* data.
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Load a dataset into R and inspect its structure
+2.  Tell **categorical** from **numeric** variables — and why it matters
+3.  Describe a numeric variable with **centre** and **spread**
+4.  Describe a categorical variable with **counts** and **proportions**
+5.  Read histograms, boxplots and bar charts
+
+## Why start here? {.unnumbered}
+
+::: callout-important
+Every analysis begins by describing the data. Before anyone believes
+your model, they want to know you **understand what you're working
+with**. Most analytical mistakes are made before any model is fitted,
+by someone who didn't look at their data first.
+:::
+
+------------------------------------------------------------------------
+
+## Setup
+
+We load the tidyverse, set a consistent plot theme, and load our two
+running datasets from the `peopleanalyticsdata` package (created by
+Keith McNulty — see the [Welcome](index.qmd) chapter for the full
+credit). **This same setup block appears, in spirit, at the top of
+every chapter in this book.**
+
+```{r setup}
+library(tidyverse)
+library(peopleanalyticsdata)
+
+theme_set(theme_minimal(base_size = 13))
+
+data("salespeople", package = "peopleanalyticsdata")
+data("employee_survey", package = "peopleanalyticsdata")
+```
+
+::: callout-tip
+## If you get a "package not found" error
+
+Run this **once** in the console (not in a code chunk):
+
+```{r}
+#| eval: false
+install.packages(c("tidyverse", "peopleanalyticsdata"))
+```
+:::
+
+------------------------------------------------------------------------
+
+## What *is* a dataset?
+
+### Rows and columns
+
+A dataset is just a table:
+
+-   Each **row** is one *observation* — one thing you measured
+-   Each **column** is one *variable* — one thing you measured *about*
+    it
+
+::: callout-important
+## The sentence you must always be able to finish
+
+**"One row is one \_\_\_."**
+
+Get this wrong and every number that follows is wrong. In
+`salespeople`, one row is one **salesperson**.
+:::
+
+### Our two datasets
+
+We'll use these two throughout the book, so it's worth learning them
+properly.
+
+-   **`salespeople`** — one row per salesperson. Sales figures,
+    customer ratings, performance, and whether they were promoted.
+    Used to ask *"what predicts who gets promoted?"*
+-   **`employee_survey`** — one row per **survey response** to an
+    engagement survey, on a four-point scale. This is *survey data* —
+    exactly the shape most People Analytics teams collect constantly.
+
+### A first look
+
+`glimpse()` shows the structure: every column, its type, and the first
+few values.
+
+```{r glimpse-salespeople}
+glimpse(salespeople)
+```
+
+So we have `r nrow(salespeople)` salespeople described by
+`r ncol(salespeople)` variables.
+
+### Two kinds of variable
+
+This distinction drives every choice you make later.
+
+| | **Numeric** | **Categorical** |
+|---|---|---|
+| Meaning | arithmetic makes sense | a label for a group |
+| Examples | `sales`, `customer_rate` | `promoted`, `performance` |
+| Describe with | centre and spread | counts |
+| Picture | histogram, boxplot | bar chart |
+
+Averaging `performance` (a 1–4 rating) is defensible only if you're
+comfortable treating it as a genuine number rather than an ordered
+label — we'll come back to exactly that question, properly, in Chapter
+16. For now, treat it as categorical.
+
+### The other dataset
+
+```{r glimpse-survey}
+glimpse(employee_survey)
+```
+
+### Your turn {.unnumbered}
+
+Look at that output and answer three questions before reading on. What
+does **one row** represent — and how do you know? Why are there so many
+more rows here than in `salespeople`? And are these columns numeric or
+categorical, given every one of them holds a whole number from 1 to 4?
+
+The third question is genuinely hard, and it's the one Chapter 16 is
+built around.
+
+------------------------------------------------------------------------
+
+## Describing a number
+
+### Two questions, always
+
+For any numeric variable, ask:
+
+1.  **Where is the middle?** — the typical value
+2.  **How spread out is it?** — how much values vary
+
+Answer both and you've described it. Everything else is detail.
+
+### Mean vs median
+
+Two ways to say "the middle":
+
+-   The **mean** adds everything and divides — it feels every value,
+    including extreme ones
+-   The **median** is the middle value when sorted — it ignores *how*
+    extreme the extremes are
+
+::: callout-note
+## Why the difference matters
+
+Nine salespeople sell \$40,000 each and one sells \$2,000,000. The
+**mean** is a figure nobody near actually sold. The **median** is
+\$40,000.
+
+Which better describes a typical salesperson?
+:::
+
+### The numbers for sales
+
+Base R's `summary()` gives you the whole picture in one line, and it's
+the quickest thing you can type:
+
+```{r sales-summary}
+summary(salespeople$sales)
+```
+
+Read the last column before anything else. **`NA's`** is a count of
+missing values, and it's the reason for the `na.rm = TRUE` arguments
+you're about to see. We'll come back to it properly at the end of the
+chapter.
+
+The tidyverse version is more typing but composes with everything else:
+
+```{r sales-centre}
+salespeople |>
+  summarise(
+    mean_sales   = mean(sales, na.rm = TRUE),
+    median_sales = median(sales, na.rm = TRUE),
+    sd_sales     = sd(sales, na.rm = TRUE)
+  )
+```
+
+::: callout-tip
+## What `na.rm = TRUE` is doing there
+
+`sales` has a missing value in it, and R's summary functions **refuse
+to guess**. Without `na.rm = TRUE` they hand back `NA` instead of a
+number — or, in `quantile()`'s case, an outright error.
+
+Treat `na.rm = TRUE` as a habit worth having by default whenever you
+summarise real data. The last section of this chapter explains why
+it's a habit rather than a fix.
+:::
+
+The **mean** is `r round(mean(salespeople$sales, na.rm = TRUE), 1)` and
+the **median** is `r round(median(salespeople$sales, na.rm = TRUE), 1)`
+(both in thousands of dollars).
+
+### See it: the histogram
+
+```{r sales-histogram}
+ggplot(salespeople, aes(x = sales)) +
+  geom_histogram(bins = 30, fill = "#122a52", colour = "white") +
+  geom_vline(xintercept = mean(salespeople$sales, na.rm = TRUE),
+             colour = "#3a4048", linewidth = 1) +
+  geom_vline(xintercept = median(salespeople$sales, na.rm = TRUE),
+             colour = "#3a4048", linewidth = 1, linetype = "dashed") +
+  labs(
+    title = "Distribution of sales",
+    subtitle = "Solid line = mean, dashed line = median",
+    x = "Sales (thousands of dollars)", y = "Number of salespeople"
+  )
+```
+
+### What the shape tells you
+
+Most salespeople cluster in the middle, with a **tail of high
+performers** stretching to the right — that tail is exactly why the
+mean sits *above* the median.
+
+::: callout-important
+When the mean and median disagree, the data is **skewed** — and you
+should report both.
+:::
+
+### Spread: two measures
+
+-   **Standard deviation (SD)** — roughly the typical distance from the
+    mean. It pairs with the mean, and like the mean it feels every
+    extreme value.
+-   **Interquartile range (IQR)** — the range covering the middle 50%
+    of the data, from the 25th to the 75th percentile. It pairs with
+    the median, and like the median it shrugs off extremes.
+
+```{r sales-spread}
+salespeople |>
+  summarise(
+    sd  = sd(sales, na.rm = TRUE),
+    q25 = quantile(sales, probs = 0.25, na.rm = TRUE),
+    q75 = quantile(sales, probs = 0.75, na.rm = TRUE),
+    iqr = IQR(sales, na.rm = TRUE)
+  )
+```
+
+Note the pairing. If you report a **mean**, report an **SD** next to
+it; if you report a **median**, report the **IQR**. Mixing them —
+a median with a standard deviation — is a small tell that someone
+reached for whichever number came to hand.
+
+### The boxplot
+
+```{r sales-boxplot}
+ggplot(salespeople, aes(y = sales)) +
+  geom_boxplot(fill = "#122a52", alpha = 0.8) +
+  labs(title = "Sales — boxplot", y = "Sales (thousands of dollars)", x = NULL) +
+  theme(axis.text.x = element_blank())
+```
+
+------------------------------------------------------------------------
+
+## Describing a category
+
+### Count, don't average
+
+There's no "average performance rating" that means much on its own.
+Instead we ask: **how many** fall into each group, and **what share**
+is that?
+
+```{r performance-counts}
+salespeople |>
+  count(performance) |>
+  mutate(proportion = round(n / sum(n), 3))
+```
+
+### The bar chart
+
+```{r performance-bar}
+salespeople |>
+  count(performance) |>
+  ggplot(aes(x = factor(performance), y = n)) +
+  geom_col(fill = "#122a52") +
+  labs(title = "Performance ratings across the sales team",
+       x = "Performance rating (1 = lowest, 4 = highest)", y = "Number of salespeople")
+```
+
+### Bars vs histograms
+
+::: callout-tip
+## Don't mix them up
+
+-   A **bar chart** shows counts for a handful of **labels**. Gaps
+    between bars are meaningful.
+-   A **histogram** shows the shape of a **numeric** variable. Bars
+    touch because the underlying scale is continuous.
+:::
+
+### Your turn {.unnumbered}
+
+Make the same count-and-bar-chart for `promoted`. What share of the
+sales team was promoted?
+
+```{r promoted-your-turn}
+# Your code here
+
+```
+
+------------------------------------------------------------------------
+
+## The survey data
+
+### Meet the engagement survey
+
+Each row is one employee's response, with an overall `Happiness` score
+(1–4) and several sub-scale items on the same scale: benefits (`Ben1-3`),
+work environment (`Work1-3`), management (`Man1-3`), and career
+prospects (`Car1-4`).
+
+::: callout-note
+This is exactly the shape of an engagement survey you'll meet in real
+People Analytics work — which is why we'll keep coming back to it.
+:::
+
+```{r survey-overall}
+employee_survey |>
+  summarise(
+    mean_happiness   = mean(Happiness, na.rm = TRUE),
+    median_happiness = median(Happiness, na.rm = TRUE),
+    sd_happiness     = sd(Happiness, na.rm = TRUE)
+  )
+```
+
+### How employees rate their happiness
+
+```{r survey-bar}
+ggplot(employee_survey, aes(x = factor(Happiness))) +
+  geom_bar(fill = "#122a52") +
+  labs(title = "Overall happiness (1–4)",
+       x = "Happiness rating", y = "Number of responses")
+```
+
+### Why that shape matters
+
+Survey scores are **bounded** (they can't go below 1 or above 4) and
+often **pile up toward one end**.
+
+::: callout-important
+Keep that shape in mind. It's extremely common in engagement data, it
+breaks some standard modelling assumptions, and it's exactly why
+Chapter 16 exists.
+:::
+
+------------------------------------------------------------------------
+
+## A first look at relationships
+
+Description gets interesting when we ask whether one variable *differs
+across* another. We're not modelling yet — just looking.
+
+### Does sales differ by promotion outcome?
+
+```{r sales-by-promoted}
+salespeople |>
+  group_by(promoted) |>
+  summarise(
+    mean_sales = mean(sales, na.rm = TRUE),
+    median_sales = median(sales, na.rm = TRUE),
+    n = n()
+  )
+```
+
+```{r sales-by-promoted-plot}
+ggplot(salespeople, aes(x = factor(promoted), y = sales, fill = factor(promoted))) +
+  geom_boxplot(alpha = 0.85, show.legend = FALSE) +
+  scale_fill_manual(values = c("#122a52", "#3d68a8")) +
+  labs(title = "Sales by promotion outcome",
+       subtitle = "Promoted salespeople sell more — but is that the whole story?",
+       x = "Promoted (1 = yes, 0 = no)", y = "Sales (thousands of dollars)")
+```
+
+That question — *is that the whole story?* — is what the rest of this
+book teaches you to answer properly.
+
+### A trick worth knowing
+
+Because `promoted` is coded 0/1, its **mean is the promotion rate**.
+We'll lean on this constantly.
+
+```{r promotion-rate-by-performance}
+salespeople |>
+  group_by(performance) |>
+  summarise(
+    n = n(),
+    promotion_rate = mean(promoted, na.rm = TRUE)
+  )
+```
+
+```{r promotion-rate-plot}
+salespeople |>
+  group_by(performance) |>
+  summarise(promotion_rate = mean(promoted, na.rm = TRUE)) |>
+  ggplot(aes(x = factor(performance), y = promotion_rate)) +
+  geom_col(fill = "#122a52") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Promotion rate by performance rating",
+       x = "Performance rating", y = "Promotion rate")
+```
+
+------------------------------------------------------------------------
+
+## Messy reality: missing values
+
+Real organisational data is rarely as clean as it first looks — and,
+in fact, neither is this teaching dataset. Let's check what we're
+actually working with:
+
+```{r missing-check}
+colSums(is.na(salespeople))
+```
+
+One missing value in `sales`, one in `customer_rate`, one in
+`performance`, none in `promoted`. Out of 351 rows that's almost
+nothing — and it's still enough to turn a mean into `NA`, which is
+exactly why the calculations earlier in this chapter used
+`na.rm = TRUE`.
+
+Notice too that the gaps aren't only in `sales`. Had we checked only
+the column we happened to be summarising, we'd have missed two of
+them.
+
+```{r na-demo}
+#| eval: false
+mean(some_vector)                 # returns NA if anything is missing
+mean(some_vector, na.rm = TRUE)   # ignores the missing values
+quantile(some_vector, 0.25)                 # errors outright if anything is missing
+quantile(some_vector, 0.25, na.rm = TRUE)   # works
+```
+
+::: callout-important
+## Knowing your gaps
+
+Notice the two different failure modes above: `mean()` fails
+*quietly* — it hands you back `NA` and lets you not notice — while
+`quantile()` fails *loudly*, with an error. The loud failure is the
+friendlier one. The quiet one is how a wrong number ends up in a
+report. Deciding what to do about missing data — ignore it, exclude
+those rows, or fill it in — is a decision you must **make and
+justify**, not something to discover by accident halfway through a
+model.
+:::
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+Every People Analytics deliverable opens with a **description of the
+data**: how many people, what the key variables look like, and where
+the gaps are. Before any model, a business stakeholder wants to know
+you *understand what you're working with* — exactly what a thesis
+examiner wants to see, just with a different audience.
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  A dataset is rows (observations) × columns (variables); every
+    variable is **numeric** or **categorical**.
+2.  Describe a **numeric** variable by its **centre** (mean, median)
+    and **spread** (SD, IQR); a gap between mean and median signals
+    skew.
+3.  Describe a **categorical** variable with **counts** and
+    **proportions**.
+4.  Report **mean with SD**, or **median with IQR** — pair them
+    properly.
+5.  **Histograms** and **boxplots** picture numbers; **bar charts**
+    picture categories.
+6.  **Check every column for missing values** before you summarise
+    any of them, and decide what to do about the gaps deliberately.
+7.  A 0/1 variable's **mean is a proportion** — our bridge to next
+    chapter.
+:::
+
+## Next chapter {.unnumbered}
+
+**Thinking in chances** — we turn that promotion rate into a
+*probability*, and meet conditional probability: does the chance of
+promotion change once we know something else about the salesperson?

@@ -1,0 +1,312 @@
+# Richer Models: Varying Slopes & Count Outcomes
+
+## Optional deep-dive {.unnumbered}
+
+Two extensions that cover most of what real People Analytics work might
+additionally need: letting a *relationship* differ across groups
+(**varying slopes**), and modelling **counts** properly.
+
+## What you'll be able to do by the end {.unnumbered}
+
+1.  Fit a **varying-slopes** multilevel model
+2.  Interpret how an effect **differs across groups**
+3.  Fit a **Poisson** regression for a count outcome
+4.  Read coefficients as **rate ratios** and know when to reach for
+    negative-binomial
+
+------------------------------------------------------------------------
+
+## Setup
+
+```{r setup}
+library(tidyverse)
+library(peopleanalyticsdata)
+library(brms)
+library(tidybayes)
+library(ggdist)
+
+theme_set(theme_minimal(base_size = 13))
+set.seed(2026)
+
+data("managers", package = "peopleanalyticsdata")
+
+# Guard against missing values before grouping and modelling (Chapter 1
+# found gaps in a similar teaching dataset).
+managers <- managers |> drop_na(test_score, yrs_employed, city, transfers, group_size)
+```
+
+------------------------------------------------------------------------
+
+## Part 1 — Varying slopes
+
+### Where we left multilevel models
+
+In Chapter 8 each city got its own **intercept** — its own average
+test score.
+
+::: callout-note
+That says offices **start** in different places. But it assumes any
+*effect* we add works **identically** everywhere.
+:::
+
+### The next question
+
+> Does the effect of **years employed** on test score differ from city
+> to city?
+
+Plausibly yes: tenure might sharpen test performance strongly in some
+offices (more mentoring, more internal knowledge-sharing) and barely
+matter in others.
+
+::: callout-important
+If that's true, a single overall slope would **average away** the very
+thing you want to report.
+:::
+
+### The formula
+
+```{r}
+#| eval: false
+test_score ~ yrs_employed + (1 | city)                   # Chapter 8
+test_score ~ yrs_employed + (1 + yrs_employed | city)    # today
+```
+
+`(1 + yrs_employed | city)` gives each city its **own intercept and its
+own slope**.
+
+### Fit it
+
+The intercept, `sd`, and `sigma` priors are the same ones from Chapter
+8. The one genuinely new number is the slope prior — how many points of
+test score a year of tenure could plausibly move things:
+
+```{r plot-prior-slope}
+tibble(b = seq(-20, 20, length.out = 400)) |>
+  mutate(density = dnorm(b, 0, 5)) |>
+  ggplot(aes(b, density)) +
+  geom_area(fill = "#122a52", alpha = 0.5) +
+  geom_vline(xintercept = 0, colour = "#d32f2f", linetype = "dashed") +
+  labs(title = "Prior for the tenure slope: Normal(0, 5)",
+       subtitle = "Most plausible values within about ±10 points per year",
+       x = "Change in test score per year employed", y = "Prior density")
+```
+
+```{r fit-vs}
+fit_vs <- brm(
+  test_score ~ yrs_employed + (1 + yrs_employed | city),
+  data = managers, family = gaussian(),
+  prior = c(prior(normal(75, 15),   class = Intercept),
+            prior(normal(0, 5),     class = b),
+            prior(exponential(1),   class = sd),
+            prior(exponential(0.5), class = sigma),
+            prior(lkj(2),           class = cor)),
+  chains = 4, iter = 2000, seed = 11, refresh = 0
+)
+
+summary(fit_vs)
+```
+
+The `lkj(2)` prior gently says intercepts and slopes probably aren't
+perfectly correlated.
+
+### The number that answers the question
+
+::: callout-important
+Under **Group-Level Effects**, `sd(yrs_employed)` is how much the
+tenure *slope* varies across cities. If it's clearly above zero, the
+relationship genuinely differs by office — a single overall slope
+would hide that.
+:::
+
+### See the varying slopes
+
+```{r plot-slopes}
+city_slopes <- coef(fit_vs)$city[, , "yrs_employed"] |>
+  as_tibble(rownames = "city")
+
+city_slopes |>
+  ggplot(aes(x = Estimate, y = fct_reorder(city, Estimate))) +
+  geom_vline(xintercept = 0, linetype = "dashed",
+             colour = "#d32f2f", linewidth = 1) +
+  geom_pointrange(aes(xmin = Q2.5, xmax = Q97.5), colour = "#122a52") +
+  labs(title = "Each city's years-employed slope",
+       subtitle = "Some positive, some near zero — the effect is not universal",
+       x = "Slope: test score change per extra year employed", y = NULL)
+```
+
+### Heterogeneity *is* a finding
+
+::: callout-important
+"Tenure predicts test performance strongly in some offices and barely
+at all in others" is a **more useful** finding than a single average
+slope near zero. An overall model would have reported "a modest
+effect" — and been misleading about where it actually shows up.
+:::
+
+### Your turn {.unnumbered}
+
+Compare `fit_vs` to the varying-intercepts-only model from Chapter 8
+using LOO. Does allowing slopes to vary improve prediction here?
+
+```{r your-turn-vs}
+# Your code here
+
+```
+
+------------------------------------------------------------------------
+
+## Part 2 — Count outcomes
+
+### A third kind of outcome
+
+Counts are neither continuous nor yes/no: transfer requests per team,
+open reqs per recruiter, sick days per employee. These are
+**non-negative whole numbers**: 0, 1, 2, 3… and often mostly small.
+
+### Why ordinary regression fails
+
+::: callout-important
+1.  It can predict **negative** counts
+2.  It can predict **fractional** counts (2.7 transfer requests)
+3.  Counts are **skewed** with unequal spread — the Normal assumes
+    neither
+
+Using ordinary regression on counts is one of the most common
+avoidable mistakes in applied People Analytics work.
+:::
+
+### The Poisson model
+
+A third kind of outcome, and — as ever — still just `brm()` with a
+formula and priors; only `family = poisson()` is new. Poisson works on
+the **log** scale, so — same habit as the log-odds prior back in
+Chapter 9 — translate before trusting it:
+
+```{r plot-prior-pois}
+set.seed(112)
+
+tibble(log_intercept = rnorm(4000, 0, 1)) |>
+  mutate(rate = exp(log_intercept)) |>
+  ggplot(aes(rate)) +
+  geom_histogram(bins = 40, fill = "#122a52", alpha = 0.6) +
+  labs(title = "What Normal(0, 1) on the log scale implies",
+       subtitle = "Simulated draws from the intercept prior, translated to a baseline transfer rate",
+       x = "Implied baseline transfers per manager", y = "Simulated draws")
+```
+
+::: callout-note
+Centred on 1 transfer, comfortably covering anything from a fraction
+of one up to several — sensible for a rate we genuinely don't know yet,
+and nowhere near ruling out either a quiet team or a high-churn one.
+:::
+
+```{r fit-pois}
+fit_pois <- brm(
+  transfers ~ yrs_employed + group_size,
+  data = managers, family = poisson(),
+  prior = c(prior(normal(0, 1),   class = Intercept),
+            prior(normal(0, 0.5), class = b)),
+  chains = 4, iter = 2000, seed = 112, refresh = 0
+)
+
+summary(fit_pois)
+```
+
+### Interpret: rate ratios
+
+```{r rate-ratios}
+fixef(fit_pois) |>
+  as_tibble(rownames = "term") |>
+  mutate(rate_ratio = exp(Estimate)) |>
+  select(term, Estimate, rate_ratio)
+```
+
+::: callout-note
+A rate ratio of 1.2 for `group_size` would mean each extra direct
+report multiplies expected transfer requests by 1.2 — a 20% increase
+per additional report. (Chapter 13 revisits this exact variable,
+`transfers`, and shows why comparing raw counts across managers with
+very different `group_size` is misleading unless you account for it —
+there, as an offset defining a *rate*, rather than as an ordinary
+predictor as we've done here.)
+:::
+
+### Does it fit?
+
+```{r ppc-pois}
+pp_check(fit_pois, type = "bars", ndraws = 100) +
+  labs(title = "Posterior predictive check for counts")
+```
+
+### When Poisson isn't enough
+
+::: callout-important
+## Overdispersion
+
+The Poisson makes a strong assumption: the **mean equals the
+variance**. Real counts are often **overdispersed** — more variable
+than Poisson allows. You'll see it in the posterior predictive check:
+the model under-covers the tails.
+:::
+
+The fix is one word:
+
+```{r}
+#| eval: false
+brm(transfers ~ yrs_employed + group_size, family = negbinomial(), ...)
+```
+
+The negative-binomial adds a spare **dispersion** parameter, letting
+variance exceed the mean. Compare the two with **LOO** — if
+negbinomial wins clearly, you had overdispersion.
+
+### Your turn {.unnumbered}
+
+Refit the count model with `family = negbinomial()` and compare it to
+the Poisson version with LOO. Is there evidence of overdispersion?
+
+```{r your-turn-pois}
+# Your code here
+
+```
+
+------------------------------------------------------------------------
+
+## On the job {.unnumbered}
+
+::: callout-important
+## Why this matters day to day
+
+Two common situations live here. If an effect plausibly **differs
+across your groups** (offices, functions, cohorts), varying slopes let
+you estimate and report that variation instead of averaging it away —
+often the more actionable finding. If your outcome is a **count**,
+Poisson or negative-binomial regression is the correct tool — using
+ordinary regression on counts is a common and avoidable mistake.
+:::
+
+------------------------------------------------------------------------
+
+## Summary {.unnumbered}
+
+::: callout-note
+## Today you learned
+
+1.  `(1 + x | group)` lets both **intercept and slope** vary by group.
+2.  `sd(x)` at the group level measures how much the **effect**
+    varies — itself a finding.
+3.  **Poisson** regression (`family = poisson()`) models counts;
+    interpret `exp(coef)` as **rate ratios**.
+4.  Overdispersed counts call for **negative-binomial**.
+:::
+
+## Next: Part V {.unnumbered}
+
+That completes the core toolkit — the same arc as any general Bayesian
+statistics course. From Chapter 12, the book turns to problems built
+specifically for the People Analytics community: **empirical Bayes**,
+**Bayesian shrinkage** for ranking managers and teams fairly,
+**hierarchical models for pay and variance**, **survival analysis** for
+the employee lifecycle, **Likert and survey data**, **Bayesian A/B
+testing**, and a closing chapter on **building priors with your
+stakeholders**.

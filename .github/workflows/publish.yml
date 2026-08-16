@@ -1,0 +1,49 @@
+on:
+  push:
+    branches: [main]
+    paths:
+      - "people-analytics-book/**"
+  workflow_dispatch: {}
+
+name: Render and publish book
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: people-analytics-book
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install R package dependencies
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: people-analytics-book
+          extra-packages: |
+            tidyverse
+            rstanarm
+            brms
+            tidybayes
+            bayesplot
+            skimr
+            peopleanalyticsdata
+
+      - name: Render book
+        run: quarto render
+
+      - name: Publish to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: people-analytics-book/docs

@@ -1,0 +1,545 @@
+# Welcome {.unnumbered}
+
+
+At first glance this is a book about using Bayesian statistical
+approaches to analyse the sort of problems People Analytics teams face
+all the time, with the sort of data that looks familiar to anyone who has
+worked in HR. I hope you look past the first glance.
+
+There are recipes here. I teach the techniques, and the data and the code
+are all provided. But I did not want to write another book of statistics
+for People Analytics, and if that is all you take from it I will have
+failed.
+
+Those of us who call ourselves Bayesian do so not because we own a
+different toolkit, but because we hold a different view of the world. A
+view in which uncertainty is everywhere, in which we never expect to
+find a true value but instead take a series of small steps towards a
+better understanding, and in which we keep updating that understanding as
+new information arrives.
+
+What that means in practice is easier to show than to claim, so the rest
+of this chapter shows it — starting a long way from HR.
+
+## Why I wrote it {.unnumbered}
+
+Many authors state a truism and I will too. I wrote this book because it is the book I always wished that I had when I was learning. In that regard it's a very personal book.
+
+I have an unusual profile for the People Analytics teams that I've worked in or worked with. I'm not an I/O psychologist. I learnt my craft via economics and especially subjects like decision making under uncertainty and econometrics. Just like I noted that being a Bayesian set my view of the world, studying micro-economics certainly did.
+
+At university I had a somewhat confusing statistical training. For courses like game theory and decision sciences I was taught to think like a Bayesian. In stats lessons we learnt the classical or frequentist machinery. The reason for this I learnt later was simple - the machinery to analyse data like I understood the world simply wasn't there.
+
+What did it feel like being an economist in a milieu of I/O psychologists? Well, pretty lonely and misunderstood if I'm honest. No, I didn't know SEM or even worse I didn't desire a copy of SPSS. "Correlation doesn't mean causation" I saw as a starting point. I was probably like the child who is told they can't have something - it increased my desire to get it. 
+
+In my newsletter, Working Ideas, I try and present a multi-disciplinary view of the world of work. A core theme I keep coming back to comprises numerous disciplines each independently researching the same topic, always in isolation, always failing to take advantage of what others have already understood.
+
+This is a statistics book which I hope breaks some boundaries. I'd like to think it will promote a more multi-disciplinary approach to people analytics. If we understand more different perspectives we're better able to understand the world. If we have more tools in our cabinet we have more chance of applying the right approach to each problem.
+
+That is the reason it exists. How it came to look the way it does is a
+different story, and a more accidental one.
+
+## Who this book is for {.unnumbered}
+
+This book grew out of a course I originally developed for data science and MBA students in hospitality. Seeing how well it worked for that group, I decided to adapt it for the People Analytics audience I know so well.
+
+There were some unusual constraints on the original course which ended up providing the greatest benefit. Originally I had to develop a 20-week course for students who could start at week 1 or week 11. Ordinarily a course like statistics builds on one week to the next, and starting anywhere other than the beginning would prove difficult. My design was to split statistics into two sections:
+
+* **Frequentist and Bootstrapping** - a version of the type of statistics most of us learnt at university
+* **Bayesian Statistics** - the basis of this book
+
+By chance the majority of students joined the class at the beginning of the Bayesian course. To them, for the first 20 hours Bayesian statistics *was* statistics. We followed a route similar to this book (though it's been refined over a few runs) - start with data and probability, especially conditional probability and probability distributions, and then teach the Bayesian machinery which provides the basis for all analyses.
+
+After the first full run something stood out. Every student who took the course found the Bayesian course easier. Not just more intuitive but easier to understand. Easier to apply to their problems. Easier to answer the questions that they wanted to answer. I realised that we didn't have to confine Bayesian approaches to the 'advanced' class.
+
+This book is therefore for two audiences:
+
+* Those genuinely new to statistics who want to learn how to analyse the data that they're likely to find in HR and People Analytics.
+* Students who have previously learnt statistics using classical or frequentist approaches.
+
+The course uses an open source and widely used language called 'R'. When I first started my People Analytics practice in 2009/2010 this was a slightly unusual choice. When I worked in an HR Analytics team in a big bank a few years earlier, my colleagues used SPSS — the standard choice for psychologists, which most of them were. If my colleagues had been economists, the team would probably have used STATA instead. Both are expensive, proprietary tools, and corporates back then liked the reassurance that came with an established, costly product. Today R is probably the dominant language among statisticians (data scientists tend to reach for Python instead). I use and teach R via two development environments — RStudio, the tool I used back in 2009, and Positron, a newer IDE that lets you work across a wider range of languages. Either works as well as the other.
+
+I've chosen not to start this book by providing an introduction to R, RStudio or Positron. There are great guides online, and a Large Language Model will walk you through the setup — there is advice on using one well in @sec-llms. The techniques are what this book is for; the tooling is not.
+
+## Why Bayesian, and why for People Analytics {.unnumbered}
+
+### A plane, and two years of nothing {.unnumbered}
+
+On the first of June 2009, Air France Flight 447 disappeared over the
+Atlantic in a storm, en route from Rio de Janeiro to Paris. It carried
+228 people. The last transmission gave a rough position; after that,
+nothing. Surface wreckage and bodies were recovered within days, but
+the flight recorders — and any answer for what happened — were
+somewhere on the ocean floor, under water more than two miles deep,
+across a search area the size of a small country.
+
+Two dedicated sonar searches of the most probable zones came back
+empty. Two years passed. The investigation was, by any conventional
+measure, stuck.
+
+In 2011, the French Bureau d'Enquêtes et d'Analyses brought in a small
+team of statisticians and asked them to do something that sounds
+almost too simple: work out, as a single probability map, where the
+wreckage most likely was, using absolutely everything that was known -
+the last position, the plane's likely speed and heading, the drift of
+the bodies that had been found, ocean currents, and, crucially, **the
+fact that two previous searches had already failed**.
+
+That last piece is the one worth dwelling on. A search that finds
+nothing is not a wasted search. It's evidence - it should make you
+*less* confident that the plane is where you just looked, and by
+exactly how much depends on how thoroughly you looked and how good
+your sonar was. Two years of failed searching had been treated as a
+dead end. Bayes' theorem treated it as information, folded the sonar's
+known reliability back into the map, and shifted the highest-probability
+region to a spot the earlier searches had passed near but not covered
+well.
+
+::: callout-important
+Searchers went back out. **Within one week**, they found the wreckage
+— almost exactly where the updated map said to look.
+:::
+
+Sharon Bertsch McGrayne tells this story properly in *The Theory That
+Would Not Die*, alongside the U-boat hunts and lost-submarine searches
+that used the same logic decades earlier. It's a great book and worth reading in full.
+The short version is the one this book is built on: **a posterior
+probability is not a final answer, it's the best statement you can
+make right now — and "we looked and found nothing" is exactly as much
+evidence as "we looked and found something."** Chapter 4 shows you the
+same arithmetic on a much smaller problem: a promotion rate, not a
+missing aircraft.
+
+### Not a special case {.unnumbered}
+
+It's tempting to file that story under "impressive things statisticians
+do for aviation investigators" and move on. Don't — the reason it
+worked there is the same reason it's becoming the normal way to do
+serious quantitative work almost everywhere data is scarce, noisy, or
+expensive to collect:
+
+-   **Medicine.** In January 2026 the FDA issued draft guidance
+    formally setting out how Bayesian methods can be used in pivotal
+    drug trials — not as an exotic alternative, but as an accepted
+    path to approval, especially for rare diseases and paediatric
+    trials where a large sample will simply never exist.
+-   **Insurance.** Actuaries have priced policies this way for over a
+    century, under the name *credibility theory*: a small
+    policyholder group's own claims history is blended with the wider
+    portfolio average, weighted by how much the group's own data can
+    be trusted. You'll meet this exact idea, with the same name for
+    the underlying mechanism, in Chapters 8, 14 and 15.
+-   **Elections.** The forecasting models run by *The Economist* and
+    by independent modellers like Nate Silver are openly Bayesian —
+    combining polls with a "fundamentals" prior built from the
+    economy and incumbency, updated as new polls arrive.
+-   **Football.** Liverpool FC's ex-director of research, Ian Graham, writes in his book "How to win the Premier League" how he used Bayesian analysis "to counteract luck's influence over players who have played a small number of games". We'll use the same concept to compare managers more fairly in chapters 8, 14 & 15.
+-   **The everyday and invisible.** Spam filters, weather forecasts,
+    and the sensors that keep a self-driving car aware of its own
+    position all run on the same rule, quietly, in the background.
+
+None of these fields adopted Bayesian methods for philosophical
+reasons. They adopted them because the alternative — waiting for a
+large, clean sample before saying anything — wasn't an option, and
+the questions on the table were about **decisions under uncertainty**,
+not abstract tests of a null hypothesis.
+
+::: callout-note
+People Analytics is exactly that kind of field, and usually nobody has
+told its practitioners so.
+:::
+
+### Why for People Analytics specifically {.unnumbered}
+
+People Analytics data has a few recurring features that make Bayesian
+methods a particularly good fit, more than a stylistic alternative to
+classical statistics:
+
+-   **Small groups, everywhere.** Teams, managers, offices, and
+    cohorts come in wildly different sizes. A five-person team's
+    average engagement score is much noisier than a two-hundred-person
+    department's — but a raw league table treats them the same.
+    Bayesian partial pooling (Chapters 8, 14 and 15) fixes this
+    directly, the same way credibility theory fixes it for an
+    insurer.
+-   **You almost always know something before you look at the data.**
+    Industry attrition benchmarks, last year's survey results, a
+    colleague's informed guess about a plausible effect size —
+    Bayesian methods give you a principled way to use that knowledge
+    instead of discarding it (Chapters 4, 5, 14 and 23).
+-   **Ordinal, bounded, and time-to-event outcomes are the norm, not
+    the exception.** Engagement surveys are Likert scales, not
+    continuous numbers; attrition is a time-to-event question, not a
+    single yes/no. Treating them as if they were ordinary continuous
+    outcomes — a very common shortcut — quietly produces wrong
+    answers. Chapters 17 and 18 deal with this properly.
+-   **The questions are inherently about uncertainty and decisions**,
+    not abstract hypothesis tests. "How confident should we be that
+    this intervention worked?" and "Is this manager's team really
+    underperforming, or is that just five people?" are Bayesian
+    questions by nature — the same species of question as "where,
+    probably, is the wreckage?"
+
+That last parallel is the one to return to. Nobody on the AF447 search team
+had the luxury of a huge sample or a repeatable experiment. They had
+one crash, partial information, and an urgent need to make the best
+possible statement about where to look next. Most People Analytics
+questions have exactly that shape, at much lower stakes — which is
+good news, because it means the method that found a plane at the
+bottom of the Atlantic is more than equal to a question about a
+promotion rate or a team's engagement score.
+
+## What I actually want you to take away {.unnumbered}
+
+The Welcome promised that this book is about a view of the world rather
+than a toolkit, and then spent a long time on an aeroplane. This is where
+that promise is delivered, because it is the thing I care about most and it
+is not what most statistics books are for.
+
+Go back to the search for AF447. The mathematics that found the plane was
+not complicated, and you will have met most of it by Chapter 5. What had
+gone wrong for two years was not a calculation. It was an assumption that
+nobody had written down: that a search which finds nothing tells you
+nothing. Once somebody questioned that assumption, the answer took a
+week.
+
+The same is true of almost every analysis that matters. The technique is
+rarely the difficult part. The difficult part is noticing an assumption
+you did not know you were making.
+
+::: callout-important
+If you take one thing from this book, I would rather it were a habit than
+a technique: **always ask what your numbers are assuming, and be willing
+to find out that you were wrong.**
+:::
+
+Bayesian statistics is unusually good at teaching that habit, and I think
+it is the real reason my students found it easier. It requires you to
+write your assumptions down. You cannot fit a model without stating what
+you believed beforehand, and how strongly you believed it. Once a belief
+is written as a distribution, instead of being hidden inside a default
+setting, it becomes something you can look at, discuss, and change your
+mind about. Running a test and reading a p-value is a very different
+experience: the assumptions are still there, but you never see them.
+
+The benefit shows up in ordinary work, long before you fit anything
+complicated. It is the analyst who asks where a sample came from before
+asking what it shows. Who checks how much of the difference between two
+teams could be measurement error, before writing the recommendation. Who
+notices that "we controlled for performance rating" is a claim about
+cause and effect, not a technical detail. None of these are advanced
+skills. All of them are the difference between an analysis that holds up
+when somebody challenges it and one that does not.
+
+It is also, if I am honest, the reason I write a newsletter. Techniques
+are easy to look up, and I have nothing useful to add to the
+documentation. What is worth writing about is the moment when something
+familiar turns out to work differently from the way everyone assumed.
+That is also what is worth reading for.
+
+## Acknowledgements {.unnumbered}
+
+There are numerous people without whom this book wouldn't have been possible.
+
+Probably the primary ones should be my colleagues and students at the Swiss Educational College - a hospitality school in central Switzerland who were my guinea pigs for the first version of this course. If my students views hadn't been so enlightening I would never have had the courage to start a book on Bayesian Statistics for People Analytics nor have dared teaching total beginners how to do statistics using Bayesian techniques.
+
+I've been in the People Analytics community for too long and with too many people to mention everyone who has influenced me. My old colleagues and clients during my OrganizationView days certainly kept me focused. Many competitors and those I met at the various conferences provided inspiration and reflection.
+
+I owe a particular debt to **Keith McNulty**. Almost every example in this book runs on data he assembled to accompany his own writing and then gave away for anyone to use. It is hard to overstate what that is worth to a book like this one. Teaching statistics on invented data has a specific failure mode: the examples come out too clean, the effects turn out to be exactly as large as the author needed them to be, and the reader learns a technique without ever meeting the messiness that made the technique necessary in the first place. Keith's data has the texture of the real thing, because it was put together by somebody who has spent a career looking at the real thing.
+
+His own books have shaped this one in a way that is harder to point at. They are rigorous without being forbidding — a harder balance than it looks — and it is the balance I have been aiming at throughout, with whatever success you are about to judge for yourself.
+
+**Edward Babushkin** deserves separate thanks. The turnover data in Chapter 17 is real, anonymised employee records that he chose to publish: genuine tenure, genuine departures, right-censored exactly the way real data arrives. Very few people share anything like it, and survival analysis is a great deal harder to teach convincingly without it.
+
+I'm also grateful to the following people for their kind feedback during the review process:
+
+<!-- TODO (Andrew): reviewer names. -->
+
+Every dataset is credited where it first appears, and listed in full —
+with licences and download instructions — in @sec-data-appendix. Keith's
+book, and the others that shaped this one, are in @sec-further-reading.
+
+------------------------------------------------------------------------
+
+## About this book {.unnumbered}
+
+This book has a small number of recurring conventions. They're worth two
+minutes now, because they repeat on almost every page and they're
+designed to let you read selectively rather than linearly.
+
+### The boxes, and which ones you can skip
+
+Coloured boxes carry most of the emphasis. Five kinds recur, and two of
+them are aimed at specific readers:
+
+::: callout-important
+**The point.** Where a section has one idea you should leave with, it's
+in a box like this. If you read nothing else on a page, read these.
+:::
+
+::: callout-note
+## A different lens
+
+Most readers arrive from a frequentist background — t-tests, p-values,
+confidence intervals, `lm()`. Where a Bayesian technique has a
+well-known classical counterpart, a box like this names it and explains
+what changes in the *mental model*. This is never an argument that the
+classical approach is wrong; it's a translation. **If you've never met
+the classical version, skip these — you're not missing a prerequisite.**
+:::
+
+::: callout-tip
+## For the ML/DS crowd
+
+Some readers are strong on machine learning and lighter on formal
+statistics. These boxes connect what's on the page to something you
+already know — regularisation, mixed-effects models, Thompson sampling.
+**Skip freely if that's not your background.**
+:::
+
+::: callout-warning
+## When you can skip this
+
+A reminder that you do not have to do everything in this book. Nobody
+applies every technique to every project, and starting simple is very
+often where the value is. A more thorough analysis cannot always be
+justified by the small amount it adds. These boxes explain when the
+simple version is good enough, and give you a sentence to use when you
+report a result produced without the full treatment. **The aim is to skip
+something because you decided to, not because you forgot.**
+:::
+
+::: callout-caution
+## Try it yourself
+
+From Chapter 14 onward, most chapters end with a short exercise in a box
+like this — usually a variation on the analysis you have just read, using
+a different column or a different assumption. They are the fastest way to
+find out whether you followed it.
+:::
+
+Plain notes like the one below carry asides, caveats and anything that
+would otherwise interrupt a paragraph.
+
+::: callout-note
+Nothing critical ever hides in a plain note.
+:::
+
+### How code is explained
+
+The code in this book is written to be read, not just run. Explanation
+comes from three places, and knowing which does what will save you time:
+
+-   **The prose above a code block** explains *why* — the reasoning and
+    the decision being made. This is where the real content is.
+-   **The code itself** shows *what*, through names and structure.
+    Distribution parameters are always named in full (`mean =`, `sd =`,
+    `rate =`) rather than passed by position, because `exponential(0.005)`
+    is ambiguous in a way `rate = 0.005` isn't.
+-   **Numbered annotations** appear below a code block the first time a
+    new pattern shows up, walking through it line by line — the
+    equivalent of me talking you through it in a workshop. Once a pattern
+    recurs, the annotations stop. **If the annotations are telling you
+    things you already know, ignore them: the marker numbers are designed
+    to be invisible to a fluent reader.**
+
+Comments *inside* code are reserved for statistics, never for R. You'll
+never find `# fit the model` above a model fit, but you will find a note
+explaining where a particular prior's parameter came from.
+
+This is not a book about learning R. It assumes you can write a
+`group_by()` and a `summarise()`, and it explains statistics rather than
+syntax. Everything uses the tidyverse and, from Chapter 5, the `brms`
+package.
+
+### The charts
+
+Charts follow a fixed colour scheme, and the colours mean the same thing
+every time:
+
+| Colour | Meaning |
+|-----------------------|-------------------------------------------------|
+| **Light blue** | A **prior** — belief before seeing the data |
+| **Red** | A **likelihood** — what the data alone says |
+| **Navy** | A **posterior** — the conclusion, after combining the two |
+
+Where a single distribution stands alone it's drawn as a light filled
+area with a solid outline; where several are compared on the same axes
+they're drawn as lines, so the colours stay readable. Discrete
+distributions — things you can only count in whole numbers — are drawn
+as bars rather than smooth curves, which is a deliberate visual break.
+
+### The recurring sections
+
+Every chapter opens with **"What you'll be able to do by the end"** — a
+short, concrete list. If you already can, skip the chapter.
+
+**"Your turn"** boxes are exercises. They're genuinely optional, but they
+tend to cover the one thing the chapter didn't do for you, and the code
+blocks under them are left empty on purpose.
+
+**"On the job"** closes each chapter by connecting the technique to a real
+decision — what you'd actually say to a stakeholder, and why this
+approach makes that conversation easier.
+
+Each chapter ends with a **summary** of the numbered points and a
+one-line trailer for the next one.
+
+### Running the code yourself
+
+Every code block in this book is executed when the book is built, so what
+you see is real output, not typed-out results. You can copy any block and
+run it. The datasets come from a public R package, so nothing here
+depends on data you don't have.
+
+::: callout-important
+One warning that catches everyone. The first time you fit a model with
+`brms` it **compiles** — it writes and builds a small C++ program behind
+the scenes, which can take a minute. After that it's fast. Nothing is
+broken; it's just warming up.
+:::
+
+------------------------------------------------------------------------
+
+## How the book is organised {.unnumbered}
+
+Five parts, twenty-three chapters. The running examples build on each other,
+so reading in order rewards you with familiarity — but each chapter is
+self-contained enough to read on its own if you already have the basics.
+
+### Part I — Foundations {.unnumbered}
+
+Describing data, probability, and where uncertainty comes from. **Start
+here if you're new to statistics**; skim it if you're not.
+
+1.  **Meeting Your Data**
+2.  **Thinking in Chances**
+3.  **Distributions, Sampling & the Idea of a Model**
+
+### Part II — Bayesian core {.unnumbered}
+
+The heart of the book. By the end of Chapter 6 you can fit and interpret
+a Bayesian model, and everything afterwards is a variation on it.
+
+4.  **Bayesian Thinking: Bayes' Theorem & Your First Inference** — the
+    whole mechanism by hand, with nothing hidden
+5.  **Posteriors, Priors & Credible Intervals** — your first `brms`
+    model, and how to choose and defend a prior
+6.  **Bayesian Regression: Explaining & Predicting** — from estimating
+    one number to explaining a relationship
+
+### Part III — Applied workflow {.unnumbered}
+
+Putting it to work on realistic problems, end to end.
+
+7.  **Groups & Categories: Comparing and Choosing Models**
+8.  **When Data Has Structure: Multilevel Models**
+9.  **Logistic Regression: Modelling a Yes/No Outcome** — most People
+    Analytics outcomes are yes/no
+10. **The Complete Workflow: From Question to Recommendation** — a full
+    project, question to stakeholder
+
+### Part IV — Going further {.unnumbered}
+
+Optional, and each one answers a different kind of "this isn't working".
+Read Chapter 11 when you don't trust the sampler; Chapter 12 when your
+outcome stops fitting the standard shapes; Chapter 13 when the difficulty
+is a judgement call rather than a technique.
+
+11. **Inside the Sampler: MCMC & Trustworthy Models**
+12. **Richer Models: When the Standard Recipe Runs Out**
+13. **Model Building as Craft: The Decisions Software Won't Make For You**
+    — what can be changed, what shape it takes, and what you'd do with
+    the answer
+
+### Part V — People Analytics deep dives {.unnumbered}
+
+Ten chapters built specifically for this audience. Mostly independent of
+each other — go straight to whichever matches the problem on your desk.
+The two exceptions are Chapters 21 and 22, which are a sequence, and
+Chapter 23, which draws on both.
+
+14. **Empirical Bayes: Estimating Rates You Don't Have Enough Data For**
+15. **Bayesian Shrinkage: Ranking Managers and Teams Fairly**
+16. **Hierarchical Models for Pay and Variance**
+17. **Survival Analysis: Time-to-Event in the Employee Lifecycle**
+18. **Analysing Likert and Survey Data the Bayesian Way**
+19. **Modelling What You Can't See** — measurement error, missing data
+    and latent variables: what to do when the number in the column
+    isn't the quantity it claims to be
+20. **Bayesian A/B Testing for People Experiments**
+21. **Causal Structure: Drawing the Graph** — which variables belong in
+    the model is a question about causes, not about fit
+22. **Causal Designs: Finding Variation You Didn't Create** —
+    difference-in-differences, event studies, and designing a study
+    before you run it
+23. **The Elicitation Workflow: Building Priors With Your Stakeholders**
+    — doing this *with* your stakeholders rather than *to* them
+
+### Part VI — From analysis to decision {.unnumbered}
+
+One chapter, and the one I would hand to somebody who commissions
+analysis rather than does it.
+
+24. **From Posterior to Decision: What an Analysis Is Worth** — putting
+    a price on outcomes nobody has priced, running the decision on
+    posterior draws, and working out which uncertainty is worth paying
+    to reduce
+
+### How to read this {.unnumbered}
+
+Twenty-four chapters is more than anyone needs at once, and they do
+not all ask the same thing of you.
+
+**Chapters 1 to 10 are meant to be done.** Read them in order, with R
+open, and type the code out yourself. This is the working path. By the
+end of Chapter 10 you can take a real question, fit a model that suits
+it, check that the model works, and give a stakeholder an answer you can
+defend. That is a complete skill, and for a long time it may be all you
+need.
+
+**Chapters 11 to 13 are for when something goes wrong, or gets
+difficult.** Read Chapter 11 when a model does not behave as expected and
+you want to understand what the sampler is doing. Read Chapter 12 when
+your outcome is no longer a simple number or a yes/no answer. Read
+Chapter 13 before your next project rather than during it — it is about
+the decisions nobody prompts you for, and it is the one chapter here that
+is as useful to somebody who commissions analysis as to somebody who does
+it.
+
+**Chapters 14 to 24 are meant to be read, and only sometimes done.** This
+is the part I would ask you not to skip, even if you are new to
+statistics, and even if you never run the code. These chapters describe
+techniques you may not use this year, or next year. But each one gives
+you a question that changes how you read every analysis, including your
+own:
+
+| Chapter | The question it leaves you with |
+|---------|--------------------------------------------------------------|
+| 14–16 | Is this difference real, or is that group simply small? |
+| 17 | Am I treating "has not happened yet" as "did not happen"? |
+| 18 | Is this scale a number, or a set of ordered labels I am averaging? |
+| 19 | How much of this measure is noise, and who is missing from it? |
+| 20 | How likely is it that this option is better, and better by enough to act on? |
+| 21–22 | Would this still be true if we changed it on purpose? |
+| 23 | Whose beliefs went into this, and did anyone check them? |
+| 24 | What would we do differently depending on the answer, and what would each wrong turn cost? |
+
+You can take every one of those questions away without fitting a single
+model from those chapters. Each chapter takes about an evening to read,
+and it changes what you notice permanently. Fitting the models matters
+less than the questions do.
+
+::: callout-tip
+Reading a chapter you do not yet need is not wasted time. Often the most
+useful result is being able to recognise a problem you are not going to
+solve today, and to say so clearly. That is worth more than a confident
+answer that ignored the problem.
+:::
+
+::: callout-tip
+## If you only have time for four chapters
+
+Chapters 4, 5, 6 and 10. That's the mechanism, the tool, the workhorse
+technique, and a complete worked project — enough to run a real analysis
+and defend it.
+:::

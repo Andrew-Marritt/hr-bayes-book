@@ -1,0 +1,285 @@
+/*-- scss:defaults --*/
+// =====================================================================
+//  AcademicDesign — Lecture Deck theme for Quarto RevealJS
+//  Swiss / grid · navy + red · Inter + JetBrains Mono
+//  Values below are the exact AcademicDesign design-system tokens.
+// =====================================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+// ---- COLOUR TOKENS ---------------------------------------------------
+$navy-900:    #0a1e3f;
+$navy-800:    #122a52;
+$navy-700:    #1c3a68;
+$navy-500:    #3d68a8;
+$navy-300:    #8fabd0;
+$navy-50:     #f0f4f9;
+$red-700:     #a8241f;
+$red-600:     #d32f2f;
+$red-500:     #e04b45;
+$red-100:     #f8dad9;
+$red-50:      #fcefee;
+$paper:       #f7f5f0;
+$paper-dim:   #eeebe2;
+$ink:         #111417;
+$ink-soft:    #3a4048;
+$gray-700:    #4b525b;
+$gray-500:    #7b828b;
+$gray-300:    #c3c8ce;
+$white:       #ffffff;
+
+// semantic aliases
+$navy:        $navy-800;   // title / section / quote backgrounds
+$red:         $red-600;    // --color-accent
+$slate-muted: $navy-300;   // muted text on navy
+$ink-muted:   $ink-soft;   // secondary text on paper
+$hairline:    $gray-300;
+
+// ---- SPACING & GRID TOKENS ------------------------------------------
+$space-3:  12px;
+$space-4:  16px;
+$space-5:  24px;
+$space-6:  32px;
+$space-7:  48px;
+$space-8:  64px;
+$space-9:  96px;
+$grid-gutter: 24px;
+$grid-margin: 64px;
+$rule-hairline: 1px;
+$rule-weight:   2px;
+
+// ---- FONTS -----------------------------------------------------------
+$font-family-sans-serif: 'Inter', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif !default;
+$font-family-monospace:  'JetBrains Mono', 'SFMono-Regular', Consolas, monospace !default;
+
+// ---- RevealJS base ---------------------------------------------------
+$body-bg:    $paper;
+$body-color: $ink;
+$link-color: $red;
+$link-color-hover: $red-700;
+$selection-bg: $red-100;
+$selection-color: $ink;
+
+$presentation-font-size-root: 22px;           // smaller body so titles dominate
+$presentation-line-height: 1.6;               // --leading-relaxed ≈ bodyLeading
+
+$presentation-heading-font: 'Inter', sans-serif;
+$presentation-heading-color: $ink;
+$presentation-heading-font-weight: 800;       // --weight-black
+$presentation-h1-font-size: 2.75rem;
+$presentation-h2-font-size: 2rem;             // slide titles — clearly > body
+$presentation-h3-font-size: 1.375rem;         // --text-h3
+$presentation-heading-line-height: 1.05;      // --leading-tight
+
+$code-block-font-size: 0.62em;
+$code-block-bg: $red-50;                       // light code block (per request)
+$code-block-border-color: $red-100;
+
+/*-- scss:rules --*/
+// =====================================================================
+//  Expose the full token set as CSS custom properties (documentation +
+//  so slide markup can reference var(--…) directly if needed).
+// =====================================================================
+:root {
+  --navy-900:#0a1e3f; --navy-800:#122a52; --navy-700:#1c3a68;
+  --navy-500:#3d68a8; --navy-300:#8fabd0; --navy-50:#f0f4f9;
+  --red-700:#a8241f; --red-600:#d32f2f; --red-500:#e04b45;
+  --red-100:#f8dad9; --red-50:#fcefee;
+  --paper:#f7f5f0; --paper-dim:#eeebe2;
+  --ink:#111417; --ink-soft:#3a4048;
+  --gray-700:#4b525b; --gray-500:#7b828b; --gray-300:#c3c8ce; --white:#fff;
+  --color-accent:#d32f2f; --color-primary:#0a1e3f;
+  --grid-gutter:24px; --grid-margin:64px;
+  --tracking-tight:-0.02em; --tracking-wide:0.06em; --tracking-label:0.14em;
+}
+
+.reveal { font-weight: 400; letter-spacing: -0.005em; }
+
+// ---- Headings --------------------------------------------------------
+.reveal h1, .reveal h2, .reveal h3 { letter-spacing: -0.02em; text-transform: none; }
+.reveal h2 { margin-bottom: 0.9em; }          // generous gap below title
+
+// ---- Red eyebrow / kicker label -------------------------------------
+.reveal .eyebrow {
+  color: $red;
+  font-size: 0.5em;
+  font-weight: 700;
+  letter-spacing: 0.14em;                      // --tracking-label
+  text-transform: uppercase;
+  margin-bottom: 0.6em;
+  display: block;
+}
+
+// ---- Links & strong --------------------------------------------------
+.reveal a { color: $red; text-decoration: none; border-bottom: 2px solid rgba($red, 0.35); }
+.reveal a:hover { color: $red-700; }
+.reveal strong { color: $ink; font-weight: 700; }
+
+// ---- Lists (red square markers) -------------------------------------
+.reveal ul { list-style: none; margin-left: 0; }
+.reveal ul li { position: relative; padding-left: 1.1em; margin-bottom: 0.5em; }
+.reveal ul li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em;
+  width: 0.4em; height: 0.4em; background: $red;
+}
+.reveal ol { margin-left: 1.1em; }
+.reveal ol li { margin-bottom: 0.5em; }
+.reveal ol li::marker { color: $red; font-weight: 700; }
+
+// ---- Footer & slide number ------------------------------------------
+.reveal .footer {
+  color: $ink-muted; font-size: 0.42em; letter-spacing: 0.02em;
+  border-top: $rule-hairline solid $hairline;
+  padding-top: 0.5em; bottom: 18px; width: 88%; left: 6%;
+}
+.reveal .slide-number {
+  background: transparent; color: $ink-muted;
+  font-family: $font-family-monospace; font-size: 0.6em;
+}
+
+// ---- Code: LIGHT blocks on paper ------------------------------------
+.reveal pre { box-shadow: none; width: 100%; }
+.reveal pre code {
+  background: $red-50;
+  border: $rule-hairline solid $red-100;
+  border-radius: 6px;
+  color: $ink;
+  padding: 0.8em 1em;
+  max-height: 480px;
+}
+.reveal code { font-family: $font-family-monospace; }
+// inline code — red on light-red, matches the block treatment
+.reveal p code, .reveal li code {
+  color: $red-600;
+  background: $red-50;
+  padding: 0.05em 0.3em;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+// ---- Disable font ligatures in code ----------------------------------
+// JetBrains Mono renders coding ligatures by default, which visually
+// merges R's `<-` into a left-arrow glyph and `|>` into a triangle —
+// confusing on a slide where students expect to see the literal
+// characters. Turn that off everywhere code appears.
+.reveal code, .reveal pre {
+  font-variant-ligatures: none;
+  -webkit-font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+
+// ---- Tables (minimal Swiss) -----------------------------------------
+.reveal table { font-size: 0.72em; border-collapse: collapse; }
+.reveal table th {
+  background: transparent; color: $red;
+  text-transform: uppercase; letter-spacing: 0.06em;   // --tracking-wide
+  font-size: 0.8em; font-weight: 700;
+  border-bottom: $rule-weight solid $ink; padding: 0.5em 0.8em;
+}
+.reveal table td { border-bottom: $rule-hairline solid $hairline; padding: 0.45em 0.8em; }
+
+// ---- Blockquote / big quote -----------------------------------------
+.reveal blockquote {
+  border: none; box-shadow: none; background: transparent; width: 100%;
+  font-weight: 700; font-size: 1.25em; line-height: 1.2;   // --leading-snug
+  letter-spacing: -0.02em;
+}
+.reveal blockquote::before { content: none; }
+
+// =====================================================================
+//  NAVY SLIDES  (title, section dividers, quotes)
+// =====================================================================
+.reveal section.navy { background-color: $navy; }
+:is(.reveal section.navy, .reveal .navy) { color: $white; }
+.reveal section.navy h1,
+.reveal section.navy h2,
+.reveal section.navy h3 { color: $white; }
+.reveal section.navy .subtitle,
+.reveal section.navy .muted { color: $slate-muted; }
+.reveal section.navy strong { color: $white; }
+.reveal section.navy a { color: $white; border-bottom-color: rgba($red, 0.8); }
+.reveal section.navy ul li::before { background: $red; }
+.reveal section.navy blockquote { color: $white; }
+
+// ---- Quarto title slide (navy set via title-slide-attributes) -------
+#title-slide, .reveal section#title-slide { text-align: left; }
+.reveal #title-slide .title {
+  font-size: 3rem; font-weight: 800;           // --text-display-2 / --weight-black
+  letter-spacing: -0.02em; line-height: 1.02; color: $white;
+}
+.reveal #title-slide .subtitle {
+  color: $slate-muted; font-size: 0.72em; font-weight: 500; margin-top: 0.4em;
+}
+.reveal #title-slide .author,
+.reveal #title-slide .date { color: $slate-muted; font-size: 0.6em; font-weight: 500; }
+
+// ---- SECTION DIVIDERS: left-aligned, dropped to lower third ---------
+//  Targets level-1 navy heading slides (the "# …" dividers), not the
+//  title slide (#title-slide) or the level-2 quote slide.
+.reveal .slides > section.level1.navy,
+.reveal .slides > section.level1.navy.center {
+  top: 0 !important;                            // cancel reveal vertical-centering
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;                    // drop to bottom
+  text-align: left;
+  padding: 0 $grid-margin 10% 0;
+}
+.reveal .slides > section.level1.navy h1,
+.reveal .slides > section.level1.navy h2 {
+  font-size: 2.75rem; max-width: 22ch;
+}
+
+// ---- QUOTE SLIDE: big left-aligned pull-quote -----------------------
+.reveal section.quote-slide {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  text-align: left;
+}
+.reveal section.quote-slide blockquote {
+  margin: 0;
+  max-width: 26ch;
+  font-size: 1.6em;
+  line-height: 1.15;
+}
+.reveal section.quote-slide .attribution {
+  display: block;
+  color: mix($white, $red, 42%);   // faded red — reads clearly on navy
+  font-weight: 500;
+  font-size: 0.8em;                 // larger, more legible
+  letter-spacing: 0.04em;
+  margin-top: 1em;
+}
+
+// =====================================================================
+//  DATA / STAT ROW  (monospaced figures; .hot = red highlight)
+//  Pandoc wraps the inline .stat spans in a <p>, so flex must sit there.
+// =====================================================================
+.reveal .stats, .reveal .stats > p {
+  display: flex; gap: $space-7; align-items: baseline;
+  font-family: $font-family-monospace; margin: 0.4em 0 0 0;
+}
+.reveal .stat { font-family: $font-family-monospace; font-size: 1.5rem; font-weight: 500; color: $ink; }
+.reveal .stat.hot { color: $red; }
+.reveal .stat-label {
+  display: block; font-family: $font-family-sans-serif; font-size: 0.7rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: $ink-muted; margin-top: 0.4em;
+}
+
+// ---- Two-column comparison (grid gutter) ----------------------------
+.reveal .columns { gap: $grid-gutter; }
+
+// ---- Emphasis panel on paper (red rule) -----------------------------
+.reveal .panel {
+  border-left: 4px solid $red; padding: 0.4em 0 0.4em 1em;
+  background: rgba($ink, 0.03);
+}
+
+// ---- Figures ---------------------------------------------------------
+.reveal .r-stretch { margin-top: 0.2em; }
+.reveal figure figcaption { color: $ink-muted; font-size: 0.6em; }
