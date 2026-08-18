@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Appendix C — Data sources – Bayesian Thinking for People Analytics</title>
+<title>Appendix A — Using LLMs for analysis – Bayesian Thinking for People Analytics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -68,7 +68,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../appendices/A2-further-reading.html" rel="prev">
+<link href="../appendices/A2-further-reading.html" rel="next">
+<link href="../chapters/24-posterior-to-decision.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -154,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A1-llms.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A3-data-sources.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Data sources</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A1-llms.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A1-llms.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Using LLMs for analysis</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -393,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../appendices/A1-llms.html" class="sidebar-item-text sidebar-link">
+  <a href="../appendices/A1-llms.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Using LLMs for analysis</span></span></a>
   </div>
 </li>
@@ -405,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../appendices/A3-data-sources.html" class="sidebar-item-text sidebar-link active">
+  <a href="../appendices/A3-data-sources.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Data sources</span></span></a>
   </div>
 </li>
@@ -421,18 +422,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#peopleanalyticsdata" id="toc-peopleanalyticsdata" class="nav-link active" data-scroll-target="#peopleanalyticsdata"><span class="header-section-number">C.1</span> <code>peopleanalyticsdata</code></a></li>
-  <li><a href="#downloaded-separately" id="toc-downloaded-separately" class="nav-link" data-scroll-target="#downloaded-separately"><span class="header-section-number">C.2</span> Downloaded separately</a></li>
-  <li><a href="#simulated-data" id="toc-simulated-data" class="nav-link" data-scroll-target="#simulated-data"><span class="header-section-number">C.3</span> Simulated data</a></li>
+  <li><a href="#my-own-ai-declaration" id="toc-my-own-ai-declaration" class="nav-link active" data-scroll-target="#my-own-ai-declaration"><span class="header-section-number">A.1</span> My own AI declaration</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/edit/main/appendices/A3-data-sources.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/edit/main/appendices/A1-llms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A1-llms.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A3-data-sources.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Data sources</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../appendices/A1-llms.html">Appendices</a></li><li class="breadcrumb-item"><a href="../appendices/A1-llms.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Using LLMs for analysis</span></a></li></ol></nav>
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span id="sec-data-appendix" class="quarto-section-identifier">Appendix C — Data sources</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span id="sec-llms" class="quarto-section-identifier">Appendix A — Using LLMs for analysis</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -449,74 +448,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Every dataset used in this book, where it came from, and what you need to do to get hold of it. Each is also credited at the point it first appears; this is the single list.</p>
-<section id="peopleanalyticsdata" class="level2" data-number="C.1">
-<h2 data-number="C.1" class="anchored" data-anchor-id="peopleanalyticsdata"><span class="header-section-number">C.1</span> <code>peopleanalyticsdata</code></h2>
-<p>Most of the book runs on the <code>peopleanalyticsdata</code> package, created by Keith McNulty. MIT licensed, and on CRAN:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"peopleanalyticsdata"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(peopleanalyticsdata)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">"peopleanalyticsdata"</span>)   <span class="co"># everything available</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Dataset</th>
-<th>Shape</th>
-<th>Used in</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>salespeople</code></td>
-<td>351 rows — sales, customer rating, performance tier, promoted</td>
-<td>1–9, 18, 20</td>
-</tr>
-<tr class="even">
-<td><code>employee_survey</code></td>
-<td>2,833 rows — four-point Likert items in blocks</td>
-<td>1–3, 17, 18</td>
-</tr>
-<tr class="odd">
-<td><code>managers</code></td>
-<td>571 rows — test score, city, tenure, transfers, team size</td>
-<td>8, 12, 13, 14</td>
-</tr>
-<tr class="even">
-<td><code>graduates</code></td>
-<td>173 rows — median salary and unemployment by major</td>
-<td>15</td>
-</tr>
-<tr class="odd">
-<td><code>promotion</code></td>
-<td>1,134 rows — time to promotion, flexible working, diversity programme</td>
-<td>16, 19</td>
-</tr>
-<tr class="even">
-<td><code>recruiting</code></td>
-<td>966 rows — hiring decisions, test scores, three interviewer ratings</td>
-<td>exercises</td>
-</tr>
-<tr class="odd">
-<td><code>learning</code></td>
-<td>4,974 rows — repeated feedback from 326 participants</td>
-<td>12 (crossed effects)</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="downloaded-separately" class="level2" data-number="C.2">
-<h2 data-number="C.2" class="anchored" data-anchor-id="downloaded-separately"><span class="header-section-number">C.2</span> Downloaded separately</h2>
-<p><strong><code>turnover</code></strong> — real, anonymised company data originally shared by Edward Babushkin and redistributed on Kaggle under CC BY-NC-SA 4.0. Genuine tenure in months, right-censored for those still employed, which is why Chapter 17 uses it rather than a constructed alternative.</p>
-<p>Not bundled with this book, because the licence is share-alike and the data is not ours to redistribute. Download it from <a href="https://www.kaggle.com/datasets/davinwijaya/employee-turnover" class="uri">https://www.kaggle.com/datasets/davinwijaya/employee-turnover</a> and save it as <code>data/turnover.csv</code> before running Chapter 17. See <code>data/README.md</code> in the repository for the detail.</p>
-</section>
-<section id="simulated-data" class="level2" data-number="C.3">
-<h2 data-number="C.3" class="anchored" data-anchor-id="simulated-data"><span class="header-section-number">C.3</span> Simulated data</h2>
-<p>Chapter 22 simulates its own panel, because no public People Analytics dataset has both a time dimension and a policy change. That is stated in the chapter and is deliberate: when you generate the data you know the true answer, which is the only situation in which you can check whether a method recovers it.</p>
+<p>Modern AI tools can, and do, support the modern statistician, and I advise my students to use them — AI fluency is now part of the analyst’s skillset. Used well, they’re genuinely helpful; used carelessly, they create new problems on top of the ones they were meant to solve.</p>
+<p>Here’s the advice I give my students:</p>
+<ol type="1">
+<li>You’re responsible for your code, and for guiding the analysis. The most important part of any analysis is asking the right business question — the LLM doesn’t know your business, so it can’t ask that question for you. You’ll also be the one fielding questions about your results. Treat the LLM as a support tool (or clever but junior assistant) that needs thorough checking, not a delegate.</li>
+<li>Pay for a good model, or at least a high-end one. The gap between what you get in a free tier and a paid tier is substantial.</li>
+<li>Ask the LLM to explain what it’s doing. This helps while you’re learning (we’re always learning), and it helps you judge whether it’s actually done what you wanted.</li>
+<li>Never paste identifiable or confidential employee data into a public LLM. Check your organisation’s data policy and the tool’s data-handling terms before you start — the pattern in the next point is a good way to avoid the question entirely.</li>
+<li>I use the Positron Assistant inside Positron. It connects to a model of my choice via an API key (another thing the free tier won’t give you), and rather than handing it my data, it generates R code and interprets the results for me. It suggests next steps, which I typically ignore, but sometimes it comes up with something I might have missed. That’s an LLM working <em>as</em> an analyst would, and it gives better, faster results with fewer errors.</li>
+<li>Read every line of code an LLM gives you before you run it, especially against live data. Treat it the way you’d treat code from a junior analyst — helpful, but not yet trusted.</li>
+<li>If I’m running an analysis I’m unfamiliar with, or haven’t done for some time, I ask the LLM to point me to papers or other high-quality sources that used the technique the way I intend to use it. Make a habit of triangulating LLM answers against real sources — it roughly doubles how fast you learn.</li>
+<li>Declare and document how you used the LLM.</li>
+</ol>
+<section id="my-own-ai-declaration" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="my-own-ai-declaration"><span class="header-section-number">A.1</span> My own AI declaration</h2>
+<p>In the writing of this book I used AI - most notably but not exclusively - various versions of Claude to support my writing but not to do the core writing.</p>
+<p>The book was written using Positron and I have Claude connected via the positron assistant. The assistant mostly helped debug the inevitable number of errors and suggested code snippets which I then reviewed and either accepted, changed, or rejected.</p>
+<p>I used various LLMs; most notabaly Claude and the current ‘labs’ AI capability in Google Scholar to help me speed up the desk research process by finding papers that I then read.</p>
+<p>Most importantly, I asked the LLM to review all my text and code, from both the Quarto documents and the rendered versions you read here replicating some of the work of the editor that I didn’t have. Again the LLM suggested changes some, but not all of which I accepted. It was particularly good at reviewing internal consistency - references within my text to other chapters or sections - which kept changing given I wrote this document asynchronously. Claude helped identify coding style guides written by others (notably Hadley Wickham) and apply them consistently across the book. Anyone who has read my code over the last 15 years will know that I’ve not always been so consistent.</p>
+<p>Finally, and less visibly, over the last few years LLMs have started to replace Stack Overflow and statistics websites, YouTube channels (but not interestingly books which I read more than ever) in my learning process. Hence if I was to map where an idea or mostly code patterns originally came from in many instances I can’t 100% determine. I continually am learning this craft. I hope from this book that you can too.</p>
 
 
 <!-- -->
@@ -977,61 +927,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../appendices/A2-further-reading.html" class="pagination-link" aria-label="Further reading">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Further reading</span></span>
+      <a href="../chapters/24-posterior-to-decision.html" class="pagination-link" aria-label="From Posterior to Decision: What an Analysis Is Worth">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">From Posterior to Decision: What an Analysis Is Worth</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../appendices/A2-further-reading.html" class="pagination-link" aria-label="Further reading">
+        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Further reading</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data sources {#sec-data-appendix}</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>Every dataset used in this book, where it came from, and what you need to</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>do to get hold of it. Each is also credited at the point it first</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>appears; this is the single list.</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## `peopleanalyticsdata`</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>Most of the book runs on the <span class="in">`peopleanalyticsdata`</span> package, created by</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>Keith McNulty. MIT licensed, and on CRAN:</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"peopleanalyticsdata"</span>)</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(peopleanalyticsdata)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="at">package =</span> <span class="st">"peopleanalyticsdata"</span>)   <span class="co"># everything available</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Dataset <span class="pp">|</span> Shape <span class="pp">|</span> Used in <span class="pp">|</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`salespeople`</span> <span class="pp">|</span> 351 rows — sales, customer rating, performance tier, promoted <span class="pp">|</span> 1–9, 18, 20 <span class="pp">|</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`employee_survey`</span> <span class="pp">|</span> 2,833 rows — four-point Likert items in blocks <span class="pp">|</span> 1–3, 17, 18 <span class="pp">|</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`managers`</span> <span class="pp">|</span> 571 rows — test score, city, tenure, transfers, team size <span class="pp">|</span> 8, 12, 13, 14 <span class="pp">|</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`graduates`</span> <span class="pp">|</span> 173 rows — median salary and unemployment by major <span class="pp">|</span> 15 <span class="pp">|</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`promotion`</span> <span class="pp">|</span> 1,134 rows — time to promotion, flexible working, diversity programme <span class="pp">|</span> 16, 19 <span class="pp">|</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`recruiting`</span> <span class="pp">|</span> 966 rows — hiring decisions, test scores, three interviewer ratings <span class="pp">|</span> exercises <span class="pp">|</span></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`learning`</span> <span class="pp">|</span> 4,974 rows — repeated feedback from 326 participants <span class="pp">|</span> 12 (crossed effects) <span class="pp">|</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## Downloaded separately</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>**`turnover`** — real, anonymised company data originally shared by</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>Edward Babushkin and redistributed on Kaggle under CC BY-NC-SA 4.0.</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>Genuine tenure in months, right-censored for those still employed, which</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>is why Chapter 17 uses it rather than a constructed alternative.</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>Not bundled with this book, because the licence is share-alike and the</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>data is not ours to redistribute. Download it from</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="ot">&lt;https://www.kaggle.com/datasets/davinwijaya/employee-turnover&gt;</span> and save</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>it as <span class="in">`data/turnover.csv`</span> before running Chapter 17. See <span class="in">`data/README.md`</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>in the repository for the detail.</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu">## Simulated data</span></span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>Chapter 22 simulates its own panel, because no public People Analytics</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>dataset has both a time dimension and a policy change. That is stated in</span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>the chapter and is deliberate: when you generate the data you know the</span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>true answer, which is the only situation in which you can check whether a</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>method recovers it.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Using LLMs for analysis {#sec-llms}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Modern AI tools can, and do, support the modern statistician, and I advise my students to use them — AI fluency is now part of the analyst's skillset. Used well, they're genuinely helpful; used carelessly, they create new problems on top of the ones they were meant to solve.</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>Here's the advice I give my students:</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>You're responsible for your code, and for guiding the analysis. The most important part of any analysis is asking the right business question — the LLM doesn't know your business, so it can't ask that question for you. You'll also be the one fielding questions about your results. Treat the LLM as a support tool (or clever but junior assistant) that needs thorough checking, not a delegate.</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Pay for a good model, or at least a high-end one. The gap between what you get in a free tier and a paid tier is substantial.</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Ask the LLM to explain what it's doing. This helps while you're learning (we're always learning), and it helps you judge whether it's actually done what you wanted.</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Never paste identifiable or confidential employee data into a public LLM. Check your organisation's data policy and the tool's data-handling terms before you start — the pattern in the next point is a good way to avoid the question entirely.</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>I use the Positron Assistant inside Positron. It connects to a model of my choice via an API key (another thing the free tier won't give you), and rather than handing it my data, it generates R code and interprets the results for me. It suggests next steps, which I typically ignore, but sometimes it comes up with something I might have missed. That's an LLM working *as* an analyst would, and it gives better, faster results with fewer errors.</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Read every line of code an LLM gives you before you run it, especially against live data. Treat it the way you'd treat code from a junior analyst — helpful, but not yet trusted.</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>If I'm running an analysis I'm unfamiliar with, or haven't done for some time, I ask the LLM to point me to papers or other high-quality sources that used the technique the way I intend to use it. Make a habit of triangulating LLM answers against real sources — it roughly doubles how fast you learn.</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>Declare and document how you used the LLM.</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## My own AI declaration</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>In the writing of this book I used AI - most notably but not exclusively - various versions of Claude to support my writing but not to do the core writing.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>The book was written using Positron and I have Claude connected via the positron assistant. The assistant mostly helped debug the inevitable number of errors and suggested code snippets which I then reviewed and either accepted, changed, or rejected.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>I used various LLMs; most notabaly Claude and the current 'labs' AI capability in Google Scholar to help me speed up the desk research process by finding papers that I then read.</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>Most importantly, I asked the LLM to review all my text and code, from both the Quarto documents and the rendered versions you read here replicating some of the work of the editor that I didn't have. Again the LLM suggested changes some, but not all of which I accepted. It was particularly good at reviewing internal consistency - references within my text to other chapters or sections - which kept changing given I wrote this document asynchronously. Claude helped identify coding style guides written by others (notably Hadley Wickham) and apply them consistently across the book. Anyone who has read my code over the last 15 years will know that I've not always been so consistent.</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>Finally, and less visibly, over the last few years LLMs have started to replace Stack Overflow and statistics websites, YouTube channels (but not interestingly books which I read more than ever) in my learning process. Hence if I was to map where an idea or mostly code patterns originally came from in many instances I can't 100% determine. I continually am learning this craft. I hope from this book that you can too.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -1041,7 +972,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/edit/main/appendices/A3-data-sources.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/edit/main/appendices/A1-llms.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/andrewmarritt/bayesian-people-analytics/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Built with <a href="https://quarto.org">Quarto</a></p>
 </div>

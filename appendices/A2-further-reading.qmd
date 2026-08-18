@@ -41,7 +41,7 @@ practice.
 Where it differs from this book: Kruschke is a psychologist writing for
 researchers, so the worked problems are experimental rather than
 organisational, and he is a strong advocate for the ROPE-and-HDI approach
-to decisions, which we do not use here.
+to decisions, which I covered only briefly in Chapter 20.
 
 **Peter E. Rossi, Greg M. Allenby and Sanjog Misra**, *Bayesian
 Statistics and Marketing* (2nd edition, Wiley, 2024).
