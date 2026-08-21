@@ -882,11 +882,13 @@ Two moves are available, and the difference matters:
 ## Where to go, and an honest note on scope
 
 The second route is standard practice in psychometrics and in the
-psychology-adjacent parts of People Analytics, under the names
-confirmatory factor analysis and structural equation modelling. It is
-rarer in the economics tradition this book mostly draws on, and I don't
-think it would be useful for me to write a shallow chapter on a technique
-I use less than the ones in the rest of the book.
+psychology-adjacent parts of People Analytics, under three names you
+will meet: **confirmatory factor analysis**, **structural equation
+modelling**, and — where the interest is in the items themselves rather
+than the constructs they feed — **item response theory**. All are rarer
+in the economics tradition this book mostly draws on, and I don't think
+it would be useful for me to write a shallow chapter on techniques I use
+less than the ones in the rest of the book.
 
 So this is a signpost rather than a treatment. If your survey has item
 blocks and you want to model constructs rather than indices, the two
@@ -896,6 +898,39 @@ separate steps and should be assessed separately, and that Keith
 McNulty's *Handbook of Regression Modeling in People Analytics* covers
 both properly with worked code. `blavaan` is the Bayesian implementation;
 `brms` can express simpler measurement models directly.
+
+Item response theory deserves a specific word, because the gap between it
+and this book is narrower than the vocabulary suggests. IRT asks a
+different question of the same data: not "what is this person's score?"
+but "what does each *item* contribute, and how hard is it?" — which is
+what lets you compare people who answered different questions, and check
+whether an item behaves differently for different groups. The apparatus
+is unfamiliar. The model is not. A Rasch model — the simplest IRT model —
+says the log-odds of endorsing an item are a person effect minus an item
+effect, which in this book's notation is:
+
+```r
+brm(response ~ 1 + (1 | person) + (1 | item), family = bernoulli("logit"))
+```
+
+That is a crossed multilevel logistic regression, Chapter 9's model with
+Chapter 8's structure. For Likert items, swap `bernoulli()` for
+`cumulative("logit")` and you have a graded response model — Chapter 18,
+with a person effect added. Priors, `brm()`, posterior, query it: the
+loop does not change, only the names do. Adding item discrimination (the
+2PL family) is where it gets genuinely fiddly and needs `brms`'
+non-linear syntax. Paul Bürkner's paper *Bayesian Item Response Modeling
+in R with brms and Stan* works through the whole family and is the place
+to start; `mirt` is the standard non-Bayesian implementation if you want
+to see the classical version first.
+
+I left IRT out because most People Analytics work uses survey instruments
+someone else validated, and the questions on your desk are about people
+and groups rather than about the items. If your questions *are* about the
+items — you are building an instrument, comparing across surveys that
+share only some questions, or checking an assessment for bias between
+groups — then it is the right tool and the paragraph above tells you it
+is closer to hand than you expected.
 
 What you should take from Part 1 regardless: **if you're going to use an
 index, find out its reliability and act as though it matters — because

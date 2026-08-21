@@ -431,15 +431,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#a-plane-and-two-years-of-nothing" id="toc-a-plane-and-two-years-of-nothing" class="nav-link" data-scroll-target="#a-plane-and-two-years-of-nothing">A plane, and two years of nothing</a></li>
   <li><a href="#what-bayesian-actually-means" id="toc-what-bayesian-actually-means" class="nav-link" data-scroll-target="#what-bayesian-actually-means">What “Bayesian” actually means</a></li>
-  <li><a href="#not-a-loyalty-test" id="toc-not-a-loyalty-test" class="nav-link" data-scroll-target="#not-a-loyalty-test">Not a loyalty test</a></li>
-  <li><a href="#the-search-for-flight-447-was-not-a-special-case" id="toc-the-search-for-flight-447-was-not-a-special-case" class="nav-link" data-scroll-target="#the-search-for-flight-447-was-not-a-special-case">The search for Flight 447 was not a special case</a></li>
+  <li><a href="#not-a-special-case" id="toc-not-a-special-case" class="nav-link" data-scroll-target="#not-a-special-case">Not a special case</a></li>
   <li><a href="#why-for-people-analytics-specifically" id="toc-why-for-people-analytics-specifically" class="nav-link" data-scroll-target="#why-for-people-analytics-specifically">Why for People Analytics specifically</a></li>
   </ul></li>
   <li><a href="#what-i-actually-want-you-to-take-away" id="toc-what-i-actually-want-you-to-take-away" class="nav-link" data-scroll-target="#what-i-actually-want-you-to-take-away">What I actually want you to take away</a></li>
   <li><a href="#acknowledgements" id="toc-acknowledgements" class="nav-link" data-scroll-target="#acknowledgements">Acknowledgements</a></li>
   <li><a href="#about-this-book" id="toc-about-this-book" class="nav-link" data-scroll-target="#about-this-book">About this book</a>
   <ul class="collapse">
-  <li><a href="#if-you-meet-a-term-you-dont-know" id="toc-if-you-meet-a-term-you-dont-know" class="nav-link" data-scroll-target="#if-you-meet-a-term-you-dont-know">If you meet a term you don’t know</a></li>
   <li><a href="#the-boxes-and-which-ones-you-can-skip" id="toc-the-boxes-and-which-ones-you-can-skip" class="nav-link" data-scroll-target="#the-boxes-and-which-ones-you-can-skip">The boxes, and which ones you can skip</a></li>
   <li><a href="#how-code-is-explained" id="toc-how-code-is-explained" class="nav-link" data-scroll-target="#how-code-is-explained">How code is explained</a></li>
   <li><a href="#the-charts" id="toc-the-charts" class="nav-link" data-scroll-target="#the-charts">The charts</a></li>
@@ -555,7 +553,7 @@ Important
 </section>
 <section id="what-bayesian-actually-means" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="what-bayesian-actually-means">What “Bayesian” actually means</h3>
-<p>I have now used three or four words without defining any of them, which is a fair thing to object to. Now, after the story I used to try and bring them to I close that gap:-</p>
+<p>I have now used three or four words without defining any of them, which is a fair thing to object to. Now, after the story I used to try and bring them to life this is what they mean:-</p>
 <p><strong>Bayes’ theorem</strong> is a rule for one narrow job: revising what you believe when new evidence turns up. It has three pieces, and the search team used all three.</p>
 <ul>
 <li>The <strong>prior</strong> is what you believed beforehand. On the search: the probability map built from the last known position, the plane’s likely heading, the drift of the recovered bodies, the currents — everything known before the next sonar run went out.</li>
@@ -564,7 +562,7 @@ Important
 </ul>
 <p>Prior, combined with likelihood, gives posterior. That is the entire mechanism, and Chapter 4 works it through by hand on a promotion rate with nothing hidden.</p>
 <p>Being <strong>Bayesian</strong> is what follows from taking that rule seriously: you are willing to put a probability on the thing you don’t know. The position of an aircraft. A promotion rate. Whether a manager training programme did anything. That sounds like a technicality. It is the whole of the difference.</p>
-<p>The <strong>classical</strong> or <strong>frequentist</strong> tradition — the statistics most of us were taught, and the one I keep translating back to throughout this book — reserves probability for the data instead. The unknown quantity is treated as a fixed number: you don’t know it, but it isn’t itself uncertain, so there’s nothing to put a distribution on. Which is why a frequentist can tell you that a procedure would bookend the truth 95% of the time, and cannot tell you there’s a 95% chance the truth lies inside the particular interval now in front of you. Read aloud, those two sentences sound identical. Only one of them answers the question that was asked.</p>
+<p>The <strong>classical</strong> or <strong>frequentist</strong> tradition — the statistics most of us were taught, and the one I keep translating back to throughout this book — reserves probability for the data instead. The unknown quantity is treated as a fixed number: you don’t know it, but it isn’t itself uncertain, so there’s nothing to put a distribution on. Which is why a frequentist can tell you that a procedure would bracket the truth 95% of the time, and cannot tell you there’s a 95% chance the truth lies inside the particular interval now in front of you. Read aloud, those two sentences sound identical. Only one of them answers the question that was asked.</p>
 <p>Allow the unknown a distribution, and a whole class of sentence becomes available:</p>
 <blockquote class="blockquote">
 <p><em>The wreckage is most probably here.</em></p>
@@ -585,29 +583,10 @@ Important
 <p>In one sentence: <strong>Bayesian statistics is what you get when you let the thing you’re trying to find out have a probability, and then use Bayes’ theorem to keep revising it as evidence arrives.</strong> Everything else in this book is machinery for doing that on problems larger than a single unknown number.</p>
 </div>
 </div>
-<p>One thing that definition does <em>not</em> commit you to: it isn’t a prerequisite to have mastered before Chapter 1. Chapter 2 makes the argument about probability properly, and Chapter 4 turns the theorem into arithmetic. If the three words above carry you through the next few pages, they’ve done their job.</p>
+<p>Two things that definition does <em>not</em> commit you to. It isn’t a loyalty test — nothing here argues that classical statistics is broken, and Chapter 17 reaches for a Kaplan-Meier curve and Chapter 21 for a plain <code>lm()</code> precisely because they’re the right tools in those places. And it isn’t a prerequisite to have mastered before Chapter 1: Chapter 2 makes the argument about probability properly, and Chapter 4 turns the theorem into arithmetic. If the three words above carry you through the next few pages, they’ve done their job.</p>
 </section>
-<section id="not-a-loyalty-test" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="not-a-loyalty-test">Not a loyalty test</h3>
-<p>Nothing in this book argues that classical statistics is broken. I use classical methods in these pages wherever they are the right tool for the question: Chapter 17 reaches for a Kaplan-Meier curve, Chapter 21 fits a trend line with a plain <code>lm()</code>, and neither is an apology. The first half of the course this book grew out of was frequentist and bootstrap methods, and I did not teach it grudgingly.</p>
-<p>Bootstrap methods in particular deserve singling out, because they share the thing I value most in the Bayesian approach. A bootstrap does not hand you an estimate and a standard error. It hands you a <em>distribution</em> — and a distribution is something you can query. Once you have one you can ask for the median rather than the mean, or the lower quartile, or the share of the distribution that falls past whatever threshold the business actually cares about. None of those questions are available if what you are holding is a test and a point estimate. Not because the arithmetic forbids them, but because that machinery was built to answer a different question and answers only that one.</p>
-<p>Which is the real argument, and it is not about Bayes at all. My deepest frustration in this field is watching an analyst reach for a tool that does not fit the question they were asked. A significance test answers “would data this extreme be surprising if nothing were going on?” That is occasionally the question. Far more often the question is “how large is it, how sure are we, and what should we do differently?” — and no amount of care in reporting a p-value turns it into an answer to that.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The skill worth having is not fluency in one tradition. It is looking at the question you have been asked and choosing the tool that answers <em>it</em>. Most of this book is Bayesian because most People Analytics questions have a shape that Bayesian methods fit — not because the other tools are wrong.</p>
-</div>
-</div>
-</section>
-<section id="the-search-for-flight-447-was-not-a-special-case" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="the-search-for-flight-447-was-not-a-special-case">The search for Flight 447 was not a special case</h3>
+<section id="not-a-special-case" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="not-a-special-case">Not a special case</h3>
 <p>It’s tempting to file that story under “impressive things statisticians do for aviation investigators” and move on. Don’t — the reason it worked there is the same reason it’s becoming the normal way to do serious quantitative work almost everywhere data is scarce, noisy, or expensive to collect:</p>
 <ul>
 <li><strong>Medicine.</strong> In January 2026 the FDA issued draft guidance formally setting out how Bayesian methods can be used in pivotal drug trials — not as an exotic alternative, but as an accepted path to approval, especially for rare diseases and paediatric trials where a large sample will simply never exist.</li>
@@ -681,14 +660,6 @@ Important
 <section id="about-this-book" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="about-this-book">About this book</h2>
 <p>This book has a small number of recurring conventions. They’re worth two minutes now, because they repeat on almost every page and they’re designed to let you read selectively rather than linearly.</p>
-<section id="if-you-meet-a-term-you-dont-know" class="level3">
-<h3 class="anchored" data-anchor-id="if-you-meet-a-term-you-dont-know">If you meet a term you don’t know</h3>
-<p>Start with this one, because it saves the most time.</p>
-<p><strong>Every word of this book is searchable.</strong> Press <code>/</code>, <code>f</code> or <code>s</code> from any page, or use the search box in the sidebar. It searches the full text of all twenty-four chapters and the appendices, not just the headings.</p>
-<p>I mention it early because a reader working through the chapters in order recently asked me what <code>Rhat</code> was. Perfectly fair question — it appears in model output from Chapter 5 onwards, gets a one-line answer there, and isn’t properly explained until Chapter 11. Searching for it finds both in about two seconds.</p>
-<p>That gap is deliberate, and you’ll meet others like it. I have tried not to re-explain the same idea every time it reappears, because a book that does that is unbearable to read straight through. The cost is that a term will occasionally turn up in front of you before its full explanation does. When that happens, search for it rather than assuming you missed something — you probably didn’t, and the explanation is very likely one keystroke away.</p>
-<p>The same applies in reverse. If a technique is <em>not</em> in this book, it is usually named somewhere anyway, with a note on why I left it out and where to go instead. Searching for something and finding an honest “here’s why this isn’t here” is a better outcome than wondering.</p>
-</section>
 <section id="the-boxes-and-which-ones-you-can-skip" class="level3">
 <h3 class="anchored" data-anchor-id="the-boxes-and-which-ones-you-can-skip">The boxes, and which ones you can skip</h3>
 <p>Coloured boxes carry most of the emphasis. Five kinds recur, and two of them are aimed at specific readers:</p>
@@ -1575,7 +1546,7 @@ Tip
 <span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="fu">### What "Bayesian" actually means {.unnumbered}</span></span>
 <span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>I have now used three or four words without defining any of them, which</span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>is a fair thing to object to. Now, after the story I used to try and bring them to I close that gap:-</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>is a fair thing to object to. Now, after the story I used to try and bring them to life this is what they mean:-</span>
 <span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>**Bayes' theorem** is a rule for one narrow job: revising what you</span>
 <span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>believe when new evidence turns up. It has three pieces, and the search</span>
@@ -1609,7 +1580,7 @@ Tip
 <span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>book — reserves probability for the data instead. The unknown quantity</span>
 <span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>is treated as a fixed number: you don't know it, but it isn't itself</span>
 <span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>uncertain, so there's nothing to put a distribution on. Which is why a</span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>frequentist can tell you that a procedure would bookend the truth 95% of</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>frequentist can tell you that a procedure would bracket the truth 95% of</span>
 <span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>the time, and cannot tell you there's a 95% chance the truth lies inside</span>
 <span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>the particular interval now in front of you. Read aloud, those two</span>
 <span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>sentences sound identical. Only one of them answers the question that was</span>
@@ -1637,547 +1608,487 @@ Tip
 <span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>unknown number.</span>
 <span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>One thing that definition does *not* commit you to: it isn't a</span>
-<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>prerequisite to have mastered before Chapter 1. Chapter 2 makes the</span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>argument about probability properly, and Chapter 4 turns the theorem into</span>
-<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>arithmetic. If the three words above carry you through the next few</span>
-<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>pages, they've done their job.</span>
-<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="fu">### Not a loyalty test {.unnumbered}</span></span>
-<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>Nothing in this book argues that classical statistics is broken. I use</span>
-<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>classical methods in these pages wherever they are the right tool for the</span>
-<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>question: Chapter 17 reaches for a Kaplan-Meier curve, Chapter 21 fits a</span>
-<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>trend line with a plain <span class="in">`lm()`</span>, and neither is an apology. The first half</span>
-<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>of the course this book grew out of was frequentist and bootstrap</span>
-<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>methods, and I did not teach it grudgingly.</span>
-<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>Bootstrap methods in particular deserve singling out, because they share</span>
-<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>the thing I value most in the Bayesian approach. A bootstrap does not</span>
-<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>hand you an estimate and a standard error. It hands you a *distribution* —</span>
-<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>and a distribution is something you can query. Once you have one you can</span>
-<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>ask for the median rather than the mean, or the lower quartile, or the</span>
-<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>share of the distribution that falls past whatever threshold the business</span>
-<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>actually cares about. None of those questions are available if what you</span>
-<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>are holding is a test and a point estimate. Not because the arithmetic</span>
-<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>forbids them, but because that machinery was built to answer a different</span>
-<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>question and answers only that one.</span>
-<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>Which is the real argument, and it is not about Bayes at all. My deepest</span>
-<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>frustration in this field is watching an analyst reach for a tool that</span>
-<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>does not fit the question they were asked. A significance test answers</span>
-<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>"would data this extreme be surprising if nothing were going on?" That is</span>
-<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>occasionally the question. Far more often the question is "how large is</span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>it, how sure are we, and what should we do differently?" — and no amount</span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>of care in reporting a p-value turns it into an answer to that.</span>
-<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>The skill worth having is not fluency in one tradition. It is looking at</span>
-<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>the question you have been asked and choosing the tool that answers *it*.</span>
-<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>Most of this book is Bayesian because most People Analytics questions</span>
-<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>have a shape that Bayesian methods fit — not because the other tools are</span>
-<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>wrong.</span>
-<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### The search for Flight 447 was not a special case {.unnumbered}</span></span>
-<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>It's tempting to file that story under "impressive things statisticians</span>
-<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>do for aviation investigators" and move on. Don't — the reason it</span>
-<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>worked there is the same reason it's becoming the normal way to do</span>
-<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>serious quantitative work almost everywhere data is scarce, noisy, or</span>
-<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>expensive to collect:</span>
-<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Medicine.** In January 2026 the FDA issued draft guidance</span>
-<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a>    formally setting out how Bayesian methods can be used in pivotal</span>
-<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a>    drug trials — not as an exotic alternative, but as an accepted</span>
-<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>    path to approval, especially for rare diseases and paediatric</span>
-<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>    trials where a large sample will simply never exist.</span>
-<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Insurance.** Actuaries have priced policies this way for over a</span>
-<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>    century, under the name *credibility theory*: a small</span>
-<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>    policyholder group's own claims history is blended with the wider</span>
-<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>    portfolio average, weighted by how much the group's own data can</span>
-<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a>    be trusted. You'll meet this exact idea, with the same name for</span>
-<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>    the underlying mechanism, in Chapters 8, 14 and 15.</span>
-<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Elections.** The forecasting models run by *The Economist* and</span>
-<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>    by independent modellers like Nate Silver are openly Bayesian —</span>
-<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>    combining polls with a "fundamentals" prior built from the</span>
-<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>    economy and incumbency, updated as new polls arrive.</span>
-<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Football.** Ian Graham, Liverpool FC's former director of</span>
-<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>    research, describes in *How to Win the Premier League* how he used</span>
-<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>    Bayesian analysis "to counteract luck's influence over players who</span>
-<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>    have played a small number of games". We use the same idea to</span>
-<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>    compare managers fairly in Chapters 8, 14 and 15.</span>
-<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The everyday and invisible.** Spam filters, weather forecasts,</span>
-<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>    and the sensors that keep a self-driving car aware of its own</span>
-<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>    position all run on the same rule, quietly, in the background.</span>
-<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>None of these fields adopted Bayesian methods for philosophical</span>
-<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>reasons. They adopted them because the alternative — waiting for a</span>
-<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>large, clean sample before saying anything — wasn't an option, and</span>
-<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>the questions on the table were about **decisions under uncertainty**,</span>
-<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>not abstract tests of a null hypothesis.</span>
-<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>People Analytics is exactly that kind of field, and usually nobody has</span>
-<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>told its practitioners so.</span>
-<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why for People Analytics specifically {.unnumbered}</span></span>
-<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>People Analytics data has a few recurring features that make Bayesian</span>
-<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>methods a particularly good fit, more than a stylistic alternative to</span>
-<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>classical statistics:</span>
-<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Small groups, everywhere.** Teams, managers, offices, and</span>
-<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a>    cohorts come in wildly different sizes. A five-person team's</span>
-<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a>    average engagement score is much noisier than a two-hundred-person</span>
-<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a>    department's — but a raw league table treats them the same.</span>
-<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>    Bayesian partial pooling (Chapters 8, 14 and 15) fixes this</span>
-<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>    directly, the same way credibility theory fixes it for an</span>
-<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>    insurer.</span>
-<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**You almost always know something before you look at the data.**</span>
-<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>    Industry attrition benchmarks, last year's survey results, a</span>
-<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>    colleague's informed guess about a plausible effect size —</span>
-<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>    Bayesian methods give you a principled way to use that knowledge</span>
-<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>    instead of discarding it (Chapters 4, 5, 14 and 23).</span>
-<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Ordinal, bounded, and time-to-event outcomes are the norm, not</span>
-<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>    the exception.** Engagement surveys are Likert scales, not</span>
-<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>    continuous numbers; attrition is a time-to-event question, not a</span>
-<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>    single yes/no. Treating them as if they were ordinary continuous</span>
-<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>    outcomes — a very common shortcut — quietly produces wrong</span>
-<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>    answers. Chapters 17 and 18 deal with this properly.</span>
-<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The questions are inherently about uncertainty and decisions**,</span>
-<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>    not abstract hypothesis tests. "How confident should we be that</span>
-<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>    this intervention worked?" and "Is this manager's team really</span>
-<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>    underperforming, or is that just five people?" are Bayesian</span>
-<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>    questions by nature — the same species of question as "where,</span>
-<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>    probably, is the wreckage?"</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>Two things that definition does *not* commit you to. It isn't a loyalty</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>test — nothing here argues that classical statistics is broken, and</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>Chapter 17 reaches for a Kaplan-Meier curve and Chapter 21 for a plain</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a><span class="in">`lm()`</span> precisely because they're the right tools in those places. And it</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>isn't a prerequisite to have mastered before Chapter 1: Chapter 2 makes</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>the argument about probability properly, and Chapter 4 turns the theorem</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>into arithmetic. If the three words above carry you through the</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>next few pages, they've done their job.</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="fu">### Not a special case {.unnumbered}</span></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>It's tempting to file that story under "impressive things statisticians</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>do for aviation investigators" and move on. Don't — the reason it</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>worked there is the same reason it's becoming the normal way to do</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>serious quantitative work almost everywhere data is scarce, noisy, or</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>expensive to collect:</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Medicine.** In January 2026 the FDA issued draft guidance</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>    formally setting out how Bayesian methods can be used in pivotal</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>    drug trials — not as an exotic alternative, but as an accepted</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>    path to approval, especially for rare diseases and paediatric</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>    trials where a large sample will simply never exist.</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Insurance.** Actuaries have priced policies this way for over a</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>    century, under the name *credibility theory*: a small</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>    policyholder group's own claims history is blended with the wider</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>    portfolio average, weighted by how much the group's own data can</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>    be trusted. You'll meet this exact idea, with the same name for</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>    the underlying mechanism, in Chapters 8, 14 and 15.</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Elections.** The forecasting models run by *The Economist* and</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>    by independent modellers like Nate Silver are openly Bayesian —</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>    combining polls with a "fundamentals" prior built from the</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>    economy and incumbency, updated as new polls arrive.</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Football.** Ian Graham, Liverpool FC's former director of</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>    research, describes in *How to Win the Premier League* how he used</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>    Bayesian analysis "to counteract luck's influence over players who</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>    have played a small number of games". We use the same idea to</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>    compare managers fairly in Chapters 8, 14 and 15.</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The everyday and invisible.** Spam filters, weather forecasts,</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>    and the sensors that keep a self-driving car aware of its own</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a>    position all run on the same rule, quietly, in the background.</span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>None of these fields adopted Bayesian methods for philosophical</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>reasons. They adopted them because the alternative — waiting for a</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>large, clean sample before saying anything — wasn't an option, and</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>the questions on the table were about **decisions under uncertainty**,</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>not abstract tests of a null hypothesis.</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>People Analytics is exactly that kind of field, and usually nobody has</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>told its practitioners so.</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why for People Analytics specifically {.unnumbered}</span></span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>People Analytics data has a few recurring features that make Bayesian</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a>methods a particularly good fit, more than a stylistic alternative to</span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>classical statistics:</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Small groups, everywhere.** Teams, managers, offices, and</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a>    cohorts come in wildly different sizes. A five-person team's</span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>    average engagement score is much noisier than a two-hundred-person</span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a>    department's — but a raw league table treats them the same.</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>    Bayesian partial pooling (Chapters 8, 14 and 15) fixes this</span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>    directly, the same way credibility theory fixes it for an</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>    insurer.</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**You almost always know something before you look at the data.**</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>    Industry attrition benchmarks, last year's survey results, a</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>    colleague's informed guess about a plausible effect size —</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>    Bayesian methods give you a principled way to use that knowledge</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>    instead of discarding it (Chapters 4, 5, 14 and 23).</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Ordinal, bounded, and time-to-event outcomes are the norm, not</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>    the exception.** Engagement surveys are Likert scales, not</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>    continuous numbers; attrition is a time-to-event question, not a</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>    single yes/no. Treating them as if they were ordinary continuous</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>    outcomes — a very common shortcut — quietly produces wrong</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>    answers. Chapters 17 and 18 deal with this properly.</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The questions are inherently about uncertainty and decisions**,</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>    not abstract hypothesis tests. "How confident should we be that</span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>    this intervention worked?" and "Is this manager's team really</span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>    underperforming, or is that just five people?" are Bayesian</span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>    questions by nature — the same species of question as "where,</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>    probably, is the wreckage?"</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>That last parallel is the one to return to. Nobody on the AF447 search team</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>had the luxury of a huge sample or a repeatable experiment. They had</span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a>one crash, partial information, and an urgent need to make the best</span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>possible statement about where to look next. Most People Analytics</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>questions have exactly that shape, at much lower stakes — which is</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>good news, because it means the method that found a plane at the</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>bottom of the Atlantic is more than equal to a question about a</span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a>promotion rate or a team's engagement score.</span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a><span class="fu">## What I actually want you to take away {.unnumbered}</span></span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a>I opened by promising that this book is about a view of the world rather</span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>than a toolkit, and then spent a long time on an aeroplane. This is where</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>that promise is delivered, because it is the thing I care about most and it</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a>is not what most statistics books are for.</span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a>Go back to the search for AF447. The mathematics that found the plane was</span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>not complicated, and you will have met most of it by Chapter 5. What had</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a>gone wrong for two years was not a calculation. It was an assumption that</span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>nobody had written down: that a search which finds nothing tells you</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a>nothing. Once somebody questioned that assumption, the answer took a</span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>week.</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>The same is true of almost every analysis that matters. The technique is</span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>rarely the difficult part. The difficult part is noticing an assumption</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>you did not know you were making.</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a>If you take one thing from this book, I would rather it were a habit than</span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a>a technique: **always ask what your numbers are assuming, and be willing</span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a>to find out that you were wrong.**</span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>That last parallel is the one to return to. Nobody on the AF447 search team</span>
-<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>had the luxury of a huge sample or a repeatable experiment. They had</span>
-<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>one crash, partial information, and an urgent need to make the best</span>
-<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>possible statement about where to look next. Most People Analytics</span>
-<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>questions have exactly that shape, at much lower stakes — which is</span>
-<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>good news, because it means the method that found a plane at the</span>
-<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>bottom of the Atlantic is more than equal to a question about a</span>
-<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>promotion rate or a team's engagement score.</span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a>Bayesian statistics is unusually good at teaching that habit, and I think</span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a>it is the real reason my students found it easier. It requires you to</span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a>write your assumptions down. You cannot fit a model without stating what</span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a>you believed beforehand, and how strongly you believed it. Once a belief</span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a>is written as a distribution, instead of being hidden inside a default</span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>setting, it becomes something you can look at, discuss, and change your</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>mind about. Running a test and reading a p-value is a very different</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a>experience: the assumptions are still there, but you never see them.</span>
 <span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a><span class="fu">## What I actually want you to take away {.unnumbered}</span></span>
-<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>I opened by promising that this book is about a view of the world rather</span>
-<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>than a toolkit, and then spent a long time on an aeroplane. This is where</span>
-<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>that promise is delivered, because it is the thing I care about most and it</span>
-<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>is not what most statistics books are for.</span>
-<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>Go back to the search for AF447. The mathematics that found the plane was</span>
-<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a>not complicated, and you will have met most of it by Chapter 5. What had</span>
-<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>gone wrong for two years was not a calculation. It was an assumption that</span>
-<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>nobody had written down: that a search which finds nothing tells you</span>
-<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>nothing. Once somebody questioned that assumption, the answer took a</span>
-<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a>week.</span>
-<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a>The same is true of almost every analysis that matters. The technique is</span>
-<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a>rarely the difficult part. The difficult part is noticing an assumption</span>
-<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a>you did not know you were making.</span>
-<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>If you take one thing from this book, I would rather it were a habit than</span>
-<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a>a technique: **always ask what your numbers are assuming, and be willing</span>
-<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>to find out that you were wrong.**</span>
-<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a>Bayesian statistics is unusually good at teaching that habit, and I think</span>
-<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>it is the real reason my students found it easier. It requires you to</span>
-<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a>write your assumptions down. You cannot fit a model without stating what</span>
-<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>you believed beforehand, and how strongly you believed it. Once a belief</span>
-<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a>is written as a distribution, instead of being hidden inside a default</span>
-<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>setting, it becomes something you can look at, discuss, and change your</span>
-<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a>mind about. Running a test and reading a p-value is a very different</span>
-<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a>experience: the assumptions are still there, but you never see them.</span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a>The benefit shows up in ordinary work, long before you fit anything</span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>complicated. It is the analyst who asks where a sample came from before</span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a>asking what it shows. Who checks how much of the difference between two</span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>teams could be measurement error, before writing the recommendation. Who</span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a>notices that "we controlled for performance rating" is a claim about</span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>cause and effect, not a technical detail. None of these are advanced</span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a>skills. All of them are the difference between an analysis that holds up</span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>when somebody challenges it and one that does not.</span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>It is also, if I am honest, the reason I write a newsletter. Techniques</span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a>are easy to look up, and I have nothing useful to add to the</span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>documentation. What is worth writing about is the moment when something</span>
+<span id="cb1-315"><a href="#cb1-315" aria-hidden="true" tabindex="-1"></a>familiar turns out to work differently from the way everyone assumed.</span>
+<span id="cb1-316"><a href="#cb1-316" aria-hidden="true" tabindex="-1"></a>That is also what is worth reading for.</span>
+<span id="cb1-317"><a href="#cb1-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-318"><a href="#cb1-318" aria-hidden="true" tabindex="-1"></a><span class="fu">## Acknowledgements {.unnumbered}</span></span>
+<span id="cb1-319"><a href="#cb1-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-320"><a href="#cb1-320" aria-hidden="true" tabindex="-1"></a>There are numerous people without whom this book wouldn't have been possible.</span>
+<span id="cb1-321"><a href="#cb1-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-322"><a href="#cb1-322" aria-hidden="true" tabindex="-1"></a>The first of them are my colleagues and students at the Swiss Educational College — a hospitality school in central Switzerland — who were the guinea pigs for the first version of this course. If my students' views hadn't been so enlightening I would never have had the courage to start a book on Bayesian Statistics for People Analytics nor have dared teaching total beginners how to do statistics using Bayesian techniques.</span>
+<span id="cb1-323"><a href="#cb1-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-324"><a href="#cb1-324" aria-hidden="true" tabindex="-1"></a>I've been in the People Analytics community for too long and with too many people to mention everyone who has influenced me. My old colleagues and clients during my OrganizationView days certainly kept me focused. Many competitors and those I met at the various conferences provided inspiration and reflection.</span>
+<span id="cb1-325"><a href="#cb1-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-326"><a href="#cb1-326" aria-hidden="true" tabindex="-1"></a>I owe a particular debt to **Keith McNulty**. Almost every example in this book runs on data he assembled to accompany his own writing and then gave away for anyone to use. It is hard to overstate what that is worth to a book like this one. Teaching statistics on invented data has a specific failure mode: the examples come out too clean, the effects turn out to be exactly as large as the author needed them to be, and the reader learns a technique without ever meeting the messiness that made the technique necessary in the first place. Keith's data has the texture of the real thing, because it was put together by somebody who has spent a career looking at the real thing.</span>
+<span id="cb1-327"><a href="#cb1-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-328"><a href="#cb1-328" aria-hidden="true" tabindex="-1"></a>His own books have shaped this one in a way that is harder to point at. They are rigorous without being forbidding — a harder balance than it looks — and it is the balance I have been aiming at throughout, with whatever success you are about to judge for yourself.</span>
+<span id="cb1-329"><a href="#cb1-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-330"><a href="#cb1-330" aria-hidden="true" tabindex="-1"></a>**Edward Babushkin** deserves separate thanks. The turnover data in Chapter 17 is real, anonymised employee records that he chose to publish: genuine tenure, genuine departures, right-censored exactly the way real data arrives. Very few people share anything like it, and survival analysis is a great deal harder to teach convincingly without it.</span>
+<span id="cb1-331"><a href="#cb1-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-332"><a href="#cb1-332" aria-hidden="true" tabindex="-1"></a>I'm also grateful to the following people for their kind feedback during the review process:</span>
+<span id="cb1-333"><a href="#cb1-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-334"><a href="#cb1-334" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- </span><span class="al">TODO</span><span class="co"> (Andrew): reviewer names. --&gt;</span></span>
 <span id="cb1-335"><a href="#cb1-335" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>The benefit shows up in ordinary work, long before you fit anything</span>
-<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>complicated. It is the analyst who asks where a sample came from before</span>
-<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>asking what it shows. Who checks how much of the difference between two</span>
-<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a>teams could be measurement error, before writing the recommendation. Who</span>
-<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>notices that "we controlled for performance rating" is a claim about</span>
-<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a>cause and effect, not a technical detail. None of these are advanced</span>
-<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a>skills. All of them are the difference between an analysis that holds up</span>
-<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a>when somebody challenges it and one that does not.</span>
-<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>It is also, if I am honest, the reason I write a newsletter. Techniques</span>
-<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>are easy to look up, and I have nothing useful to add to the</span>
-<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a>documentation. What is worth writing about is the moment when something</span>
-<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a>familiar turns out to work differently from the way everyone assumed.</span>
-<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a>That is also what is worth reading for.</span>
-<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a><span class="fu">## Acknowledgements {.unnumbered}</span></span>
+<span id="cb1-336"><a href="#cb1-336" aria-hidden="true" tabindex="-1"></a>Every dataset is credited where it first appears, and listed in full —</span>
+<span id="cb1-337"><a href="#cb1-337" aria-hidden="true" tabindex="-1"></a>with licences and download instructions — in @sec-data-appendix. Keith's</span>
+<span id="cb1-338"><a href="#cb1-338" aria-hidden="true" tabindex="-1"></a>book, and the others that shaped this one, are in @sec-further-reading.</span>
+<span id="cb1-339"><a href="#cb1-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-340"><a href="#cb1-340" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb1-341"><a href="#cb1-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-342"><a href="#cb1-342" aria-hidden="true" tabindex="-1"></a><span class="fu">## About this book {.unnumbered}</span></span>
+<span id="cb1-343"><a href="#cb1-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-344"><a href="#cb1-344" aria-hidden="true" tabindex="-1"></a>This book has a small number of recurring conventions. They're worth two</span>
+<span id="cb1-345"><a href="#cb1-345" aria-hidden="true" tabindex="-1"></a>minutes now, because they repeat on almost every page and they're</span>
+<span id="cb1-346"><a href="#cb1-346" aria-hidden="true" tabindex="-1"></a>designed to let you read selectively rather than linearly.</span>
+<span id="cb1-347"><a href="#cb1-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-348"><a href="#cb1-348" aria-hidden="true" tabindex="-1"></a><span class="fu">### The boxes, and which ones you can skip</span></span>
+<span id="cb1-349"><a href="#cb1-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-350"><a href="#cb1-350" aria-hidden="true" tabindex="-1"></a>Coloured boxes carry most of the emphasis. Five kinds recur, and two of</span>
+<span id="cb1-351"><a href="#cb1-351" aria-hidden="true" tabindex="-1"></a>them are aimed at specific readers:</span>
 <span id="cb1-352"><a href="#cb1-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>There are numerous people without whom this book wouldn't have been possible.</span>
-<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>The first of them are my colleagues and students at the Swiss Educational College — a hospitality school in central Switzerland — who were the guinea pigs for the first version of this course. If my students' views hadn't been so enlightening I would never have had the courage to start a book on Bayesian Statistics for People Analytics nor have dared teaching total beginners how to do statistics using Bayesian techniques.</span>
-<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a>I've been in the People Analytics community for too long and with too many people to mention everyone who has influenced me. My old colleagues and clients during my OrganizationView days certainly kept me focused. Many competitors and those I met at the various conferences provided inspiration and reflection.</span>
-<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a>I owe a particular debt to **Keith McNulty**. Almost every example in this book runs on data he assembled to accompany his own writing and then gave away for anyone to use. It is hard to overstate what that is worth to a book like this one. Teaching statistics on invented data has a specific failure mode: the examples come out too clean, the effects turn out to be exactly as large as the author needed them to be, and the reader learns a technique without ever meeting the messiness that made the technique necessary in the first place. Keith's data has the texture of the real thing, because it was put together by somebody who has spent a career looking at the real thing.</span>
+<span id="cb1-353"><a href="#cb1-353" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-354"><a href="#cb1-354" aria-hidden="true" tabindex="-1"></a>**The point.** Where a section has one idea you should leave with, it's</span>
+<span id="cb1-355"><a href="#cb1-355" aria-hidden="true" tabindex="-1"></a>in a box like this. If you read nothing else on a page, read these.</span>
+<span id="cb1-356"><a href="#cb1-356" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-357"><a href="#cb1-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-358"><a href="#cb1-358" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb1-359"><a href="#cb1-359" aria-hidden="true" tabindex="-1"></a><span class="fu">## A different lens</span></span>
 <span id="cb1-360"><a href="#cb1-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>His own books have shaped this one in a way that is harder to point at. They are rigorous without being forbidding — a harder balance than it looks — and it is the balance I have been aiming at throughout, with whatever success you are about to judge for yourself.</span>
-<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>**Edward Babushkin** deserves separate thanks. The turnover data in Chapter 17 is real, anonymised employee records that he chose to publish: genuine tenure, genuine departures, right-censored exactly the way real data arrives. Very few people share anything like it, and survival analysis is a great deal harder to teach convincingly without it.</span>
-<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>I'm also grateful to the following people for their kind feedback during the review process:</span>
-<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- </span><span class="al">TODO</span><span class="co"> (Andrew): reviewer names. --&gt;</span></span>
+<span id="cb1-361"><a href="#cb1-361" aria-hidden="true" tabindex="-1"></a>Most readers arrive from a frequentist background — t-tests, p-values,</span>
+<span id="cb1-362"><a href="#cb1-362" aria-hidden="true" tabindex="-1"></a>confidence intervals, <span class="in">`lm()`</span>. Where a Bayesian technique has a</span>
+<span id="cb1-363"><a href="#cb1-363" aria-hidden="true" tabindex="-1"></a>well-known classical counterpart, a box like this names it and explains</span>
+<span id="cb1-364"><a href="#cb1-364" aria-hidden="true" tabindex="-1"></a>what changes in the *mental model*. This is never an argument that the</span>
+<span id="cb1-365"><a href="#cb1-365" aria-hidden="true" tabindex="-1"></a>classical approach is wrong; it's a translation. **If you've never met</span>
+<span id="cb1-366"><a href="#cb1-366" aria-hidden="true" tabindex="-1"></a>the classical version, skip these — you're not missing a prerequisite.**</span>
+<span id="cb1-367"><a href="#cb1-367" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-368"><a href="#cb1-368" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>Every dataset is credited where it first appears, and listed in full —</span>
-<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a>with licences and download instructions — in @sec-data-appendix. Keith's</span>
-<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a>book, and the others that shaped this one, are in @sec-further-reading.</span>
-<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a><span class="fu">## About this book {.unnumbered}</span></span>
-<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a>This book has a small number of recurring conventions. They're worth two</span>
-<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>minutes now, because they repeat on almost every page and they're</span>
-<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a>designed to let you read selectively rather than linearly.</span>
+<span id="cb1-369"><a href="#cb1-369" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb1-370"><a href="#cb1-370" aria-hidden="true" tabindex="-1"></a><span class="fu">## For the ML/DS crowd</span></span>
+<span id="cb1-371"><a href="#cb1-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-372"><a href="#cb1-372" aria-hidden="true" tabindex="-1"></a>Some readers are strong on machine learning and lighter on formal</span>
+<span id="cb1-373"><a href="#cb1-373" aria-hidden="true" tabindex="-1"></a>statistics. These boxes connect what's on the page to something you</span>
+<span id="cb1-374"><a href="#cb1-374" aria-hidden="true" tabindex="-1"></a>already know — regularisation, mixed-effects models, Thompson sampling.</span>
+<span id="cb1-375"><a href="#cb1-375" aria-hidden="true" tabindex="-1"></a>**Skip freely if that's not your background.**</span>
+<span id="cb1-376"><a href="#cb1-376" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-377"><a href="#cb1-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-378"><a href="#cb1-378" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb1-379"><a href="#cb1-379" aria-hidden="true" tabindex="-1"></a><span class="fu">## When you can skip this</span></span>
 <span id="cb1-380"><a href="#cb1-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a><span class="fu">### If you meet a term you don't know</span></span>
-<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a>Start with this one, because it saves the most time.</span>
-<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a>**Every word of this book is searchable.** Press <span class="in">`/`</span>, <span class="in">`f`</span> or <span class="in">`s`</span> from any</span>
-<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a>page, or use the search box in the sidebar. It searches the full text of</span>
-<span id="cb1-387"><a href="#cb1-387" aria-hidden="true" tabindex="-1"></a>all twenty-four chapters and the appendices, not just the headings.</span>
-<span id="cb1-388"><a href="#cb1-388" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-389"><a href="#cb1-389" aria-hidden="true" tabindex="-1"></a>I mention it early because a reader working through the chapters in order</span>
-<span id="cb1-390"><a href="#cb1-390" aria-hidden="true" tabindex="-1"></a>recently asked me what <span class="in">`Rhat`</span> was. Perfectly fair question — it appears</span>
-<span id="cb1-391"><a href="#cb1-391" aria-hidden="true" tabindex="-1"></a>in model output from Chapter 5 onwards, gets a one-line answer there, and</span>
-<span id="cb1-392"><a href="#cb1-392" aria-hidden="true" tabindex="-1"></a>isn't properly explained until Chapter 11. Searching for it finds both in</span>
-<span id="cb1-393"><a href="#cb1-393" aria-hidden="true" tabindex="-1"></a>about two seconds.</span>
-<span id="cb1-394"><a href="#cb1-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-395"><a href="#cb1-395" aria-hidden="true" tabindex="-1"></a>That gap is deliberate, and you'll meet others like it. I have tried not</span>
-<span id="cb1-396"><a href="#cb1-396" aria-hidden="true" tabindex="-1"></a>to re-explain the same idea every time it reappears, because a book that</span>
-<span id="cb1-397"><a href="#cb1-397" aria-hidden="true" tabindex="-1"></a>does that is unbearable to read straight through. The cost is that a term</span>
-<span id="cb1-398"><a href="#cb1-398" aria-hidden="true" tabindex="-1"></a>will occasionally turn up in front of you before its full explanation</span>
-<span id="cb1-399"><a href="#cb1-399" aria-hidden="true" tabindex="-1"></a>does. When that happens, search for it rather than assuming you missed</span>
-<span id="cb1-400"><a href="#cb1-400" aria-hidden="true" tabindex="-1"></a>something — you probably didn't, and the explanation is very likely one</span>
-<span id="cb1-401"><a href="#cb1-401" aria-hidden="true" tabindex="-1"></a>keystroke away.</span>
-<span id="cb1-402"><a href="#cb1-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-403"><a href="#cb1-403" aria-hidden="true" tabindex="-1"></a>The same applies in reverse. If a technique is *not* in this book, it is</span>
-<span id="cb1-404"><a href="#cb1-404" aria-hidden="true" tabindex="-1"></a>usually named somewhere anyway, with a note on why I left it out and</span>
-<span id="cb1-405"><a href="#cb1-405" aria-hidden="true" tabindex="-1"></a>where to go instead. Searching for something and finding an honest</span>
-<span id="cb1-406"><a href="#cb1-406" aria-hidden="true" tabindex="-1"></a>"here's why this isn't here" is a better outcome than wondering.</span>
+<span id="cb1-381"><a href="#cb1-381" aria-hidden="true" tabindex="-1"></a>A reminder that you do not have to do everything in this book. Nobody</span>
+<span id="cb1-382"><a href="#cb1-382" aria-hidden="true" tabindex="-1"></a>applies every technique to every project, and starting simple is very</span>
+<span id="cb1-383"><a href="#cb1-383" aria-hidden="true" tabindex="-1"></a>often where the value is. A more thorough analysis cannot always be</span>
+<span id="cb1-384"><a href="#cb1-384" aria-hidden="true" tabindex="-1"></a>justified by the small amount it adds. These boxes explain when the</span>
+<span id="cb1-385"><a href="#cb1-385" aria-hidden="true" tabindex="-1"></a>simple version is good enough, and give you a sentence to use when you</span>
+<span id="cb1-386"><a href="#cb1-386" aria-hidden="true" tabindex="-1"></a>report a result produced without the full treatment. **The aim is to skip</span>
+<span id="cb1-387"><a href="#cb1-387" aria-hidden="true" tabindex="-1"></a>something because you decided to, not because you forgot.**</span>
+<span id="cb1-388"><a href="#cb1-388" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-389"><a href="#cb1-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-390"><a href="#cb1-390" aria-hidden="true" tabindex="-1"></a>::: callout-caution</span>
+<span id="cb1-391"><a href="#cb1-391" aria-hidden="true" tabindex="-1"></a><span class="fu">## Try it yourself</span></span>
+<span id="cb1-392"><a href="#cb1-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-393"><a href="#cb1-393" aria-hidden="true" tabindex="-1"></a>From Chapter 14 onward, most chapters end with a short exercise in a box</span>
+<span id="cb1-394"><a href="#cb1-394" aria-hidden="true" tabindex="-1"></a>like this — usually a variation on the analysis you have just read, using</span>
+<span id="cb1-395"><a href="#cb1-395" aria-hidden="true" tabindex="-1"></a>a different column or a different assumption. They are the fastest way to</span>
+<span id="cb1-396"><a href="#cb1-396" aria-hidden="true" tabindex="-1"></a>find out whether you followed it.</span>
+<span id="cb1-397"><a href="#cb1-397" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-398"><a href="#cb1-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-399"><a href="#cb1-399" aria-hidden="true" tabindex="-1"></a>Plain notes like the one below carry asides, caveats and anything that</span>
+<span id="cb1-400"><a href="#cb1-400" aria-hidden="true" tabindex="-1"></a>would otherwise interrupt a paragraph.</span>
+<span id="cb1-401"><a href="#cb1-401" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-402"><a href="#cb1-402" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb1-403"><a href="#cb1-403" aria-hidden="true" tabindex="-1"></a>Nothing critical ever hides in a plain note.</span>
+<span id="cb1-404"><a href="#cb1-404" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-405"><a href="#cb1-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-406"><a href="#cb1-406" aria-hidden="true" tabindex="-1"></a><span class="fu">### How code is explained</span></span>
 <span id="cb1-407"><a href="#cb1-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-408"><a href="#cb1-408" aria-hidden="true" tabindex="-1"></a><span class="fu">### The boxes, and which ones you can skip</span></span>
-<span id="cb1-409"><a href="#cb1-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-410"><a href="#cb1-410" aria-hidden="true" tabindex="-1"></a>Coloured boxes carry most of the emphasis. Five kinds recur, and two of</span>
-<span id="cb1-411"><a href="#cb1-411" aria-hidden="true" tabindex="-1"></a>them are aimed at specific readers:</span>
-<span id="cb1-412"><a href="#cb1-412" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-413"><a href="#cb1-413" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-414"><a href="#cb1-414" aria-hidden="true" tabindex="-1"></a>**The point.** Where a section has one idea you should leave with, it's</span>
-<span id="cb1-415"><a href="#cb1-415" aria-hidden="true" tabindex="-1"></a>in a box like this. If you read nothing else on a page, read these.</span>
-<span id="cb1-416"><a href="#cb1-416" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-417"><a href="#cb1-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-418"><a href="#cb1-418" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb1-419"><a href="#cb1-419" aria-hidden="true" tabindex="-1"></a><span class="fu">## A different lens</span></span>
-<span id="cb1-420"><a href="#cb1-420" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-421"><a href="#cb1-421" aria-hidden="true" tabindex="-1"></a>Most readers arrive from a frequentist background — t-tests, p-values,</span>
-<span id="cb1-422"><a href="#cb1-422" aria-hidden="true" tabindex="-1"></a>confidence intervals, <span class="in">`lm()`</span>. Where a Bayesian technique has a</span>
-<span id="cb1-423"><a href="#cb1-423" aria-hidden="true" tabindex="-1"></a>well-known classical counterpart, a box like this names it and explains</span>
-<span id="cb1-424"><a href="#cb1-424" aria-hidden="true" tabindex="-1"></a>what changes in the *mental model*. This is never an argument that the</span>
-<span id="cb1-425"><a href="#cb1-425" aria-hidden="true" tabindex="-1"></a>classical approach is wrong; it's a translation. **If you've never met</span>
-<span id="cb1-426"><a href="#cb1-426" aria-hidden="true" tabindex="-1"></a>the classical version, skip these — you're not missing a prerequisite.**</span>
-<span id="cb1-427"><a href="#cb1-427" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-428"><a href="#cb1-428" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a><span class="fu">## For the ML/DS crowd</span></span>
-<span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a>Some readers are strong on machine learning and lighter on formal</span>
-<span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a>statistics. These boxes connect what's on the page to something you</span>
-<span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a>already know — regularisation, mixed-effects models, Thompson sampling.</span>
-<span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a>**Skip freely if that's not your background.**</span>
-<span id="cb1-436"><a href="#cb1-436" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-408"><a href="#cb1-408" aria-hidden="true" tabindex="-1"></a>The code in this book is written to be read, not just run. Explanation</span>
+<span id="cb1-409"><a href="#cb1-409" aria-hidden="true" tabindex="-1"></a>comes from three places, and knowing which does what will save you time:</span>
+<span id="cb1-410"><a href="#cb1-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-411"><a href="#cb1-411" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The prose above a code block** explains *why* — the reasoning and</span>
+<span id="cb1-412"><a href="#cb1-412" aria-hidden="true" tabindex="-1"></a>    the decision being made. This is where the real content is.</span>
+<span id="cb1-413"><a href="#cb1-413" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The code itself** shows *what*, through names and structure.</span>
+<span id="cb1-414"><a href="#cb1-414" aria-hidden="true" tabindex="-1"></a>    Distribution parameters are always named in full (<span class="in">`mean =`</span>, <span class="in">`sd =`</span>,</span>
+<span id="cb1-415"><a href="#cb1-415" aria-hidden="true" tabindex="-1"></a>    <span class="in">`rate =`</span>) rather than passed by position, because <span class="in">`exponential(0.005)`</span></span>
+<span id="cb1-416"><a href="#cb1-416" aria-hidden="true" tabindex="-1"></a>    is ambiguous in a way <span class="in">`rate = 0.005`</span> isn't.</span>
+<span id="cb1-417"><a href="#cb1-417" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Numbered annotations** appear below a code block the first time a</span>
+<span id="cb1-418"><a href="#cb1-418" aria-hidden="true" tabindex="-1"></a>    new pattern shows up, walking through it line by line — the</span>
+<span id="cb1-419"><a href="#cb1-419" aria-hidden="true" tabindex="-1"></a>    equivalent of me talking you through it in a workshop. Once a pattern</span>
+<span id="cb1-420"><a href="#cb1-420" aria-hidden="true" tabindex="-1"></a>    recurs, the annotations stop. **If the annotations are telling you</span>
+<span id="cb1-421"><a href="#cb1-421" aria-hidden="true" tabindex="-1"></a>    things you already know, ignore them: the marker numbers are designed</span>
+<span id="cb1-422"><a href="#cb1-422" aria-hidden="true" tabindex="-1"></a>    to be invisible to a fluent reader.**</span>
+<span id="cb1-423"><a href="#cb1-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-424"><a href="#cb1-424" aria-hidden="true" tabindex="-1"></a>Comments *inside* code are reserved for statistics, never for R. You'll</span>
+<span id="cb1-425"><a href="#cb1-425" aria-hidden="true" tabindex="-1"></a>never find <span class="in">`# fit the model`</span> above a model fit, but you will find a note</span>
+<span id="cb1-426"><a href="#cb1-426" aria-hidden="true" tabindex="-1"></a>explaining where a particular prior's parameter came from.</span>
+<span id="cb1-427"><a href="#cb1-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-428"><a href="#cb1-428" aria-hidden="true" tabindex="-1"></a>This is not a book about learning R. It assumes you can write a</span>
+<span id="cb1-429"><a href="#cb1-429" aria-hidden="true" tabindex="-1"></a><span class="in">`group_by()`</span> and a <span class="in">`summarise()`</span>, and it explains statistics rather than</span>
+<span id="cb1-430"><a href="#cb1-430" aria-hidden="true" tabindex="-1"></a>syntax. Everything uses the tidyverse and, from Chapter 5, the <span class="in">`brms`</span></span>
+<span id="cb1-431"><a href="#cb1-431" aria-hidden="true" tabindex="-1"></a>package.</span>
+<span id="cb1-432"><a href="#cb1-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-433"><a href="#cb1-433" aria-hidden="true" tabindex="-1"></a><span class="fu">### The charts</span></span>
+<span id="cb1-434"><a href="#cb1-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-435"><a href="#cb1-435" aria-hidden="true" tabindex="-1"></a>Charts follow a fixed colour scheme, and the colours mean the same thing</span>
+<span id="cb1-436"><a href="#cb1-436" aria-hidden="true" tabindex="-1"></a>every time:</span>
 <span id="cb1-437"><a href="#cb1-437" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-438"><a href="#cb1-438" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
-<span id="cb1-439"><a href="#cb1-439" aria-hidden="true" tabindex="-1"></a><span class="fu">## When you can skip this</span></span>
-<span id="cb1-440"><a href="#cb1-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-441"><a href="#cb1-441" aria-hidden="true" tabindex="-1"></a>A reminder that you do not have to do everything in this book. Nobody</span>
-<span id="cb1-442"><a href="#cb1-442" aria-hidden="true" tabindex="-1"></a>applies every technique to every project, and starting simple is very</span>
-<span id="cb1-443"><a href="#cb1-443" aria-hidden="true" tabindex="-1"></a>often where the value is. A more thorough analysis cannot always be</span>
-<span id="cb1-444"><a href="#cb1-444" aria-hidden="true" tabindex="-1"></a>justified by the small amount it adds. These boxes explain when the</span>
-<span id="cb1-445"><a href="#cb1-445" aria-hidden="true" tabindex="-1"></a>simple version is good enough, and give you a sentence to use when you</span>
-<span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a>report a result produced without the full treatment. **The aim is to skip</span>
-<span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a>something because you decided to, not because you forgot.**</span>
-<span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-438"><a href="#cb1-438" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Colour <span class="pp">|</span> Meaning <span class="pp">|</span></span>
+<span id="cb1-439"><a href="#cb1-439" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------------------|-------------------------------------------------|</span></span>
+<span id="cb1-440"><a href="#cb1-440" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Light blue** | A **prior** — belief before seeing the data <span class="pp">|</span></span>
+<span id="cb1-441"><a href="#cb1-441" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Red** | A **likelihood** — what the data alone says <span class="pp">|</span></span>
+<span id="cb1-442"><a href="#cb1-442" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Navy** | A **posterior** — the conclusion, after combining the two <span class="pp">|</span></span>
+<span id="cb1-443"><a href="#cb1-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-444"><a href="#cb1-444" aria-hidden="true" tabindex="-1"></a>Where a single distribution stands alone it's drawn as a light filled</span>
+<span id="cb1-445"><a href="#cb1-445" aria-hidden="true" tabindex="-1"></a>area with a solid outline; where several are compared on the same axes</span>
+<span id="cb1-446"><a href="#cb1-446" aria-hidden="true" tabindex="-1"></a>they're drawn as lines, so the colours stay readable. Discrete</span>
+<span id="cb1-447"><a href="#cb1-447" aria-hidden="true" tabindex="-1"></a>distributions — things you can only count in whole numbers — are drawn</span>
+<span id="cb1-448"><a href="#cb1-448" aria-hidden="true" tabindex="-1"></a>as bars rather than smooth curves, which is a deliberate visual break.</span>
 <span id="cb1-449"><a href="#cb1-449" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a>::: callout-caution</span>
-<span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a><span class="fu">## Try it yourself</span></span>
-<span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-453"><a href="#cb1-453" aria-hidden="true" tabindex="-1"></a>From Chapter 14 onward, most chapters end with a short exercise in a box</span>
-<span id="cb1-454"><a href="#cb1-454" aria-hidden="true" tabindex="-1"></a>like this — usually a variation on the analysis you have just read, using</span>
-<span id="cb1-455"><a href="#cb1-455" aria-hidden="true" tabindex="-1"></a>a different column or a different assumption. They are the fastest way to</span>
-<span id="cb1-456"><a href="#cb1-456" aria-hidden="true" tabindex="-1"></a>find out whether you followed it.</span>
-<span id="cb1-457"><a href="#cb1-457" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-458"><a href="#cb1-458" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-459"><a href="#cb1-459" aria-hidden="true" tabindex="-1"></a>Plain notes like the one below carry asides, caveats and anything that</span>
-<span id="cb1-460"><a href="#cb1-460" aria-hidden="true" tabindex="-1"></a>would otherwise interrupt a paragraph.</span>
+<span id="cb1-450"><a href="#cb1-450" aria-hidden="true" tabindex="-1"></a>From Part V onward, most charts no longer show all three curves at once —</span>
+<span id="cb1-451"><a href="#cb1-451" aria-hidden="true" tabindex="-1"></a>by then the interesting quantity is usually a single posterior, or a</span>
+<span id="cb1-452"><a href="#cb1-452" aria-hidden="true" tabindex="-1"></a>comparison between two of them. So red is freed up, and takes on a second</span>
+<span id="cb1-453"><a href="#cb1-453" aria-hidden="true" tabindex="-1"></a>and closely related job: **a dashed red line always marks a reference</span>
+<span id="cb1-454"><a href="#cb1-454" aria-hidden="true" tabindex="-1"></a>value** — zero, the truth in a simulation, the edge of a scale, the point</span>
+<span id="cb1-455"><a href="#cb1-455" aria-hidden="true" tabindex="-1"></a>at which a decision changes. It's still "what to measure yourself</span>
+<span id="cb1-456"><a href="#cb1-456" aria-hidden="true" tabindex="-1"></a>against"; it's just no longer a curve. The one rule that never changes is</span>
+<span id="cb1-457"><a href="#cb1-457" aria-hidden="true" tabindex="-1"></a>that red is never a second data series. If two things are being compared,</span>
+<span id="cb1-458"><a href="#cb1-458" aria-hidden="true" tabindex="-1"></a>they are both blue.</span>
+<span id="cb1-459"><a href="#cb1-459" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-460"><a href="#cb1-460" aria-hidden="true" tabindex="-1"></a><span class="fu">### The recurring sections</span></span>
 <span id="cb1-461"><a href="#cb1-461" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-462"><a href="#cb1-462" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb1-463"><a href="#cb1-463" aria-hidden="true" tabindex="-1"></a>Nothing critical ever hides in a plain note.</span>
-<span id="cb1-464"><a href="#cb1-464" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-465"><a href="#cb1-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-466"><a href="#cb1-466" aria-hidden="true" tabindex="-1"></a><span class="fu">### How code is explained</span></span>
-<span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a>The code in this book is written to be read, not just run. Explanation</span>
-<span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a>comes from three places, and knowing which does what will save you time:</span>
-<span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The prose above a code block** explains *why* — the reasoning and</span>
-<span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a>    the decision being made. This is where the real content is.</span>
-<span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**The code itself** shows *what*, through names and structure.</span>
-<span id="cb1-474"><a href="#cb1-474" aria-hidden="true" tabindex="-1"></a>    Distribution parameters are always named in full (<span class="in">`mean =`</span>, <span class="in">`sd =`</span>,</span>
-<span id="cb1-475"><a href="#cb1-475" aria-hidden="true" tabindex="-1"></a>    <span class="in">`rate =`</span>) rather than passed by position, because <span class="in">`exponential(0.005)`</span></span>
-<span id="cb1-476"><a href="#cb1-476" aria-hidden="true" tabindex="-1"></a>    is ambiguous in a way <span class="in">`rate = 0.005`</span> isn't.</span>
-<span id="cb1-477"><a href="#cb1-477" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Numbered annotations** appear below a code block the first time a</span>
-<span id="cb1-478"><a href="#cb1-478" aria-hidden="true" tabindex="-1"></a>    new pattern shows up, walking through it line by line — the</span>
-<span id="cb1-479"><a href="#cb1-479" aria-hidden="true" tabindex="-1"></a>    equivalent of me talking you through it in a workshop. Once a pattern</span>
-<span id="cb1-480"><a href="#cb1-480" aria-hidden="true" tabindex="-1"></a>    recurs, the annotations stop. **If the annotations are telling you</span>
-<span id="cb1-481"><a href="#cb1-481" aria-hidden="true" tabindex="-1"></a>    things you already know, ignore them: the marker numbers are designed</span>
-<span id="cb1-482"><a href="#cb1-482" aria-hidden="true" tabindex="-1"></a>    to be invisible to a fluent reader.**</span>
-<span id="cb1-483"><a href="#cb1-483" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-484"><a href="#cb1-484" aria-hidden="true" tabindex="-1"></a>Comments *inside* code are reserved for statistics, never for R. You'll</span>
-<span id="cb1-485"><a href="#cb1-485" aria-hidden="true" tabindex="-1"></a>never find <span class="in">`# fit the model`</span> above a model fit, but you will find a note</span>
-<span id="cb1-486"><a href="#cb1-486" aria-hidden="true" tabindex="-1"></a>explaining where a particular prior's parameter came from.</span>
-<span id="cb1-487"><a href="#cb1-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-488"><a href="#cb1-488" aria-hidden="true" tabindex="-1"></a>This is not a book about learning R. It assumes you can write a</span>
-<span id="cb1-489"><a href="#cb1-489" aria-hidden="true" tabindex="-1"></a><span class="in">`group_by()`</span> and a <span class="in">`summarise()`</span>, and it explains statistics rather than</span>
-<span id="cb1-490"><a href="#cb1-490" aria-hidden="true" tabindex="-1"></a>syntax. Everything uses the tidyverse and, from Chapter 5, the <span class="in">`brms`</span></span>
-<span id="cb1-491"><a href="#cb1-491" aria-hidden="true" tabindex="-1"></a>package.</span>
-<span id="cb1-492"><a href="#cb1-492" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-493"><a href="#cb1-493" aria-hidden="true" tabindex="-1"></a><span class="fu">### The charts</span></span>
-<span id="cb1-494"><a href="#cb1-494" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-495"><a href="#cb1-495" aria-hidden="true" tabindex="-1"></a>Charts follow a fixed colour scheme, and the colours mean the same thing</span>
-<span id="cb1-496"><a href="#cb1-496" aria-hidden="true" tabindex="-1"></a>every time:</span>
-<span id="cb1-497"><a href="#cb1-497" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-498"><a href="#cb1-498" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Colour <span class="pp">|</span> Meaning <span class="pp">|</span></span>
-<span id="cb1-499"><a href="#cb1-499" aria-hidden="true" tabindex="-1"></a><span class="pp">|-----------------------|-------------------------------------------------|</span></span>
-<span id="cb1-500"><a href="#cb1-500" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Light blue** | A **prior** — belief before seeing the data <span class="pp">|</span></span>
-<span id="cb1-501"><a href="#cb1-501" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Red** | A **likelihood** — what the data alone says <span class="pp">|</span></span>
-<span id="cb1-502"><a href="#cb1-502" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Navy** | A **posterior** — the conclusion, after combining the two <span class="pp">|</span></span>
-<span id="cb1-503"><a href="#cb1-503" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-504"><a href="#cb1-504" aria-hidden="true" tabindex="-1"></a>Where a single distribution stands alone it's drawn as a light filled</span>
-<span id="cb1-505"><a href="#cb1-505" aria-hidden="true" tabindex="-1"></a>area with a solid outline; where several are compared on the same axes</span>
-<span id="cb1-506"><a href="#cb1-506" aria-hidden="true" tabindex="-1"></a>they're drawn as lines, so the colours stay readable. Discrete</span>
-<span id="cb1-507"><a href="#cb1-507" aria-hidden="true" tabindex="-1"></a>distributions — things you can only count in whole numbers — are drawn</span>
-<span id="cb1-508"><a href="#cb1-508" aria-hidden="true" tabindex="-1"></a>as bars rather than smooth curves, which is a deliberate visual break.</span>
-<span id="cb1-509"><a href="#cb1-509" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-510"><a href="#cb1-510" aria-hidden="true" tabindex="-1"></a>From Part V onward, most charts no longer show all three curves at once —</span>
-<span id="cb1-511"><a href="#cb1-511" aria-hidden="true" tabindex="-1"></a>by then the interesting quantity is usually a single posterior, or a</span>
-<span id="cb1-512"><a href="#cb1-512" aria-hidden="true" tabindex="-1"></a>comparison between two of them. So red is freed up, and takes on a second</span>
-<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a>and closely related job: **a dashed red line always marks a reference</span>
-<span id="cb1-514"><a href="#cb1-514" aria-hidden="true" tabindex="-1"></a>value** — zero, the truth in a simulation, the edge of a scale, the point</span>
-<span id="cb1-515"><a href="#cb1-515" aria-hidden="true" tabindex="-1"></a>at which a decision changes. It's still "what to measure yourself</span>
-<span id="cb1-516"><a href="#cb1-516" aria-hidden="true" tabindex="-1"></a>against"; it's just no longer a curve. The one rule that never changes is</span>
-<span id="cb1-517"><a href="#cb1-517" aria-hidden="true" tabindex="-1"></a>that red is never a second data series. If two things are being compared,</span>
-<span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a>they are both blue.</span>
-<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a><span class="fu">### The recurring sections</span></span>
+<span id="cb1-462"><a href="#cb1-462" aria-hidden="true" tabindex="-1"></a>Every chapter opens with **"What you'll be able to do by the end"** — a</span>
+<span id="cb1-463"><a href="#cb1-463" aria-hidden="true" tabindex="-1"></a>short, concrete list. If you already can, skip the chapter.</span>
+<span id="cb1-464"><a href="#cb1-464" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-465"><a href="#cb1-465" aria-hidden="true" tabindex="-1"></a>**"Your turn"** boxes are exercises. They're genuinely optional, but they</span>
+<span id="cb1-466"><a href="#cb1-466" aria-hidden="true" tabindex="-1"></a>tend to cover the one thing the chapter didn't do for you, and the code</span>
+<span id="cb1-467"><a href="#cb1-467" aria-hidden="true" tabindex="-1"></a>blocks under them are left empty on purpose.</span>
+<span id="cb1-468"><a href="#cb1-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-469"><a href="#cb1-469" aria-hidden="true" tabindex="-1"></a>**"On the job"** closes each chapter by connecting the technique to a real</span>
+<span id="cb1-470"><a href="#cb1-470" aria-hidden="true" tabindex="-1"></a>decision — what you'd actually say to a stakeholder, and why this</span>
+<span id="cb1-471"><a href="#cb1-471" aria-hidden="true" tabindex="-1"></a>approach makes that conversation easier.</span>
+<span id="cb1-472"><a href="#cb1-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-473"><a href="#cb1-473" aria-hidden="true" tabindex="-1"></a>Each chapter ends with a **summary** of the numbered points and a</span>
+<span id="cb1-474"><a href="#cb1-474" aria-hidden="true" tabindex="-1"></a>one-line trailer for the next one.</span>
+<span id="cb1-475"><a href="#cb1-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-476"><a href="#cb1-476" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running the code yourself</span></span>
+<span id="cb1-477"><a href="#cb1-477" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-478"><a href="#cb1-478" aria-hidden="true" tabindex="-1"></a>Every code block in this book is executed when the book is built, so what</span>
+<span id="cb1-479"><a href="#cb1-479" aria-hidden="true" tabindex="-1"></a>you see is real output, not typed-out results. You can copy any block and</span>
+<span id="cb1-480"><a href="#cb1-480" aria-hidden="true" tabindex="-1"></a>run it. The datasets come from a public R package, so nothing here</span>
+<span id="cb1-481"><a href="#cb1-481" aria-hidden="true" tabindex="-1"></a>depends on data you don't have.</span>
+<span id="cb1-482"><a href="#cb1-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-483"><a href="#cb1-483" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-484"><a href="#cb1-484" aria-hidden="true" tabindex="-1"></a>One warning that catches everyone. The first time you fit a model with</span>
+<span id="cb1-485"><a href="#cb1-485" aria-hidden="true" tabindex="-1"></a><span class="in">`brms`</span> it **compiles** — it writes and builds a small C++ program behind</span>
+<span id="cb1-486"><a href="#cb1-486" aria-hidden="true" tabindex="-1"></a>the scenes, which can take a minute. After that it's fast. Nothing is</span>
+<span id="cb1-487"><a href="#cb1-487" aria-hidden="true" tabindex="-1"></a>broken; it's just warming up.</span>
+<span id="cb1-488"><a href="#cb1-488" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-489"><a href="#cb1-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-490"><a href="#cb1-490" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb1-491"><a href="#cb1-491" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-492"><a href="#cb1-492" aria-hidden="true" tabindex="-1"></a><span class="fu">## Free, unfinished, and open to correction {.unnumbered}</span></span>
+<span id="cb1-493"><a href="#cb1-493" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-494"><a href="#cb1-494" aria-hidden="true" tabindex="-1"></a>Three things about the status of what you're reading, before you spend</span>
+<span id="cb1-495"><a href="#cb1-495" aria-hidden="true" tabindex="-1"></a>an evening on it.</span>
+<span id="cb1-496"><a href="#cb1-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-497"><a href="#cb1-497" aria-hidden="true" tabindex="-1"></a>**It's free, and it stays free.** The online edition is the edition.</span>
+<span id="cb1-498"><a href="#cb1-498" aria-hidden="true" tabindex="-1"></a>There's no paywalled version and nothing held back. If you'd like to</span>
+<span id="cb1-499"><a href="#cb1-499" aria-hidden="true" tabindex="-1"></a>put something behind it, the last page of Chapter 24 says how — but</span>
+<span id="cb1-500"><a href="#cb1-500" aria-hidden="true" tabindex="-1"></a>nothing here depends on it.</span>
+<span id="cb1-501"><a href="#cb1-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-502"><a href="#cb1-502" aria-hidden="true" tabindex="-1"></a>**It isn't finished.** Chapters get revised as I teach them and as I</span>
+<span id="cb1-503"><a href="#cb1-503" aria-hidden="true" tabindex="-1"></a>write about the same ideas in my newsletter. What you have is a version,</span>
+<span id="cb1-504"><a href="#cb1-504" aria-hidden="true" tabindex="-1"></a>not a final text, and a chapter you read last year may not be the one</span>
+<span id="cb1-505"><a href="#cb1-505" aria-hidden="true" tabindex="-1"></a>that's here now.</span>
+<span id="cb1-506"><a href="#cb1-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-507"><a href="#cb1-507" aria-hidden="true" tabindex="-1"></a>**Corrections are genuinely wanted.** Every page has *Edit this page*</span>
+<span id="cb1-508"><a href="#cb1-508" aria-hidden="true" tabindex="-1"></a>and *Report an issue* links in the right-hand margin, which go straight</span>
+<span id="cb1-509"><a href="#cb1-509" aria-hidden="true" tabindex="-1"></a>to the source on GitHub, and you can always email me at</span>
+<span id="cb1-510"><a href="#cb1-510" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">andrew@andrewmarritt.ch</span><span class="co">](mailto:andrew@andrewmarritt.ch)</span>. Typos are</span>
+<span id="cb1-511"><a href="#cb1-511" aria-hidden="true" tabindex="-1"></a>welcome; disagreements more so. Questioning your own assumptions is</span>
+<span id="cb1-512"><a href="#cb1-512" aria-hidden="true" tabindex="-1"></a>most of what this book is about, and that has to include mine.</span>
+<span id="cb1-513"><a href="#cb1-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-514"><a href="#cb1-514" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb1-515"><a href="#cb1-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-516"><a href="#cb1-516" aria-hidden="true" tabindex="-1"></a><span class="fu">## How the book is organised {.unnumbered}</span></span>
+<span id="cb1-517"><a href="#cb1-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-518"><a href="#cb1-518" aria-hidden="true" tabindex="-1"></a>Six parts, twenty-four chapters. The running examples build on each other,</span>
+<span id="cb1-519"><a href="#cb1-519" aria-hidden="true" tabindex="-1"></a>so reading in order rewards you with familiarity — but each chapter is</span>
+<span id="cb1-520"><a href="#cb1-520" aria-hidden="true" tabindex="-1"></a>self-contained enough to read on its own if you already have the basics.</span>
 <span id="cb1-521"><a href="#cb1-521" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a>Every chapter opens with **"What you'll be able to do by the end"** — a</span>
-<span id="cb1-523"><a href="#cb1-523" aria-hidden="true" tabindex="-1"></a>short, concrete list. If you already can, skip the chapter.</span>
-<span id="cb1-524"><a href="#cb1-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-525"><a href="#cb1-525" aria-hidden="true" tabindex="-1"></a>**"Your turn"** boxes are exercises. They're genuinely optional, but they</span>
-<span id="cb1-526"><a href="#cb1-526" aria-hidden="true" tabindex="-1"></a>tend to cover the one thing the chapter didn't do for you, and the code</span>
-<span id="cb1-527"><a href="#cb1-527" aria-hidden="true" tabindex="-1"></a>blocks under them are left empty on purpose.</span>
-<span id="cb1-528"><a href="#cb1-528" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-529"><a href="#cb1-529" aria-hidden="true" tabindex="-1"></a>**"On the job"** closes each chapter by connecting the technique to a real</span>
-<span id="cb1-530"><a href="#cb1-530" aria-hidden="true" tabindex="-1"></a>decision — what you'd actually say to a stakeholder, and why this</span>
-<span id="cb1-531"><a href="#cb1-531" aria-hidden="true" tabindex="-1"></a>approach makes that conversation easier.</span>
+<span id="cb1-522"><a href="#cb1-522" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part I — Foundations {.unnumbered}</span></span>
+<span id="cb1-523"><a href="#cb1-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-524"><a href="#cb1-524" aria-hidden="true" tabindex="-1"></a>Describing data, probability, and where uncertainty comes from. **Start</span>
+<span id="cb1-525"><a href="#cb1-525" aria-hidden="true" tabindex="-1"></a>here if you're new to statistics**; skim it if you're not.</span>
+<span id="cb1-526"><a href="#cb1-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-527"><a href="#cb1-527" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Meeting Your Data**</span>
+<span id="cb1-528"><a href="#cb1-528" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Thinking in Chances**</span>
+<span id="cb1-529"><a href="#cb1-529" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Distributions, Sampling &amp; the Idea of a Model**</span>
+<span id="cb1-530"><a href="#cb1-530" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-531"><a href="#cb1-531" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part II — Bayesian core {.unnumbered}</span></span>
 <span id="cb1-532"><a href="#cb1-532" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-533"><a href="#cb1-533" aria-hidden="true" tabindex="-1"></a>Each chapter ends with a **summary** of the numbered points and a</span>
-<span id="cb1-534"><a href="#cb1-534" aria-hidden="true" tabindex="-1"></a>one-line trailer for the next one.</span>
+<span id="cb1-533"><a href="#cb1-533" aria-hidden="true" tabindex="-1"></a>The heart of the book. By the end of Chapter 6 you can fit and interpret</span>
+<span id="cb1-534"><a href="#cb1-534" aria-hidden="true" tabindex="-1"></a>a Bayesian model, and everything afterwards is a variation on it.</span>
 <span id="cb1-535"><a href="#cb1-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-536"><a href="#cb1-536" aria-hidden="true" tabindex="-1"></a><span class="fu">### Running the code yourself</span></span>
-<span id="cb1-537"><a href="#cb1-537" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-538"><a href="#cb1-538" aria-hidden="true" tabindex="-1"></a>Every code block in this book is executed when the book is built, so what</span>
-<span id="cb1-539"><a href="#cb1-539" aria-hidden="true" tabindex="-1"></a>you see is real output, not typed-out results. You can copy any block and</span>
-<span id="cb1-540"><a href="#cb1-540" aria-hidden="true" tabindex="-1"></a>run it. The datasets come from a public R package, so nothing here</span>
-<span id="cb1-541"><a href="#cb1-541" aria-hidden="true" tabindex="-1"></a>depends on data you don't have.</span>
+<span id="cb1-536"><a href="#cb1-536" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Bayesian Thinking: Bayes' Theorem &amp; Your First Inference** — the</span>
+<span id="cb1-537"><a href="#cb1-537" aria-hidden="true" tabindex="-1"></a>    whole mechanism by hand, with nothing hidden</span>
+<span id="cb1-538"><a href="#cb1-538" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Posteriors, Priors &amp; Credible Intervals** — your first <span class="in">`brms`</span></span>
+<span id="cb1-539"><a href="#cb1-539" aria-hidden="true" tabindex="-1"></a>    model, and how to choose and defend a prior</span>
+<span id="cb1-540"><a href="#cb1-540" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>**Bayesian Regression: Explaining &amp; Predicting** — from estimating</span>
+<span id="cb1-541"><a href="#cb1-541" aria-hidden="true" tabindex="-1"></a>    one number to explaining a relationship</span>
 <span id="cb1-542"><a href="#cb1-542" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-543"><a href="#cb1-543" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-544"><a href="#cb1-544" aria-hidden="true" tabindex="-1"></a>One warning that catches everyone. The first time you fit a model with</span>
-<span id="cb1-545"><a href="#cb1-545" aria-hidden="true" tabindex="-1"></a><span class="in">`brms`</span> it **compiles** — it writes and builds a small C++ program behind</span>
-<span id="cb1-546"><a href="#cb1-546" aria-hidden="true" tabindex="-1"></a>the scenes, which can take a minute. After that it's fast. Nothing is</span>
-<span id="cb1-547"><a href="#cb1-547" aria-hidden="true" tabindex="-1"></a>broken; it's just warming up.</span>
-<span id="cb1-548"><a href="#cb1-548" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-549"><a href="#cb1-549" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-550"><a href="#cb1-550" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-551"><a href="#cb1-551" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-552"><a href="#cb1-552" aria-hidden="true" tabindex="-1"></a><span class="fu">## Free, unfinished, and open to correction {.unnumbered}</span></span>
+<span id="cb1-543"><a href="#cb1-543" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part III — Applied workflow {.unnumbered}</span></span>
+<span id="cb1-544"><a href="#cb1-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-545"><a href="#cb1-545" aria-hidden="true" tabindex="-1"></a>Putting it to work on realistic problems, end to end.</span>
+<span id="cb1-546"><a href="#cb1-546" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-547"><a href="#cb1-547" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>**Groups &amp; Categories: Comparing and Choosing Models**</span>
+<span id="cb1-548"><a href="#cb1-548" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**When Data Has Structure: Multilevel Models**</span>
+<span id="cb1-549"><a href="#cb1-549" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>**Logistic Regression: Modelling a Yes/No Outcome** — most People</span>
+<span id="cb1-550"><a href="#cb1-550" aria-hidden="true" tabindex="-1"></a>    Analytics outcomes are yes/no</span>
+<span id="cb1-551"><a href="#cb1-551" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>**The Complete Workflow: From Question to Recommendation** — a full</span>
+<span id="cb1-552"><a href="#cb1-552" aria-hidden="true" tabindex="-1"></a>    project, question to stakeholder</span>
 <span id="cb1-553"><a href="#cb1-553" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-554"><a href="#cb1-554" aria-hidden="true" tabindex="-1"></a>Three things about the status of what you're reading, before you spend</span>
-<span id="cb1-555"><a href="#cb1-555" aria-hidden="true" tabindex="-1"></a>an evening on it.</span>
-<span id="cb1-556"><a href="#cb1-556" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-557"><a href="#cb1-557" aria-hidden="true" tabindex="-1"></a>**It's free, and it stays free.** The online edition is the edition.</span>
-<span id="cb1-558"><a href="#cb1-558" aria-hidden="true" tabindex="-1"></a>There's no paywalled version and nothing held back. If you'd like to</span>
-<span id="cb1-559"><a href="#cb1-559" aria-hidden="true" tabindex="-1"></a>put something behind it, the last page of Chapter 24 says how — but</span>
-<span id="cb1-560"><a href="#cb1-560" aria-hidden="true" tabindex="-1"></a>nothing here depends on it.</span>
-<span id="cb1-561"><a href="#cb1-561" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-562"><a href="#cb1-562" aria-hidden="true" tabindex="-1"></a>**It isn't finished.** Chapters get revised as I teach them and as I</span>
-<span id="cb1-563"><a href="#cb1-563" aria-hidden="true" tabindex="-1"></a>write about the same ideas in my newsletter. What you have is a version,</span>
-<span id="cb1-564"><a href="#cb1-564" aria-hidden="true" tabindex="-1"></a>not a final text, and a chapter you read last year may not be the one</span>
-<span id="cb1-565"><a href="#cb1-565" aria-hidden="true" tabindex="-1"></a>that's here now.</span>
+<span id="cb1-554"><a href="#cb1-554" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part IV — Going further {.unnumbered}</span></span>
+<span id="cb1-555"><a href="#cb1-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-556"><a href="#cb1-556" aria-hidden="true" tabindex="-1"></a>Optional, and each one answers a different kind of "this isn't working".</span>
+<span id="cb1-557"><a href="#cb1-557" aria-hidden="true" tabindex="-1"></a>Read Chapter 11 when you don't trust the sampler; Chapter 12 when your</span>
+<span id="cb1-558"><a href="#cb1-558" aria-hidden="true" tabindex="-1"></a>outcome stops fitting the standard shapes; Chapter 13 when the difficulty</span>
+<span id="cb1-559"><a href="#cb1-559" aria-hidden="true" tabindex="-1"></a>is a judgement call rather than a technique.</span>
+<span id="cb1-560"><a href="#cb1-560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-561"><a href="#cb1-561" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>**Inside the Sampler: MCMC &amp; Trustworthy Models**</span>
+<span id="cb1-562"><a href="#cb1-562" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>**Richer Models: When the Standard Recipe Runs Out**</span>
+<span id="cb1-563"><a href="#cb1-563" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>**Model Building as Craft: The Decisions Software Won't Make For You**</span>
+<span id="cb1-564"><a href="#cb1-564" aria-hidden="true" tabindex="-1"></a>    — what can be changed, what shape it takes, and what you'd do with</span>
+<span id="cb1-565"><a href="#cb1-565" aria-hidden="true" tabindex="-1"></a>    the answer</span>
 <span id="cb1-566"><a href="#cb1-566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-567"><a href="#cb1-567" aria-hidden="true" tabindex="-1"></a>**Corrections are genuinely wanted.** Every page has *Edit this page*</span>
-<span id="cb1-568"><a href="#cb1-568" aria-hidden="true" tabindex="-1"></a>and *Report an issue* links in the right-hand margin, which go straight</span>
-<span id="cb1-569"><a href="#cb1-569" aria-hidden="true" tabindex="-1"></a>to the source on GitHub, and you can always email me at</span>
-<span id="cb1-570"><a href="#cb1-570" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">andrew@andrewmarritt.ch</span><span class="co">](mailto:andrew@andrewmarritt.ch)</span>. Typos are</span>
-<span id="cb1-571"><a href="#cb1-571" aria-hidden="true" tabindex="-1"></a>welcome; disagreements more so. Questioning your own assumptions is</span>
-<span id="cb1-572"><a href="#cb1-572" aria-hidden="true" tabindex="-1"></a>most of what this book is about, and that has to include mine.</span>
+<span id="cb1-567"><a href="#cb1-567" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part V — People Analytics deep dives {.unnumbered}</span></span>
+<span id="cb1-568"><a href="#cb1-568" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-569"><a href="#cb1-569" aria-hidden="true" tabindex="-1"></a>Ten chapters built specifically for this audience. Mostly independent of</span>
+<span id="cb1-570"><a href="#cb1-570" aria-hidden="true" tabindex="-1"></a>each other — go straight to whichever matches the problem on your desk.</span>
+<span id="cb1-571"><a href="#cb1-571" aria-hidden="true" tabindex="-1"></a>The two exceptions are Chapters 21 and 22, which are a sequence, and</span>
+<span id="cb1-572"><a href="#cb1-572" aria-hidden="true" tabindex="-1"></a>Chapter 23, which draws on both.</span>
 <span id="cb1-573"><a href="#cb1-573" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-574"><a href="#cb1-574" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-575"><a href="#cb1-575" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-576"><a href="#cb1-576" aria-hidden="true" tabindex="-1"></a><span class="fu">## How the book is organised {.unnumbered}</span></span>
-<span id="cb1-577"><a href="#cb1-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-578"><a href="#cb1-578" aria-hidden="true" tabindex="-1"></a>Six parts, twenty-four chapters. The running examples build on each other,</span>
-<span id="cb1-579"><a href="#cb1-579" aria-hidden="true" tabindex="-1"></a>so reading in order rewards you with familiarity — but each chapter is</span>
-<span id="cb1-580"><a href="#cb1-580" aria-hidden="true" tabindex="-1"></a>self-contained enough to read on its own if you already have the basics.</span>
-<span id="cb1-581"><a href="#cb1-581" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-582"><a href="#cb1-582" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part I — Foundations {.unnumbered}</span></span>
-<span id="cb1-583"><a href="#cb1-583" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-584"><a href="#cb1-584" aria-hidden="true" tabindex="-1"></a>Describing data, probability, and where uncertainty comes from. **Start</span>
-<span id="cb1-585"><a href="#cb1-585" aria-hidden="true" tabindex="-1"></a>here if you're new to statistics**; skim it if you're not.</span>
-<span id="cb1-586"><a href="#cb1-586" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-587"><a href="#cb1-587" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Meeting Your Data**</span>
-<span id="cb1-588"><a href="#cb1-588" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Thinking in Chances**</span>
-<span id="cb1-589"><a href="#cb1-589" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Distributions, Sampling &amp; the Idea of a Model**</span>
+<span id="cb1-574"><a href="#cb1-574" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>**Empirical Bayes: Estimating Rates You Don't Have Enough Data For**</span>
+<span id="cb1-575"><a href="#cb1-575" aria-hidden="true" tabindex="-1"></a><span class="ss">15. </span>**Bayesian Shrinkage: Ranking Managers and Teams Fairly**</span>
+<span id="cb1-576"><a href="#cb1-576" aria-hidden="true" tabindex="-1"></a><span class="ss">16. </span>**Hierarchical Models for Pay and Variance**</span>
+<span id="cb1-577"><a href="#cb1-577" aria-hidden="true" tabindex="-1"></a><span class="ss">17. </span>**Survival Analysis: Time-to-Event in the Employee Lifecycle**</span>
+<span id="cb1-578"><a href="#cb1-578" aria-hidden="true" tabindex="-1"></a><span class="ss">18. </span>**Analysing Likert and Survey Data the Bayesian Way**</span>
+<span id="cb1-579"><a href="#cb1-579" aria-hidden="true" tabindex="-1"></a><span class="ss">19. </span>**Modelling What You Can't See** — measurement error, missing data</span>
+<span id="cb1-580"><a href="#cb1-580" aria-hidden="true" tabindex="-1"></a>    and latent variables: what to do when the number in the column</span>
+<span id="cb1-581"><a href="#cb1-581" aria-hidden="true" tabindex="-1"></a>    isn't the quantity it claims to be</span>
+<span id="cb1-582"><a href="#cb1-582" aria-hidden="true" tabindex="-1"></a><span class="ss">20. </span>**Bayesian A/B Testing for People Experiments**</span>
+<span id="cb1-583"><a href="#cb1-583" aria-hidden="true" tabindex="-1"></a><span class="ss">21. </span>**Causal Structure: Drawing the Graph** — which variables belong in</span>
+<span id="cb1-584"><a href="#cb1-584" aria-hidden="true" tabindex="-1"></a>    the model is a question about causes, not about fit</span>
+<span id="cb1-585"><a href="#cb1-585" aria-hidden="true" tabindex="-1"></a><span class="ss">22. </span>**Causal Designs: Finding Variation You Didn't Create** —</span>
+<span id="cb1-586"><a href="#cb1-586" aria-hidden="true" tabindex="-1"></a>    difference-in-differences, event studies, and designing a study</span>
+<span id="cb1-587"><a href="#cb1-587" aria-hidden="true" tabindex="-1"></a>    before you run it</span>
+<span id="cb1-588"><a href="#cb1-588" aria-hidden="true" tabindex="-1"></a><span class="ss">23. </span>**The Elicitation Workflow: Building Priors With Your Stakeholders**</span>
+<span id="cb1-589"><a href="#cb1-589" aria-hidden="true" tabindex="-1"></a>    — doing this *with* your stakeholders rather than *to* them</span>
 <span id="cb1-590"><a href="#cb1-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-591"><a href="#cb1-591" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part II — Bayesian core {.unnumbered}</span></span>
+<span id="cb1-591"><a href="#cb1-591" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part VI — From analysis to decision {.unnumbered}</span></span>
 <span id="cb1-592"><a href="#cb1-592" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-593"><a href="#cb1-593" aria-hidden="true" tabindex="-1"></a>The heart of the book. By the end of Chapter 6 you can fit and interpret</span>
-<span id="cb1-594"><a href="#cb1-594" aria-hidden="true" tabindex="-1"></a>a Bayesian model, and everything afterwards is a variation on it.</span>
+<span id="cb1-593"><a href="#cb1-593" aria-hidden="true" tabindex="-1"></a>One chapter, and the one I would hand to somebody who commissions</span>
+<span id="cb1-594"><a href="#cb1-594" aria-hidden="true" tabindex="-1"></a>analysis rather than does it.</span>
 <span id="cb1-595"><a href="#cb1-595" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-596"><a href="#cb1-596" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Bayesian Thinking: Bayes' Theorem &amp; Your First Inference** — the</span>
-<span id="cb1-597"><a href="#cb1-597" aria-hidden="true" tabindex="-1"></a>    whole mechanism by hand, with nothing hidden</span>
-<span id="cb1-598"><a href="#cb1-598" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Posteriors, Priors &amp; Credible Intervals** — your first <span class="in">`brms`</span></span>
-<span id="cb1-599"><a href="#cb1-599" aria-hidden="true" tabindex="-1"></a>    model, and how to choose and defend a prior</span>
-<span id="cb1-600"><a href="#cb1-600" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>**Bayesian Regression: Explaining &amp; Predicting** — from estimating</span>
-<span id="cb1-601"><a href="#cb1-601" aria-hidden="true" tabindex="-1"></a>    one number to explaining a relationship</span>
+<span id="cb1-596"><a href="#cb1-596" aria-hidden="true" tabindex="-1"></a><span class="ss">24. </span>**From Posterior to Decision: What an Analysis Is Worth** — putting</span>
+<span id="cb1-597"><a href="#cb1-597" aria-hidden="true" tabindex="-1"></a>    a price on outcomes nobody has priced, running the decision on</span>
+<span id="cb1-598"><a href="#cb1-598" aria-hidden="true" tabindex="-1"></a>    posterior draws, and working out which uncertainty is worth paying</span>
+<span id="cb1-599"><a href="#cb1-599" aria-hidden="true" tabindex="-1"></a>    to reduce</span>
+<span id="cb1-600"><a href="#cb1-600" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-601"><a href="#cb1-601" aria-hidden="true" tabindex="-1"></a><span class="fu">### How to read this {.unnumbered}</span></span>
 <span id="cb1-602"><a href="#cb1-602" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-603"><a href="#cb1-603" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part III — Applied workflow {.unnumbered}</span></span>
-<span id="cb1-604"><a href="#cb1-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-605"><a href="#cb1-605" aria-hidden="true" tabindex="-1"></a>Putting it to work on realistic problems, end to end.</span>
-<span id="cb1-606"><a href="#cb1-606" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-607"><a href="#cb1-607" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>**Groups &amp; Categories: Comparing and Choosing Models**</span>
-<span id="cb1-608"><a href="#cb1-608" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**When Data Has Structure: Multilevel Models**</span>
-<span id="cb1-609"><a href="#cb1-609" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>**Logistic Regression: Modelling a Yes/No Outcome** — most People</span>
-<span id="cb1-610"><a href="#cb1-610" aria-hidden="true" tabindex="-1"></a>    Analytics outcomes are yes/no</span>
-<span id="cb1-611"><a href="#cb1-611" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>**The Complete Workflow: From Question to Recommendation** — a full</span>
-<span id="cb1-612"><a href="#cb1-612" aria-hidden="true" tabindex="-1"></a>    project, question to stakeholder</span>
-<span id="cb1-613"><a href="#cb1-613" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-614"><a href="#cb1-614" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part IV — Going further {.unnumbered}</span></span>
-<span id="cb1-615"><a href="#cb1-615" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-616"><a href="#cb1-616" aria-hidden="true" tabindex="-1"></a>Optional, and each one answers a different kind of "this isn't working".</span>
-<span id="cb1-617"><a href="#cb1-617" aria-hidden="true" tabindex="-1"></a>Read Chapter 11 when you don't trust the sampler; Chapter 12 when your</span>
-<span id="cb1-618"><a href="#cb1-618" aria-hidden="true" tabindex="-1"></a>outcome stops fitting the standard shapes; Chapter 13 when the difficulty</span>
-<span id="cb1-619"><a href="#cb1-619" aria-hidden="true" tabindex="-1"></a>is a judgement call rather than a technique.</span>
-<span id="cb1-620"><a href="#cb1-620" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-621"><a href="#cb1-621" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>**Inside the Sampler: MCMC &amp; Trustworthy Models**</span>
-<span id="cb1-622"><a href="#cb1-622" aria-hidden="true" tabindex="-1"></a><span class="ss">12. </span>**Richer Models: When the Standard Recipe Runs Out**</span>
-<span id="cb1-623"><a href="#cb1-623" aria-hidden="true" tabindex="-1"></a><span class="ss">13. </span>**Model Building as Craft: The Decisions Software Won't Make For You**</span>
-<span id="cb1-624"><a href="#cb1-624" aria-hidden="true" tabindex="-1"></a>    — what can be changed, what shape it takes, and what you'd do with</span>
-<span id="cb1-625"><a href="#cb1-625" aria-hidden="true" tabindex="-1"></a>    the answer</span>
-<span id="cb1-626"><a href="#cb1-626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-627"><a href="#cb1-627" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part V — People Analytics deep dives {.unnumbered}</span></span>
+<span id="cb1-603"><a href="#cb1-603" aria-hidden="true" tabindex="-1"></a>Twenty-four chapters is more than anyone needs at once, and they do</span>
+<span id="cb1-604"><a href="#cb1-604" aria-hidden="true" tabindex="-1"></a>not all ask the same thing of you.</span>
+<span id="cb1-605"><a href="#cb1-605" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-606"><a href="#cb1-606" aria-hidden="true" tabindex="-1"></a>**Chapters 1 to 10 are meant to be done.** Read them in order, with R</span>
+<span id="cb1-607"><a href="#cb1-607" aria-hidden="true" tabindex="-1"></a>open, and type the code out yourself. This is the working path. By the</span>
+<span id="cb1-608"><a href="#cb1-608" aria-hidden="true" tabindex="-1"></a>end of Chapter 10 you can take a real question, fit a model that suits</span>
+<span id="cb1-609"><a href="#cb1-609" aria-hidden="true" tabindex="-1"></a>it, check that the model works, and give a stakeholder an answer you can</span>
+<span id="cb1-610"><a href="#cb1-610" aria-hidden="true" tabindex="-1"></a>defend. That is a complete skill, and for a long time it may be all you</span>
+<span id="cb1-611"><a href="#cb1-611" aria-hidden="true" tabindex="-1"></a>need.</span>
+<span id="cb1-612"><a href="#cb1-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-613"><a href="#cb1-613" aria-hidden="true" tabindex="-1"></a>**Chapters 11 to 13 are for when something goes wrong, or gets</span>
+<span id="cb1-614"><a href="#cb1-614" aria-hidden="true" tabindex="-1"></a>difficult.** Read Chapter 11 when a model does not behave as expected and</span>
+<span id="cb1-615"><a href="#cb1-615" aria-hidden="true" tabindex="-1"></a>you want to understand what the sampler is doing. Read Chapter 12 when</span>
+<span id="cb1-616"><a href="#cb1-616" aria-hidden="true" tabindex="-1"></a>your outcome is no longer a simple number or a yes/no answer. Read</span>
+<span id="cb1-617"><a href="#cb1-617" aria-hidden="true" tabindex="-1"></a>Chapter 13 before your next project rather than during it — it is about</span>
+<span id="cb1-618"><a href="#cb1-618" aria-hidden="true" tabindex="-1"></a>the decisions nobody prompts you for, and it is the one chapter here that</span>
+<span id="cb1-619"><a href="#cb1-619" aria-hidden="true" tabindex="-1"></a>is as useful to somebody who commissions analysis as to somebody who does</span>
+<span id="cb1-620"><a href="#cb1-620" aria-hidden="true" tabindex="-1"></a>it.</span>
+<span id="cb1-621"><a href="#cb1-621" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-622"><a href="#cb1-622" aria-hidden="true" tabindex="-1"></a>**Chapters 14 to 24 are meant to be read, and only sometimes done.** This</span>
+<span id="cb1-623"><a href="#cb1-623" aria-hidden="true" tabindex="-1"></a>is the part I would ask you not to skip, even if you are new to</span>
+<span id="cb1-624"><a href="#cb1-624" aria-hidden="true" tabindex="-1"></a>statistics, and even if you never run the code. These chapters describe</span>
+<span id="cb1-625"><a href="#cb1-625" aria-hidden="true" tabindex="-1"></a>techniques you may not use this year, or next year. But each one gives</span>
+<span id="cb1-626"><a href="#cb1-626" aria-hidden="true" tabindex="-1"></a>you a question that changes how you read every analysis, including your</span>
+<span id="cb1-627"><a href="#cb1-627" aria-hidden="true" tabindex="-1"></a>own:</span>
 <span id="cb1-628"><a href="#cb1-628" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-629"><a href="#cb1-629" aria-hidden="true" tabindex="-1"></a>Ten chapters built specifically for this audience. Mostly independent of</span>
-<span id="cb1-630"><a href="#cb1-630" aria-hidden="true" tabindex="-1"></a>each other — go straight to whichever matches the problem on your desk.</span>
-<span id="cb1-631"><a href="#cb1-631" aria-hidden="true" tabindex="-1"></a>The two exceptions are Chapters 21 and 22, which are a sequence, and</span>
-<span id="cb1-632"><a href="#cb1-632" aria-hidden="true" tabindex="-1"></a>Chapter 23, which draws on both.</span>
-<span id="cb1-633"><a href="#cb1-633" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-634"><a href="#cb1-634" aria-hidden="true" tabindex="-1"></a><span class="ss">14. </span>**Empirical Bayes: Estimating Rates You Don't Have Enough Data For**</span>
-<span id="cb1-635"><a href="#cb1-635" aria-hidden="true" tabindex="-1"></a><span class="ss">15. </span>**Bayesian Shrinkage: Ranking Managers and Teams Fairly**</span>
-<span id="cb1-636"><a href="#cb1-636" aria-hidden="true" tabindex="-1"></a><span class="ss">16. </span>**Hierarchical Models for Pay and Variance**</span>
-<span id="cb1-637"><a href="#cb1-637" aria-hidden="true" tabindex="-1"></a><span class="ss">17. </span>**Survival Analysis: Time-to-Event in the Employee Lifecycle**</span>
-<span id="cb1-638"><a href="#cb1-638" aria-hidden="true" tabindex="-1"></a><span class="ss">18. </span>**Analysing Likert and Survey Data the Bayesian Way**</span>
-<span id="cb1-639"><a href="#cb1-639" aria-hidden="true" tabindex="-1"></a><span class="ss">19. </span>**Modelling What You Can't See** — measurement error, missing data</span>
-<span id="cb1-640"><a href="#cb1-640" aria-hidden="true" tabindex="-1"></a>    and latent variables: what to do when the number in the column</span>
-<span id="cb1-641"><a href="#cb1-641" aria-hidden="true" tabindex="-1"></a>    isn't the quantity it claims to be</span>
-<span id="cb1-642"><a href="#cb1-642" aria-hidden="true" tabindex="-1"></a><span class="ss">20. </span>**Bayesian A/B Testing for People Experiments**</span>
-<span id="cb1-643"><a href="#cb1-643" aria-hidden="true" tabindex="-1"></a><span class="ss">21. </span>**Causal Structure: Drawing the Graph** — which variables belong in</span>
-<span id="cb1-644"><a href="#cb1-644" aria-hidden="true" tabindex="-1"></a>    the model is a question about causes, not about fit</span>
-<span id="cb1-645"><a href="#cb1-645" aria-hidden="true" tabindex="-1"></a><span class="ss">22. </span>**Causal Designs: Finding Variation You Didn't Create** —</span>
-<span id="cb1-646"><a href="#cb1-646" aria-hidden="true" tabindex="-1"></a>    difference-in-differences, event studies, and designing a study</span>
-<span id="cb1-647"><a href="#cb1-647" aria-hidden="true" tabindex="-1"></a>    before you run it</span>
-<span id="cb1-648"><a href="#cb1-648" aria-hidden="true" tabindex="-1"></a><span class="ss">23. </span>**The Elicitation Workflow: Building Priors With Your Stakeholders**</span>
-<span id="cb1-649"><a href="#cb1-649" aria-hidden="true" tabindex="-1"></a>    — doing this *with* your stakeholders rather than *to* them</span>
-<span id="cb1-650"><a href="#cb1-650" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-651"><a href="#cb1-651" aria-hidden="true" tabindex="-1"></a><span class="fu">### Part VI — From analysis to decision {.unnumbered}</span></span>
-<span id="cb1-652"><a href="#cb1-652" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-653"><a href="#cb1-653" aria-hidden="true" tabindex="-1"></a>One chapter, and the one I would hand to somebody who commissions</span>
-<span id="cb1-654"><a href="#cb1-654" aria-hidden="true" tabindex="-1"></a>analysis rather than does it.</span>
-<span id="cb1-655"><a href="#cb1-655" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-656"><a href="#cb1-656" aria-hidden="true" tabindex="-1"></a><span class="ss">24. </span>**From Posterior to Decision: What an Analysis Is Worth** — putting</span>
-<span id="cb1-657"><a href="#cb1-657" aria-hidden="true" tabindex="-1"></a>    a price on outcomes nobody has priced, running the decision on</span>
-<span id="cb1-658"><a href="#cb1-658" aria-hidden="true" tabindex="-1"></a>    posterior draws, and working out which uncertainty is worth paying</span>
-<span id="cb1-659"><a href="#cb1-659" aria-hidden="true" tabindex="-1"></a>    to reduce</span>
-<span id="cb1-660"><a href="#cb1-660" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-661"><a href="#cb1-661" aria-hidden="true" tabindex="-1"></a><span class="fu">### How to read this {.unnumbered}</span></span>
-<span id="cb1-662"><a href="#cb1-662" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-663"><a href="#cb1-663" aria-hidden="true" tabindex="-1"></a>Twenty-four chapters is more than anyone needs at once, and they do</span>
-<span id="cb1-664"><a href="#cb1-664" aria-hidden="true" tabindex="-1"></a>not all ask the same thing of you.</span>
-<span id="cb1-665"><a href="#cb1-665" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-666"><a href="#cb1-666" aria-hidden="true" tabindex="-1"></a>**Chapters 1 to 10 are meant to be done.** Read them in order, with R</span>
-<span id="cb1-667"><a href="#cb1-667" aria-hidden="true" tabindex="-1"></a>open, and type the code out yourself. This is the working path. By the</span>
-<span id="cb1-668"><a href="#cb1-668" aria-hidden="true" tabindex="-1"></a>end of Chapter 10 you can take a real question, fit a model that suits</span>
-<span id="cb1-669"><a href="#cb1-669" aria-hidden="true" tabindex="-1"></a>it, check that the model works, and give a stakeholder an answer you can</span>
-<span id="cb1-670"><a href="#cb1-670" aria-hidden="true" tabindex="-1"></a>defend. That is a complete skill, and for a long time it may be all you</span>
-<span id="cb1-671"><a href="#cb1-671" aria-hidden="true" tabindex="-1"></a>need.</span>
-<span id="cb1-672"><a href="#cb1-672" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-673"><a href="#cb1-673" aria-hidden="true" tabindex="-1"></a>**Chapters 11 to 13 are for when something goes wrong, or gets</span>
-<span id="cb1-674"><a href="#cb1-674" aria-hidden="true" tabindex="-1"></a>difficult.** Read Chapter 11 when a model does not behave as expected and</span>
-<span id="cb1-675"><a href="#cb1-675" aria-hidden="true" tabindex="-1"></a>you want to understand what the sampler is doing. Read Chapter 12 when</span>
-<span id="cb1-676"><a href="#cb1-676" aria-hidden="true" tabindex="-1"></a>your outcome is no longer a simple number or a yes/no answer. Read</span>
-<span id="cb1-677"><a href="#cb1-677" aria-hidden="true" tabindex="-1"></a>Chapter 13 before your next project rather than during it — it is about</span>
-<span id="cb1-678"><a href="#cb1-678" aria-hidden="true" tabindex="-1"></a>the decisions nobody prompts you for, and it is the one chapter here that</span>
-<span id="cb1-679"><a href="#cb1-679" aria-hidden="true" tabindex="-1"></a>is as useful to somebody who commissions analysis as to somebody who does</span>
-<span id="cb1-680"><a href="#cb1-680" aria-hidden="true" tabindex="-1"></a>it.</span>
-<span id="cb1-681"><a href="#cb1-681" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-682"><a href="#cb1-682" aria-hidden="true" tabindex="-1"></a>**Chapters 14 to 24 are meant to be read, and only sometimes done.** This</span>
-<span id="cb1-683"><a href="#cb1-683" aria-hidden="true" tabindex="-1"></a>is the part I would ask you not to skip, even if you are new to</span>
-<span id="cb1-684"><a href="#cb1-684" aria-hidden="true" tabindex="-1"></a>statistics, and even if you never run the code. These chapters describe</span>
-<span id="cb1-685"><a href="#cb1-685" aria-hidden="true" tabindex="-1"></a>techniques you may not use this year, or next year. But each one gives</span>
-<span id="cb1-686"><a href="#cb1-686" aria-hidden="true" tabindex="-1"></a>you a question that changes how you read every analysis, including your</span>
-<span id="cb1-687"><a href="#cb1-687" aria-hidden="true" tabindex="-1"></a>own:</span>
-<span id="cb1-688"><a href="#cb1-688" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-689"><a href="#cb1-689" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Chapter <span class="pp">|</span> The question it leaves you with <span class="pp">|</span></span>
-<span id="cb1-690"><a href="#cb1-690" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|--------------------------------------------------------------|</span></span>
-<span id="cb1-691"><a href="#cb1-691" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14–16 <span class="pp">|</span> Is this difference real, or is that group simply small? <span class="pp">|</span></span>
-<span id="cb1-692"><a href="#cb1-692" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 17 <span class="pp">|</span> Am I treating "has not happened yet" as "did not happen"? <span class="pp">|</span></span>
-<span id="cb1-693"><a href="#cb1-693" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 18 <span class="pp">|</span> Is this scale a number, or a set of ordered labels I am averaging? <span class="pp">|</span></span>
-<span id="cb1-694"><a href="#cb1-694" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 19 <span class="pp">|</span> How much of this measure is noise, and who is missing from it? <span class="pp">|</span></span>
-<span id="cb1-695"><a href="#cb1-695" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> How likely is it that this option is better, and better by enough to act on? <span class="pp">|</span></span>
-<span id="cb1-696"><a href="#cb1-696" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 21–22 <span class="pp">|</span> Would this still be true if we changed it on purpose? <span class="pp">|</span></span>
-<span id="cb1-697"><a href="#cb1-697" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 23 <span class="pp">|</span> Whose beliefs went into this, and did anyone check them? <span class="pp">|</span></span>
-<span id="cb1-698"><a href="#cb1-698" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 24 <span class="pp">|</span> What would we do differently depending on the answer, and what would each wrong turn cost? <span class="pp">|</span></span>
-<span id="cb1-699"><a href="#cb1-699" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-700"><a href="#cb1-700" aria-hidden="true" tabindex="-1"></a>You can take every one of those questions away without fitting a single</span>
-<span id="cb1-701"><a href="#cb1-701" aria-hidden="true" tabindex="-1"></a>model from those chapters. Each chapter takes about an evening to read,</span>
-<span id="cb1-702"><a href="#cb1-702" aria-hidden="true" tabindex="-1"></a>and it changes what you notice permanently. Fitting the models matters</span>
-<span id="cb1-703"><a href="#cb1-703" aria-hidden="true" tabindex="-1"></a>less than the questions do.</span>
-<span id="cb1-704"><a href="#cb1-704" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-705"><a href="#cb1-705" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-706"><a href="#cb1-706" aria-hidden="true" tabindex="-1"></a>Reading a chapter you do not yet need is not wasted time. Often the most</span>
-<span id="cb1-707"><a href="#cb1-707" aria-hidden="true" tabindex="-1"></a>useful result is being able to recognise a problem you are not going to</span>
-<span id="cb1-708"><a href="#cb1-708" aria-hidden="true" tabindex="-1"></a>solve today, and to say so clearly. That is worth more than a confident</span>
-<span id="cb1-709"><a href="#cb1-709" aria-hidden="true" tabindex="-1"></a>answer that ignored the problem.</span>
-<span id="cb1-710"><a href="#cb1-710" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-711"><a href="#cb1-711" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-712"><a href="#cb1-712" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-713"><a href="#cb1-713" aria-hidden="true" tabindex="-1"></a><span class="fu">## If you only have time for four chapters</span></span>
-<span id="cb1-714"><a href="#cb1-714" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-715"><a href="#cb1-715" aria-hidden="true" tabindex="-1"></a>Chapters 4, 5, 6 and 10. That's the mechanism, the tool, the workhorse</span>
-<span id="cb1-716"><a href="#cb1-716" aria-hidden="true" tabindex="-1"></a>technique, and a complete worked project — enough to run a real analysis</span>
-<span id="cb1-717"><a href="#cb1-717" aria-hidden="true" tabindex="-1"></a>and defend it.</span>
-<span id="cb1-718"><a href="#cb1-718" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-629"><a href="#cb1-629" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Chapter <span class="pp">|</span> The question it leaves you with <span class="pp">|</span></span>
+<span id="cb1-630"><a href="#cb1-630" aria-hidden="true" tabindex="-1"></a><span class="pp">|---------|--------------------------------------------------------------|</span></span>
+<span id="cb1-631"><a href="#cb1-631" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 14–16 <span class="pp">|</span> Is this difference real, or is that group simply small? <span class="pp">|</span></span>
+<span id="cb1-632"><a href="#cb1-632" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 17 <span class="pp">|</span> Am I treating "has not happened yet" as "did not happen"? <span class="pp">|</span></span>
+<span id="cb1-633"><a href="#cb1-633" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 18 <span class="pp">|</span> Is this scale a number, or a set of ordered labels I am averaging? <span class="pp">|</span></span>
+<span id="cb1-634"><a href="#cb1-634" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 19 <span class="pp">|</span> How much of this measure is noise, and who is missing from it? <span class="pp">|</span></span>
+<span id="cb1-635"><a href="#cb1-635" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 20 <span class="pp">|</span> How likely is it that this option is better, and better by enough to act on? <span class="pp">|</span></span>
+<span id="cb1-636"><a href="#cb1-636" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 21–22 <span class="pp">|</span> Would this still be true if we changed it on purpose? <span class="pp">|</span></span>
+<span id="cb1-637"><a href="#cb1-637" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 23 <span class="pp">|</span> Whose beliefs went into this, and did anyone check them? <span class="pp">|</span></span>
+<span id="cb1-638"><a href="#cb1-638" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 24 <span class="pp">|</span> What would we do differently depending on the answer, and what would each wrong turn cost? <span class="pp">|</span></span>
+<span id="cb1-639"><a href="#cb1-639" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-640"><a href="#cb1-640" aria-hidden="true" tabindex="-1"></a>You can take every one of those questions away without fitting a single</span>
+<span id="cb1-641"><a href="#cb1-641" aria-hidden="true" tabindex="-1"></a>model from those chapters. Each chapter takes about an evening to read,</span>
+<span id="cb1-642"><a href="#cb1-642" aria-hidden="true" tabindex="-1"></a>and it changes what you notice permanently. Fitting the models matters</span>
+<span id="cb1-643"><a href="#cb1-643" aria-hidden="true" tabindex="-1"></a>less than the questions do.</span>
+<span id="cb1-644"><a href="#cb1-644" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-645"><a href="#cb1-645" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb1-646"><a href="#cb1-646" aria-hidden="true" tabindex="-1"></a>Reading a chapter you do not yet need is not wasted time. Often the most</span>
+<span id="cb1-647"><a href="#cb1-647" aria-hidden="true" tabindex="-1"></a>useful result is being able to recognise a problem you are not going to</span>
+<span id="cb1-648"><a href="#cb1-648" aria-hidden="true" tabindex="-1"></a>solve today, and to say so clearly. That is worth more than a confident</span>
+<span id="cb1-649"><a href="#cb1-649" aria-hidden="true" tabindex="-1"></a>answer that ignored the problem.</span>
+<span id="cb1-650"><a href="#cb1-650" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-651"><a href="#cb1-651" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-652"><a href="#cb1-652" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb1-653"><a href="#cb1-653" aria-hidden="true" tabindex="-1"></a><span class="fu">## If you only have time for four chapters</span></span>
+<span id="cb1-654"><a href="#cb1-654" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-655"><a href="#cb1-655" aria-hidden="true" tabindex="-1"></a>Chapters 4, 5, 6 and 10. That's the mechanism, the tool, the workhorse</span>
+<span id="cb1-656"><a href="#cb1-656" aria-hidden="true" tabindex="-1"></a>technique, and a complete worked project — enough to run a real analysis</span>
+<span id="cb1-657"><a href="#cb1-657" aria-hidden="true" tabindex="-1"></a>and defend it.</span>
+<span id="cb1-658"><a href="#cb1-658" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

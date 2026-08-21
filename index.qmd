@@ -113,7 +113,7 @@ missing aircraft.
 ### What "Bayesian" actually means {.unnumbered}
 
 I have now used three or four words without defining any of them, which
-is a fair thing to object to. Now, after the story I used to try and bring them to life this is what they mean:-
+is a fair thing to object to. Now, after the story I used to try and bring them to I close that gap:-
 
 **Bayes' theorem** is a rule for one narrow job: revising what you
 believe when new evidence turns up. It has three pieces, and the search
@@ -147,7 +147,7 @@ us were taught, and the one I keep translating back to throughout this
 book — reserves probability for the data instead. The unknown quantity
 is treated as a fixed number: you don't know it, but it isn't itself
 uncertain, so there's nothing to put a distribution on. Which is why a
-frequentist can tell you that a procedure would bracket the truth 95% of
+frequentist can tell you that a procedure would bookend the truth 95% of
 the time, and cannot tell you there's a 95% chance the truth lies inside
 the particular interval now in front of you. Read aloud, those two
 sentences sound identical. Only one of them answers the question that was
@@ -175,16 +175,49 @@ this book is machinery for doing that on problems larger than a single
 unknown number.
 :::
 
-Two things that definition does *not* commit you to. It isn't a loyalty
-test — nothing here argues that classical statistics is broken, and
-Chapter 17 reaches for a Kaplan-Meier curve and Chapter 21 for a plain
-`lm()` precisely because they're the right tools in those places. And it
-isn't a prerequisite to have mastered before Chapter 1: Chapter 2 makes
-the argument about probability properly, and Chapter 4 turns the theorem
-into arithmetic. If the three words above carry you through the
-next few pages, they've done their job.
+One thing that definition does *not* commit you to: it isn't a
+prerequisite to have mastered before Chapter 1. Chapter 2 makes the
+argument about probability properly, and Chapter 4 turns the theorem into
+arithmetic. If the three words above carry you through the next few
+pages, they've done their job.
 
-### Not a special case {.unnumbered}
+### Not a loyalty test {.unnumbered}
+
+Nothing in this book argues that classical statistics is broken. I use
+classical methods in these pages wherever they are the right tool for the
+question: Chapter 17 reaches for a Kaplan-Meier curve, Chapter 21 fits a
+trend line with a plain `lm()`, and neither is an apology. The first half
+of the course this book grew out of was frequentist and bootstrap
+methods, and I did not teach it grudgingly.
+
+Bootstrap methods in particular deserve singling out, because they share
+the thing I value most in the Bayesian approach. A bootstrap does not
+hand you an estimate and a standard error. It hands you a *distribution* —
+and a distribution is something you can query. Once you have one you can
+ask for the median rather than the mean, or the lower quartile, or the
+share of the distribution that falls past whatever threshold the business
+actually cares about. None of those questions are available if what you
+are holding is a test and a point estimate. Not because the arithmetic
+forbids them, but because that machinery was built to answer a different
+question and answers only that one.
+
+Which is the real argument, and it is not about Bayes at all. My deepest
+frustration in this field is watching an analyst reach for a tool that
+does not fit the question they were asked. A significance test answers
+"would data this extreme be surprising if nothing were going on?" That is
+occasionally the question. Far more often the question is "how large is
+it, how sure are we, and what should we do differently?" — and no amount
+of care in reporting a p-value turns it into an answer to that.
+
+::: callout-important
+The skill worth having is not fluency in one tradition. It is looking at
+the question you have been asked and choosing the tool that answers *it*.
+Most of this book is Bayesian because most People Analytics questions
+have a shape that Bayesian methods fit — not because the other tools are
+wrong.
+:::
+
+### The search for Flight 447 was not a special case {.unnumbered}
 
 It's tempting to file that story under "impressive things statisticians
 do for aviation investigators" and move on. Don't — the reason it
@@ -344,6 +377,33 @@ book, and the others that shaped this one, are in @sec-further-reading.
 This book has a small number of recurring conventions. They're worth two
 minutes now, because they repeat on almost every page and they're
 designed to let you read selectively rather than linearly.
+
+### If you meet a term you don't know
+
+Start with this one, because it saves the most time.
+
+**Every word of this book is searchable.** Press `/`, `f` or `s` from any
+page, or use the search box in the sidebar. It searches the full text of
+all twenty-four chapters and the appendices, not just the headings.
+
+I mention it early because a reader working through the chapters in order
+recently asked me what `Rhat` was. Perfectly fair question — it appears
+in model output from Chapter 5 onwards, gets a one-line answer there, and
+isn't properly explained until Chapter 11. Searching for it finds both in
+about two seconds.
+
+That gap is deliberate, and you'll meet others like it. I have tried not
+to re-explain the same idea every time it reappears, because a book that
+does that is unbearable to read straight through. The cost is that a term
+will occasionally turn up in front of you before its full explanation
+does. When that happens, search for it rather than assuming you missed
+something — you probably didn't, and the explanation is very likely one
+keystroke away.
+
+The same applies in reverse. If a technique is *not* in this book, it is
+usually named somewhere anyway, with a note on why I left it out and
+where to go instead. Searching for something and finding an honest
+"here's why this isn't here" is a better outcome than wondering.
 
 ### The boxes, and which ones you can skip
 
