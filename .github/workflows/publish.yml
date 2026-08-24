@@ -32,6 +32,11 @@ jobs:
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # Hard dependencies only (Depends/Imports/LinkingTo). The default
+          # ("all") pulls Suggests too, and brms suggests cmdstanr, which is not
+          # on CRAN — pak can't resolve it and the whole solve fails. The book
+          # uses brms's default rstan backend, so cmdstanr is never needed.
+          dependencies: '"hard"'
           extra-packages: |
             tidyverse
             rstanarm

@@ -10,3 +10,5 @@ data/turnover.csv
 
 # Artefacts of the Claude device mount — never source files
 .fuse_hidden*
+
+talk and article/
