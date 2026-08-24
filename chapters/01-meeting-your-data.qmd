@@ -116,6 +116,22 @@ by someone who didn't look at their data first.
 
 ## Setup
 
+::: callout-tip
+## Before you start
+
+If you intend to run the code as you read — and if R is new to you, you
+should — have R and an editor installed and open before you go any
+further. @sec-getting-started-with-r walks through it: where to download R and
+RStudio (or Positron) from, which packages to install, and the
+browser-based option if you would rather not install anything at all.
+It also explains what `tidyverse` and `brms` actually are, since this
+book otherwise treats both as furniture.
+
+If you would rather read than type, that is a legitimate way to use
+this book. @sec-r-how-to-use sets out which approach suits which
+reader.
+:::
+
 We load the tidyverse, set a consistent plot theme, and load our two
 running datasets from the `peopleanalyticsdata` package (created by
 Keith McNulty — see the [Welcome](../index.qmd) chapter for the full
@@ -136,12 +152,17 @@ data("employee_survey", package = "peopleanalyticsdata")
 ::: callout-tip
 ## If you get a "package not found" error
 
-Run this **once** in the console (not in a code chunk):
+A **package** is a bundle of functions somebody else wrote and shared;
+`library()` loads one that is already on your machine, but it has to be
+installed first. Run this **once** in the console (the pane you type
+into directly), not in a code chunk:
 
 ```{r}
 #| eval: false
 install.packages(c("tidyverse", "peopleanalyticsdata", "skimr"))
 ```
+
+See @sec-r-install if that fails.
 :::
 
 ------------------------------------------------------------------------
@@ -295,8 +316,8 @@ The choice is usually decided by whether a long tail exists:
 -   **Absence days → median**, usually, and often better still as a
     distribution: most people take very few days, a small number take
     many.
--   **Engagement scores → mean is fine.** The scale is bounded 1 to 5,
-    so there's no tail to distort anything, and means are easier to
+-   **Engagement scores → mean is fine.** The scale is often bounded 1 to 5,
+    so there's no long tail to distort anything, and means are easier to
     compare across teams.
 
 ::: callout-important
@@ -327,11 +348,26 @@ skim(salespeople)
 That is a lot of table at once, so read it in this order.
 
 **`n_missing` first.** It counts the empty cells in each column, and it
-is the reason for the `na.rm = TRUE` arguments you are about to meet.
-We come back to it properly at the end of the chapter. Getting this on
-screen in the first minute, rather than discovering it later, is the
-main reason this book uses `skim()` rather than the shorter
-`summary()`.
+is the reason for the `na.rm = TRUE` arguments you are about to meet —
+`na.rm` is short for "**NA rem**ove", `NA` being R's marker for a
+missing value, so the whole argument reads as *remove the missing
+values before calculating*. We come back to it properly at the end of
+the chapter. Getting this on screen in the first minute, rather than
+discovering it later, is the main reason this book uses `skim()` rather
+than the shorter `summary()`.
+
+::: callout-tip
+## Most names in R are squashed-up words
+
+`na.rm`, `sd`, `IQR`, `cumsum`, `rbinom` — almost every function and
+argument name in R is an abbreviated description of what it does (`sd`
+= standard deviation, `cumsum` = cumulative sum). Reading them that way
+means you can often guess a new one correctly on sight, which is a far
+better position than looking up every term. When the guess fails,
+typing `?name` in the console — `?mutate`, `?rbinom` — opens the
+documentation, and the **Examples** at the bottom of the page are
+usually the fastest way in.
+:::
 
 **Then the middle.** `mean` is the mean and `p50` is the median. When
 those two disagree, the column is skewed — the distinction we were just

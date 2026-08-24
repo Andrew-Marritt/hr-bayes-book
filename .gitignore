@@ -7,3 +7,6 @@ data/turnover.csv
 
 /.quarto/
 **/*.quarto_ipynb
+
+# Artefacts of the Claude device mount — never source files
+.fuse_hidden*

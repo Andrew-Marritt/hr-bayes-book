@@ -1,0 +1,206 @@
+# Getting started with R {#sec-getting-started-with-r}
+
+This book is not an R tutorial. It is a book about Bayesian reasoning
+that happens to use R to do the arithmetic, and you can get most of the
+value from it without writing a line of code — see
+[How to use the code in this book](#sec-r-how-to-use) below.
+
+But several readers of the draft told me the same thing: they wanted to
+follow along, and nothing in the book told them how to get to a point
+where they could. This appendix fixes that. It is a signpost, not a
+course — enough to get R running, plus pointers to the people who teach
+it properly. 
+
+## Installing R and an editor {#sec-r-install}
+
+You need two things, and they are separate: **R** itself, which does the
+computing, and an **editor**, which is where you actually work. Installing
+only the first leaves you at a bare console; almost nobody works that way.
+
+### Step 1 — install R
+
+Download it from **<https://cran.r-project.org>**. This is CRAN, the
+Comprehensive R Archive Network — the official home of R, run by the R
+Foundation. Pick your operating system, take the latest release, accept
+the defaults.
+
+::: callout-tip
+## Make sure you are on the real site
+
+R and its editors are free, which unfortunately makes them attractive
+bait for lookalike download sites. The two addresses worth trusting are
+`cran.r-project.org` for R and `posit.co` for the editor. If you arrived
+somewhere else via a search result, close the tab and type the address
+in directly.
+
+If you work somewhere with a managed software catalogue, check it first
+— many organisations already offer R and RStudio there, sometimes as a
+supported enterprise build, which saves you the download and the
+conversation with IT.
+:::
+
+### Step 2 — install an editor
+
+You have two good options, both free and both from Posit (the company
+that employs many of the tidyverse developers).
+
+-   **RStudio Desktop** — <https://posit.co/download/rstudio-desktop/>.
+    The standard choice, and the one nearly every tutorial you will find
+    online assumes. Start here if you have no reason not to.
+-   **Positron** — <https://positron.posit.co>. Posit's newer editor,
+    built on the same foundations as VS Code. It handles R and Python
+    equally well and has a built-in AI assistant. It is what I wrote this
+    book in.
+
+Either works for everything in this book. If you are undecided, take
+RStudio: when you get stuck and search for help, the answer will be
+written for RStudio.
+
+### Step 3 — install the packages
+
+Base R does relatively little on its own. Everything interesting comes
+from **packages** — bundles of functions somebody else wrote and shared.
+Run this **once**, in the console (the pane you type into directly), not
+in a code chunk:
+
+```r
+install.packages(c("tidyverse", "peopleanalyticsdata", "skimr"))
+```
+
+That covers Chapters 1 to 3. The Bayesian modelling chapters need `brms`,
+which is a larger install because it compiles models behind the scenes:
+
+```r
+install.packages("brms")
+```
+
+On some systems `brms` also needs a working C++ toolchain. If it
+complains, the current instructions are maintained at
+<https://mc-stan.org/cmdstanr/articles/cmdstanr.html> — follow those
+rather than anything you find on a forum, because this is one of the few
+areas where old advice goes stale quickly.
+
+### If you would rather not install anything
+
+**Posit Cloud** (<https://posit.cloud>) runs RStudio in a browser with a
+free tier. Nothing to install, nothing to persuade IT to approve, and it
+is a perfectly reasonable way to work through the Foundations chapters.
+The free tier limits how many hours a month you get and how much memory
+a project can use, which is fine for Chapters 1 to 3 and will start to
+pinch once you are fitting Bayesian models.
+
+## The packages this book leans on {#sec-r-packages}
+
+Two names appear constantly and are worth knowing properly, because the
+book treats them as background furniture.
+
+### tidyverse
+
+The **tidyverse** is not one package but a collection of them, designed
+to work together and sharing a common style. When you run
+`library(tidyverse)` you load about eight at once. The ones you will see
+in this book:
+
+| Package | What it does |
+|---|---|
+| `dplyr` | Manipulating tables — filter rows, add columns, group and summarise. Most of the code in this book is `dplyr`. |
+| `ggplot2` | Every chart in this book. |
+| `tibble` | A modern data frame — the table type most functions here return. |
+| `tidyr` | Reshaping tables between long and wide. |
+| `readr` | Reading data files in. |
+
+The unifying idea is **tidy data**: one row per observation, one column
+per variable, one value per cell. Chapter 1 introduces this properly. The
+tidyverse is built around the assumption that your data is in that shape,
+which is why its functions compose so neatly with one another.
+
+### brms
+
+**brms** — "Bayesian Regression Models using Stan" — is the package that
+fits nearly every model from Chapter 6 onwards. It lets you write a
+Bayesian model using the same formula syntax as R's ordinary regression
+functions:
+
+```r
+brm(sales ~ performance + (1 | region), data = salespeople)
+```
+
+and then does the genuinely hard part — translating that into Stan,
+compiling it, and sampling from the posterior — without you having to
+write Stan yourself. It is the reason this book can teach Bayesian
+modelling at all without a chapter of C++.
+
+You do not need to understand any of that to read the book. Chapter 6
+introduces `brms` where it is first needed, and Chapter 11 explains what
+the sampling underneath is actually doing.
+
+## How to use the code in this book {#sec-r-how-to-use}
+
+Readers arrive here from very different places, so here is the honest
+guidance.
+
+-   **New to R, or new to statistics.** Run the code. Type it rather than
+    pasting it, change a number, break it, see what the error says. The
+    Foundations chapters are deliberately gentle for exactly this reason,
+    and the fluency you build there is what makes the later chapters
+    readable.
+-   **Comfortable with statistics but not with R.** You can read past the
+    code and still follow every argument in this book — the prose carries
+    the reasoning and the output is always interpreted in words. What you
+    should not skip is the Foundations part itself, because the Bayesian
+    way of thinking about a probability is a genuine mental shift, and
+    Chapters 2 and 3 are where that shift starts.
+-   **Comfortable with both.** Skim Foundations for the framing, then
+    start properly at Chapter 4.
+
+::: callout-note
+## On using an AI assistant to write the code
+
+If you can describe your approach clearly in plain language, an AI
+assistant can usually turn it into working R. That is a legitimate way
+to work and I use it myself — but the description has to be *yours*.
+Knowing what you want to compute is the analytical skill; producing the
+syntax is not. @sec-llms sets out how to do this well, and
+where it goes wrong.
+:::
+
+## Where to learn R properly {#sec-r-learning}
+
+I am not going to teach R here when others do it better and keep it
+current. These are the resources I actually point people to.
+
+### The cheatsheets
+
+Posit publishes one-page reference cards for each major package, and they
+are the single most useful thing on this list — print the `dplyr` one and
+keep it next to you.
+
+**<https://posit.co/resources/cheatsheets/>**
+
+The **Data transformation with dplyr** sheet is the one to start with. It
+covers `filter()`, `select()`, `group_by()`, `summarise()` and
+`mutate()` — including `mutate()`, which this book uses without ever
+teaching formally. `mutate()` adds or changes a column; it is the verb
+you reach for whenever an exercise asks you to derive something new from
+what you already have, such as bucketing a numeric variable into groups.
+
+### Books, free online
+
+-   **R for Data Science** (Wickham, Çetinkaya-Rundel & Grolemund) —
+    <https://r4ds.hadley.nz>. The standard introduction to the
+    tidyverse, and the one to work through if you want to be able to
+    write the code in this book yourself rather than read it.
+-   **Handbook of Regression Modeling in People Analytics** (Keith
+    McNulty) — <https://peopleanalytics-regression-book.org>. The
+    frequentist companion to what this book does, on much of the same
+    data, since the `peopleanalyticsdata` package is his.
+
+### Built-in help
+
+Inside R, `?function_name` opens the documentation for anything —
+`?mutate`, `?rbinom`, `?set.seed`. The **Examples** section at the bottom
+is usually the fastest way in; the rest of the page is written for
+people who already know the answer.
+
+@sec-further-reading has the wider reading list, including the
+Bayesian texts this book draws on.

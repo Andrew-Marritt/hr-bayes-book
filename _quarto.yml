@@ -60,11 +60,15 @@ book:
       chapters:
         - chapters/24-posterior-to-decision.qmd
   appendices:
+    - appendices/A0-getting-started-with-r.qmd
     - appendices/A1-llms.qmd
     - appendices/A2-further-reading.qmd
     - appendices/A3-data-sources.qmd
-  repo-url: "https://github.com/andrewmarritt/bayesian-people-analytics"
-  repo-actions: [edit, issue]
+  repo-url: "https://github.com/Andrew-Marritt/hr-bayes-book"
+  # repo-actions deliberately omitted. The "Edit this page" and "Report an
+  # issue" links both point into the source repo; it is private, so every
+  # one of them 404s for a reader. Restore `repo-actions: [issue]` if the
+  # repo is ever made public.
   sharing: [twitter, linkedin]
 
 bibliography: references.bib

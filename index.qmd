@@ -30,7 +30,7 @@ I have an unusual profile for the People Analytics teams that I've worked in or 
 
 At university I had a somewhat confusing statistical training. For courses like game theory and decision sciences I was taught to think like a Bayesian. In stats lessons we learnt the classical or frequentist machinery. The reason, I learnt later, was simple — the machinery to analyse data the way I understood the world simply wasn't there.
 
-What did it feel like being an economist in a milieu of industrial-organizational (I/O) psychologists? Well, pretty lonely and misunderstood if I'm honest. No, I didn't know SEM (Structural equation modeling) — and worse, I didn't want a copy of SPSS. "Correlation doesn't mean causation" I saw as a starting point rather than a conclusion. I was probably like the child who is told they can't have something: being told only increased my desire to get it.
+What did it feel like being an economist in a milieu of industrial-organizational (I/O) psychologists in People Analytics teams? Well, pretty lonely and misunderstood if I'm honest. No, I didn't know SEM (Structural equation modeling) — and worse, I didn't want a copy of SPSS. "Correlation doesn't mean causation" I saw as a starting point rather than a conclusion. I was probably like the child who is told they can't have something: being told only increased my desire to get it.
 
 In my newsletter, *Working Ideas*, I try to present a multi-disciplinary view of the world of work. A core theme I keep coming back to comprises numerous disciplines each independently researching the same topic, always in isolation, always failing to take advantage of what others have already understood.
 
@@ -59,7 +59,7 @@ This book is therefore for two audiences:
 
 The course uses an open source and widely used language called 'R'. When I first started my People Analytics practice in 2009/2010 this was a slightly unusual choice. When I worked in an HR Analytics team in a big bank a few years earlier, my colleagues used SPSS — the standard choice for psychologists, which most of them were. If my colleagues had been economists, the team would probably have used STATA instead. Both are expensive, proprietary tools, and corporates back then liked the reassurance that came with an established, costly product. Today R is probably the dominant language among statisticians (data scientists tend to reach for Python instead). I use and teach R via two development environments — RStudio, the tool I used back in 2009, and Positron, a newer IDE that lets you work across a wider range of languages. Either works as well as the other.
 
-I've chosen not to start this book by providing an introduction to R, RStudio or Positron. There are great guides online, and a Large Language Model will walk you through the setup — there is advice on using one well in @sec-llms. The techniques are what this book is for; the tooling is not.
+I've chosen not to start this book by providing an introduction to R, RStudio or Positron though there is a very basic guide at @sec-getting-started-with-r if you're totally new to R. There are great guides online, some of which I've linked to, and a Large Language Model will walk you through the setup — there is advice on using one well in @sec-llms. The techniques are what this book is for; the tooling is not.
 
 ## Why Bayesian, and why for People Analytics {.unnumbered}
 
@@ -113,7 +113,7 @@ missing aircraft.
 ### What "Bayesian" actually means {.unnumbered}
 
 I have now used three or four words without defining any of them, which
-is a fair thing to object to. Now, after the story I used to try and bring them to I close that gap:-
+is a fair thing to object to. Now, after the story I used to try and bring them to life I close that gap:-
 
 **Bayes' theorem** is a rule for one narrow job: revising what you
 believe when new evidence turns up. It has three pieces, and the search
@@ -147,7 +147,7 @@ us were taught, and the one I keep translating back to throughout this
 book — reserves probability for the data instead. The unknown quantity
 is treated as a fixed number: you don't know it, but it isn't itself
 uncertain, so there's nothing to put a distribution on. Which is why a
-frequentist can tell you that a procedure would bookend the truth 95% of
+frequentist can tell you that a procedure would cover the truth 95% of
 the time, and cannot tell you there's a 95% chance the truth lies inside
 the particular interval now in front of you. Read aloud, those two
 sentences sound identical. Only one of them answers the question that was
@@ -556,8 +556,9 @@ an evening on it.
 
 **It's free, and it stays free.** The online edition is the edition.
 There's no paywalled version and nothing held back. If you'd like to
-put something behind it, the last page of Chapter 24 says how — but
-nothing here depends on it.
+put something behind it,
+[the last page of Chapter 24](chapters/24-posterior-to-decision.qmd#supporting-the-book)
+says how — but nothing here depends on it.
 
 **It isn't finished.** Chapters get revised as I teach them and as I
 write about the same ideas in my newsletter. What you have is a version,
@@ -582,7 +583,10 @@ self-contained enough to read on its own if you already have the basics.
 ### Part I — Foundations {.unnumbered}
 
 Describing data, probability, and where uncertainty comes from. **Start
-here if you're new to statistics**; skim it if you're not.
+here whatever you arrive with.** If you're new to statistics this is the
+groundwork. If you're not, it's where probability quietly stops being a
+long-run frequency and starts being a degree of belief — read it faster,
+but don't skip it. More on that below.
 
 1.  **Meeting Your Data**
 2.  **Thinking in Chances**
@@ -663,8 +667,36 @@ analysis rather than does it.
 Twenty-four chapters is more than anyone needs at once, and they do
 not all ask the same thing of you.
 
+First, a question worth settling before you start: **should you be
+running the code at all?** The honest answer depends on what you arrive
+with, and it isn't the same for everybody.
+
+If you're **new to statistics, or new to R**, run it. Type it out rather
+than pasting it, change a number, break it, read the error. The fluency
+you build in Part I is what makes everything after it readable, and
+there's no faster way to get it. @sec-getting-started-with-r has what you
+need to get set up.
+
+If you're **comfortable with statistics but don't write R**, you can read
+past the code and still follow every argument in this book. The prose
+carries the reasoning and every output is interpreted in words. A good
+number of readers are in exactly this position — often the ones who
+commission analysis rather than run it — and they aren't getting a lesser
+version of the book.
+
+**What nobody should skip is Part I.** This is the one I'd push back on
+hardest. If you learnt statistics the classical way, the temptation is to
+treat Foundations as revision, and the material does look familiar —
+means and medians, distributions, conditional probability. But Chapters 2
+and 3 are where probability stops being a long-run frequency and starts
+being a degree of belief, and that shift is the whole book in miniature.
+Skim past it and Chapter 4 arrives as machinery rather than as the
+obvious next step. Knowing the statistics is not the same as having made
+the jump, and the jump is the part that takes a while.
+
 **Chapters 1 to 10 are meant to be done.** Read them in order, with R
-open, and type the code out yourself. This is the working path. By the
+open if you're running the code, and type it out yourself rather than
+pasting. This is the working path. By the
 end of Chapter 10 you can take a real question, fit a model that suits
 it, check that the model works, and give a stakeholder an answer you can
 defend. That is a complete skill, and for a long time it may be all you

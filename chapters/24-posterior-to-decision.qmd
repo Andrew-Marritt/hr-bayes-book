@@ -1255,7 +1255,7 @@ The company version is usually the more interesting one, because we can
 run it on your problems rather than on the `salespeople` dataset. If
 either would be useful to you, do get in touch.
 
-### Free, and how to support it if you want to
+### Free, and how to support it if you want to {#supporting-the-book}
 
 The online version of this book is free, and will stay free. There is
 no paywalled edition and no upsell — I would rather it were read.

@@ -1,20 +1,23 @@
 on:
   push:
     branches: [main]
-    paths:
-      - "people-analytics-book/**"
   workflow_dispatch: {}
 
 name: Render and publish book
+
+# The book is the repository root. Do not reintroduce a
+# `working-directory: people-analytics-book` — no such directory exists here,
+# and the path filter that went with it meant this workflow never triggered.
+
+concurrency:
+  group: publish
+  cancel-in-progress: true
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    defaults:
-      run:
-        working-directory: people-analytics-book
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +32,6 @@ jobs:
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          working-directory: people-analytics-book
           extra-packages: |
             tidyverse
             rstanarm
@@ -39,6 +41,7 @@ jobs:
             skimr
             peopleanalyticsdata
 
+      # _freeze is committed, so only chapters whose source changed re-execute.
       - name: Render book
         run: quarto render
 
@@ -46,4 +49,8 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: people-analytics-book/docs
+          publish_dir: docs
+          # Rebuild gh-pages from scratch each time. Without this, files deleted
+          # from the book linger on the live site forever — which is how 99 stale
+          # iCloud conflict copies ended up published.
+          force_orphan: true

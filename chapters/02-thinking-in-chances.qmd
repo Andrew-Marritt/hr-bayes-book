@@ -128,6 +128,27 @@ here only because we're inventing the data. We'll generate
 salespeople one at a time and track the running proportion promoted,
 just as you'd track the running proportion of heads.
 
+::: callout-tip
+## What `set.seed()` is doing, and why 202
+
+The code below **invents random numbers** — it makes up 2,000
+salespeople and decides at random which of them were promoted. Random
+means a different answer on every run, which would be a nuisance in a
+book: the chart in front of you wouldn't match the one you produced.
+
+`set.seed()` fixes that. R's randomness isn't truly random; it comes
+from a formula, and the **seed** is the number that formula starts
+from. Give it the same starting number and you get the same sequence of
+"random" values back, every time, on any machine.
+
+The particular value is arbitrary and means nothing — `202` is a number
+I picked, and `set.seed(7)` would work exactly as well. All that
+matters is that it's *fixed*. Seed a simulation whenever someone might
+need to reproduce it, which is most of the time at work. Change the
+number and re-run the chunk to watch the same lesson told with a
+different set of draws.
+:::
+
 ```{r law-large-numbers}
 set.seed(202)                                        # <1>
 
@@ -427,14 +448,35 @@ prediction is mostly about finding the right things to condition on.
 
 ### Your turn {.unnumbered}
 
-Compute P(promoted \| a customer rating above the median) — split
-`customer_rate` at its median and compute the promotion rate for each
-half. Does a higher customer rating change the odds?
+Start with the thinking, not the typing. `customer_rate` is a *number*,
+not a category, so there is no group to restrict to until you make one
+— and the first question is how you'd carve a continuous measurement
+into groups at all. Splitting it at the median is one answer: it gives
+you two halves of equal size, which keeps the comparison fair. It is
+not the only answer, and deciding where to cut is a judgement about the
+business, not a statistical rule.
+
+So: **how would you examine whether a higher customer rating changes
+the promotion odds?** Answer that in plain language first. Then, if
+you want to run it, compute P(promoted \| customer rating above the
+median) — split `customer_rate` at its median and take the promotion
+rate for each half.
 
 ```{r your-turn-conditional}
 # Your code here
 
 ```
+
+::: callout-tip
+## The R you'll need
+
+Adding a column that labels each row is `mutate()` — the `dplyr` verb
+for *derive something new from what's already there*. It's the one
+piece of syntax this exercise needs that the book hasn't shown you, and
+rather than teach `dplyr` here, @sec-r-learning points you at Posit's
+one-page cheatsheets, which do it better than a paragraph could.
+`?mutate` in the console also works.
+:::
 
 ### Where we're heading
 
@@ -482,13 +524,28 @@ roles_open <- 10
 bench_size <- 28
 n_sims     <- 10000
 
-promoted_count <- rbinom(n_sims, size = bench_size, prob = p_promoted)
+promoted_count <- rbinom(n_sims, size = bench_size, prob = p_promoted)  # <1>
 
 cat("P(fewer than 10 promoted — roles left unfilled):",
-    round(mean(promoted_count < roles_open), 3), "\n")
+    round(mean(promoted_count < roles_open), 3), "\n")                  # <2>
 cat("P(5+ more candidates promoted than roles available):",
     round(mean(promoted_count > roles_open + 5), 3), "\n")
 ```
+
+1.  `rbinom()` — "**r**andom draws from a **binom**ial" — runs one whole
+    bench through one selection cycle and reports how many got
+    promoted. `size = bench_size` is how many people are on the bench,
+    `prob = p_promoted` is each person's chance, and `n_sims` is how
+    many times to repeat the exercise. So `promoted_count` is 10,000
+    numbers: *how many of the 28 were promoted* in each of 10,000
+    imagined years.
+2.  This line is the answer. `promoted_count < roles_open` turns those
+    10,000 numbers into 10,000 `TRUE`/`FALSE` values — did this year
+    fall short? — and R treats `TRUE` as 1, so taking the `mean()` of
+    them gives *the proportion of years we came up short*, which is the
+    risk we wanted. It's the same 0/1-mean trick from Chapter 1, doing
+    real work. `cat()` merely prints the result with a label, and `\n`
+    is a line break.
 
 ```{r bench-plot}
 tibble(promoted_count) |>
