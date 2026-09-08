@@ -155,6 +155,7 @@ summary(fit_vs)
     below is the hardest thing in this model to estimate, and at 2,000
     it comes back with a warning-level `Rhat`. Chapter 11's rule
     applies: run longer rather than report it.
+
 ### Reading the output, line by line
 
 This is the most crowded output in the book, and it is worth going

@@ -811,14 +811,30 @@ diff_draws |>
 
 *"Promoted salespeople sell about [the median] more on average, with a
 95% probability the true gap lies between [lower] and [upper]. Given
-this data, there is a
-`r round(100 * mean(diff_draws$difference > 0))`% probability their
-underlying average is genuinely the higher of the two."*
+this data, their underlying average is almost certainly the higher of
+the two —
+`r round(100 * mean(diff_draws$difference > 0))`% of the posterior
+points that way."*
 
 Read the interval **before** the probability. If the interval
 comfortably straddles zero, the probability is only telling you which
 side of the fence most of the posterior sits on — not that a
 difference has been established.
+
+And read a printed 100% as *essentially* 100%. The figure is the share
+of 4,000 posterior draws falling above zero, and if none of them do it
+prints 1.00 whether the true probability is 0.999 or 0.99999. Saying
+"essentially 100% — none of the draws fell below zero" carries the
+honest habit into the cases where the margin is thinner.
+:::
+
+::: callout-note
+One caveat belongs to *this example* rather than to the technique.
+Promoted and not-promoted are **selected** groups: people are promoted
+partly for selling well. So the gap describes a difference between two
+groups, not the effect of promoting someone on how much they sell. The
+machinery is right; the causal reading is the one to resist, and
+Chapter 21 is where that distinction gets its own chapter.
 :::
 
 ::: callout-note

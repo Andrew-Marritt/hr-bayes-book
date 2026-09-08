@@ -130,14 +130,14 @@ Answer these and you have a rigorous, defensible Bayesian analysis.
 | Yes / no | Logistic | `bernoulli()` | 9 |
 | A rate or proportion | Beta-Binomial | *conjugate shortcut* | 4 |
 | Grouped / nested data | add `(1 \| group)` | *(same family, new formula)* | 8 |
-| A rate needing a fast, closed-form fix | Empirical Bayes | *conjugate shortcut* | 13 |
-| Ranking many small groups fairly | Shrinkage / partial pooling | `poisson()` + offset | 14 |
-| Variance across levels of structure | Hierarchical variance components | `gaussian()` | 15 |
-| Time until an event | Survival model | `weibull()` + `cens()` | 16 |
-| Likert / ordered-category | Ordinal (proportional-odds) | `cumulative("logit")` | 17 |
-| Comparing two rates | Bayesian A/B test | *conjugate shortcut* | 19 |
-| A predictor measured with error | Measurement-error model | `me()` wrapper | 18 |
-| Missing values in a predictor | In-model imputation | `mi()` wrapper | 18 |
+| A rate needing a fast, closed-form fix | Empirical Bayes | *conjugate shortcut* | 14 |
+| Ranking many small groups fairly | Shrinkage / partial pooling | `poisson()` + offset | 15 |
+| Variance across levels of structure | Hierarchical variance components | `gaussian()` | 16 |
+| Time until an event | Survival model | `weibull()` + `cens()` | 17 |
+| Likert / ordered-category | Ordinal (proportional-odds) | `cumulative("logit")` | 18 |
+| Comparing two rates | Bayesian A/B test | *conjugate shortcut* | 20 |
+| A predictor measured with error | Measurement-error model | `me()` wrapper | 19 |
+| Missing values in a predictor | In-model imputation | `mi()` wrapper | 19 |
 | Counts | Poisson / negative binomial | `poisson()` / `negbinomial()` | 12 (optional) |
 | An effect that may vary by group | Varying slopes | *(same family, new formula)* | 12 (optional) |
 | Several unordered categories | Multinomial | `categorical()` | 12 (optional) |
@@ -202,9 +202,9 @@ on rather than something they have to take on faith.
 ## Today you learned
 
 1.  The **complete Bayesian workflow** ties every chapter so far into
-    one repeatable recipe: question, data, model, priors, fit,
-    diagnose, check, interpret, communicate.
-2.  **Steps 6 and 7 — diagnose and check — are the ones people skip**,
+    one repeatable recipe: question, claim, data, model, priors, fit,
+    diagnose, check, interpret, temper, communicate.
+2.  **Steps 7 and 8 — diagnose and check — are the ones people skip**,
     and the first two a technical reviewer asks about.
 3.  Choosing a model is mostly choosing a **family to match your
     outcome**. The formula and the workflow barely change.

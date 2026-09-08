@@ -79,7 +79,7 @@ quietly discarding incomplete rows. This one is about what that costs.
 
 ------------------------------------------------------------------------
 
-# Part 1 — Measurement error
+## Part 1 — Measurement error
 
 ## Not every wrong number is wrong in the same way
 
@@ -397,7 +397,7 @@ fit_me <- brm(
 
 Before reading anything off it, the two checks the workflow asks for.
 `me()` adds a latent true score for every observation, so the parameter
-count jumps from three to several hundred — which makes step 7 less of a
+count jumps from three to several hundred — which makes steps 7 and 8 less of a
 formality than usual:
 
 ```{r ppc-me}
@@ -467,7 +467,7 @@ are the half that's easy to forget.
 ## Check the sampler here more carefully than usual
 
 Every model in this chapter is harder to fit than anything before it, and
-this is the one place in the book where Chapter 10's step 6 is more than a
+this is the one place in the book where Chapter 10's step 7 is more than a
 formality.
 
 The reason is structural. `me()` adds **one latent parameter per
@@ -541,7 +541,7 @@ idea pointed in the other direction.
 
 ------------------------------------------------------------------------
 
-# Part 2 — Missing data
+## Part 2 — Missing data
 
 ## What `drop_na()` has been doing
 
@@ -850,7 +850,7 @@ afterwards.
 
 ------------------------------------------------------------------------
 
-# Part 3 — When the thing itself is unobservable {#sec-latent-variables}
+## Part 3 — When the thing itself is unobservable {#sec-latent-variables}
 
 Measurement error assumes there's a true score your instrument is
 missing. Sometimes the construct has no direct measurement at all, and

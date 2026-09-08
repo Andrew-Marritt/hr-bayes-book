@@ -121,12 +121,14 @@ halves.
 ### Why the bell curve appears *everywhere*
 
 Because most things are pushed around by **many small, independent
-influences that add up**. A salesperson's total sales are nudged by
-territory, client mix, timing of deals, effort, luck… No single factor
-dominates.
+contributing factors that add up**. A salesperson's total sales are
+pushed a little one way or the other by territory, client mix, timing
+of deals, effort, luck… No single factor dominates.
 
 ::: callout-important
-Add lots of little nudges together and you almost always get a bell.
+Add lots of small contributing factors together and you almost always
+get a bell. Read "add" literally, not figuratively — it is the `sum()`
+in the code below.
 :::
 
 You already meet Normals every day:
@@ -140,7 +142,7 @@ You already meet Normals every day:
 
 ### See it happen
 
-Twelve small random nudges, added up:
+Twelve small random contributions, added up:
 
 ```{r normal-emerges}
 set.seed(301)
@@ -150,11 +152,11 @@ tibble(total = replicate(5000, sum(runif(12, min = -1, max = 1)))) |>   # <1>
   geom_histogram(bins = 45, fill = "#122a52", colour = "white") +
   labs(title = "A bell emerges from nothing",
        subtitle = "Nothing here is 'normal' by design — it simply appears",
-       x = "Sum of 12 random nudges", y = "Count")
+       x = "Sum of 12 random contributions", y = "Count")
 ```
 
 1.  Read this from the inside out. `runif(12, min = -1, max = 1)`
-    draws twelve nudges, each equally likely to be anywhere between
+    draws twelve contributions, each equally likely to be anywhere between
     −1 and +1 — a perfectly flat distribution, nothing bell-shaped
     about it. `sum()` adds them into a single total. `replicate(5000,
     ...)` repeats that whole exercise 5,000 times. The bell is in
@@ -166,6 +168,14 @@ turns up so relentlessly. It isn't that nature likes bell curves. It's
 that anything built by summing many small independent contributions
 ends up bell-shaped almost regardless of what the contributions
 looked like individually.
+
+Read the conditions in that sentence as a warning rather than a
+licence. *Many*, *small*, *independent*, *added*: break any one — a
+single factor that dominates, contributions that move together, an
+outcome built by multiplying rather than adding — and the bell need not
+appear. You can rarely verify all four in real data, which is why the
+working rule in this book is to **check the shape rather than assume
+it**, as we do with the sales figures below.
 :::
 
 ### The anatomy of a Normal
@@ -251,9 +261,13 @@ ggplot(salespeople, aes(x = sales)) +
 ```
 
 1.  `after_stat(density)` rescales the histogram from counts to
-    density, so its total area is 1. Without it the bars and the
-    curve would be on completely different vertical scales and the
-    comparison would be meaningless.
+    density, so its total area is 1. It has to be 1 because that is
+    what makes a curve a *distribution*: the value has to land
+    somewhere, so the total probability — and therefore the area under
+    any density curve, the Normal we are about to overlay included — is
+    1 by definition. Without the rescaling the bars and the curve would
+    be on completely different vertical scales and the comparison would
+    be meaningless.
 2.  The Normal we're testing against, given the mean and SD of the
     real data. We're not fitting anything — just asking whether the
     simplest possible summary of this variable does a decent job.
@@ -300,11 +314,22 @@ tibble(promotions = 0:50) |>
 Bars, not a curve — you can promote 14 people or 15, never 14.5.
 
 ::: callout-tip
-Read that chart as a range, not a point. With a 30% rate and 50
-salespeople you'd *expect* 15 promotions, but anywhere from about 9 to
-21 is unremarkable. So a division that promoted 11 this year and 18
+Read that chart as a range, not a point. With the 32% rate above and 50
+salespeople you'd *expect* about 16 promotions, but anywhere from about
+10 to 23 is unremarkable — that range is the middle 95% of the bars you
+are looking at, read straight off the distribution rather than from a
+rule of thumb (`qbinom(c(0.025, 0.975), size = 50, prob = 0.32)`). So a division that promoted 11 this year and 18
 last year has not necessarily changed anything at all — which is the
 Manchester survey problem again, in a different form.
+:::
+
+::: callout-note
+This framing works because promotion is a yes/no event you can count,
+which is what the Binomial describes. A Likert item — an engagement
+question answered 1 to 5 — is not that, even though its average looks
+like a number you could treat the same way. Whether a move from 4.5 to
+4.3 means anything needs a model built for **ordered categories**, and
+that is Chapter 18.
 :::
 
 ::: callout-important

@@ -316,9 +316,12 @@ The choice is usually decided by whether a long tail exists:
 -   **Absence days → median**, usually, and often better still as a
     distribution: most people take very few days, a small number take
     many.
--   **Engagement scores → mean is fine.** The scale is often bounded 1 to 5,
-    so there's no long tail to distort anything, and means are easier to
-    compare across teams.
+-   **Engagement scores → mean is usually fine.** The scale is bounded —
+    the `employee_survey` data here runs 1 to 4 — so there's no long tail
+    to distort anything, and means are easier to compare across teams.
+    Bounded is not the same as symmetric, though: these responses pile up
+    at the top end, which is the shape we meet in 1.5.3 and the reason
+    Chapter 18 exists.
 
 ::: callout-important
 If you're not sure, compute both. If they agree, report the mean and

@@ -182,8 +182,8 @@ tibble(theta = seq(0, 0.6, length.out = 400)) |>
 ## A different lens: frequentist statistics has a version of this too
 
 If your background is frequentist statistics, this might feel like it
-comes out of nowhere — but it doesn't. In the 1960s, Charles Stein
-proved something that shocked the statistics world: if you want to
+comes out of nowhere — but it doesn't. In the 1950s and 60s, Charles Stein
+and Willard James proved something that shocked the statistics world: if you want to
 estimate several unrelated quantities at once (say, the true rate for
 each of our cities), you get *better overall accuracy* by pulling every
 estimate a little toward the grand average — even when the quantities
@@ -612,7 +612,7 @@ built on a raw count that may itself be noisy).
 
 ## Empirical Bayes vs. a full multilevel model
 
-| | **Empirical Bayes (this chapter)** | **Multilevel model (Ch. 8, 14)** |
+| | **Empirical Bayes (this chapter)** | **Multilevel model (Ch. 8, 15)** |
 |---|---|---|
 | Speed | Instant, closed-form | Seconds to minutes (MCMC) |
 | Uncertainty | Point estimate only, by default | Full posterior for every group |

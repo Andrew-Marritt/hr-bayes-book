@@ -320,9 +320,9 @@ $$P(A \text{ and } B) = P(A) \times P(B) \quad \text{— if they're independent}
 
 *Independent* means knowing one tells you nothing about the other.
 
-Suppose roughly 25% of salespeople are top performers (`performance ==
-4`) and about 30% get promoted overall. *If* those were unrelated, the
-chance of being both would be roughly 0.25 × 0.30 ≈ 0.075. Let's check
+Suppose about 16% of salespeople are top performers (`performance ==
+4`) and about 32% get promoted overall. *If* those were unrelated, the
+chance of being both would be roughly 0.16 × 0.32 ≈ 0.05. Let's check
 reality:
 
 ```{r independence-check}
@@ -528,7 +528,7 @@ promoted_count <- rbinom(n_sims, size = bench_size, prob = p_promoted)  # <1>
 
 cat("P(fewer than 10 promoted — roles left unfilled):",
     round(mean(promoted_count < roles_open), 3), "\n")                  # <2>
-cat("P(5+ more candidates promoted than roles available):",
+cat("P(6+ more candidates promoted than roles available):",
     round(mean(promoted_count > roles_open + 5), 3), "\n")
 ```
 

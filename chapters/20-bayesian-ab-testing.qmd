@@ -319,8 +319,8 @@ the posterior sits on — not that a difference has been established.
 ::: callout-note
 ## Two workflow steps that legitimately don't apply here
 
-Chapter 10's nine steps include diagnosing the sampler (step 6) and a
-posterior predictive check (step 7), and this chapter does neither. That's
+Chapter 10's eleven steps include diagnosing the sampler (step 7) and a
+posterior predictive check (step 8), and this chapter does neither. That's
 correct, and worth being explicit about so it doesn't read as a shortcut.
 
 **There is no sampler to diagnose.** A Beta prior updated by binomial data
@@ -344,8 +344,10 @@ difference is that you can say which one you did.
 ## Reporting this properly
 
 Report **three things together**, not a single number: the probability
-the groups genuinely differ (`r scales::percent(p_higher, accuracy = 0.1)`
-here), the likely *size* of the difference (the credible interval), and
+that the difference runs in the direction you asked about (here
+`r scales::percent(p_higher, accuracy = 0.1)` that the diversity group's
+rate is the *higher* of the two), the likely *size* of the difference
+(the credible interval), and
 whether that size is big enough to matter for a real decision. A
 99%-confident but tiny difference and an 80%-confident but large one
 often call for different actions — collapsing both into "significant /
@@ -445,9 +447,13 @@ two are closer than the philosophical argument suggests:
   sentence. It is not the probability that the rates are the same, and it
   is not the probability the gap is real, which is what
   `r scales::percent(p_higher, accuracy = 0.1)` above actually gives you.
-- **`95 percent confidence interval`** — compare it directly to the
-  credible interval from `quantile(samples$diff, ...)`. With hundreds of
-  observations per group and a weak prior, the two will land in nearly the
+- **`95 percent confidence interval`** — compare it to the credible
+  interval from `quantile(samples$diff, ...)`, but mind the direction of
+  the subtraction. `prop.test()` works down the rows of `group_rates` and
+  reports comparison group *minus* diversity group; `samples$diff` runs
+  the other way round. The two intervals are mirror images, so flip the
+  sign on one before you line them up. Once you do: with hundreds of
+  observations per group and a weak prior, the two land in nearly the
   same place, which is the honest version of "these methods usually
   agree." What differs is what you're allowed to say about the interval:
   the credible interval is a statement about where the difference probably

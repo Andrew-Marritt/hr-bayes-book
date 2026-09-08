@@ -83,8 +83,9 @@ repeat, thousands of times:
 
     if the new spot is lower:
         move there anyway — but only sometimes,
-        with a chance equal to how much lower it is
-        (a little lower: usually move; far lower: rarely move)
+        with a chance equal to how much lower it is *in proportion*
+        (half as plausible: move about half the time;
+         far less plausible: rarely move)
 
     write down where you are standing
 ```
@@ -301,7 +302,12 @@ they're unreliable.
     scale.
 -   **Handle divergences** — if `brms` warns about "divergent
     transitions," raise `control = list(adapt_delta = 0.95)` (or
-    higher), or reparameterise.
+    higher), or reparameterise. This is a *separate* warning from the
+    ones the broken model above produced, which is why you have not
+    seen one on this page. Divergences turn up most often in
+    hierarchical models — Chapter 8's territory — where a group-level
+    standard deviation is pushed towards zero and the sampler has to
+    work its way down a narrowing funnel.
 
 ```{r fixed}
 fit_fixed <- update(fit_bad, iter = 2000, warmup = 1000, refresh = 0)

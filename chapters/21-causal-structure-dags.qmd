@@ -508,7 +508,7 @@ ggplot(adjustment_comparison, aes(x = b_customer_rate_c, y = fct_rev(model))) +
 
 ### Both models fit, and that is exactly the problem
 
-Chapter 10's step 7 asks whether the model reproduces the data. Run it on
+Chapter 10's step 8 asks whether the model reproduces the data. Run it on
 both:
 
 ```{r ppc-adjusted}

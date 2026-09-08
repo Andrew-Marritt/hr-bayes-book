@@ -177,9 +177,11 @@ managers; Toronto has 213. That is a ninefold difference in how much
 evidence sits behind each average, and nothing on the slide version of
 this table would tell you so.
 
-Now look at `se`. Toronto's average is worth about ±5 points; Houston's
-is worth about ±15. The small offices are not slightly less reliable
-than the large ones — they are about three times less reliable.
+Now look at `se`. One standard error is about 5 points for Toronto and
+about 15 for Houston — and because a 95% range runs roughly two standard
+errors either side, that is ±11 against ±31. The small offices are not
+slightly less reliable than the large ones — they are about three times
+less reliable.
 
 Put the two together and the ranking starts to fall apart. New York
 tops the table at 253 and San Francisco follows at 244, a gap of nine

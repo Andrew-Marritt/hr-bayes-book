@@ -171,7 +171,7 @@ tibble(x = seq(0, 50000, length.out = 400)) |>
 Plotting each prior on its own says what we believe about each
 *parameter*. The prior predictive check asks the more useful question:
 put them together, and what salaries does this model think are possible
-before it has seen a single major? Chapter 10's step 4 asks for both, and
+before it has seen a single major? Chapter 10's step 5 asks for both, and
 this is the half that catches mistakes:
 
 ```{r prior-predictive-var}
@@ -245,7 +245,7 @@ block matters far more than the others:
 a typical discipline's mean salary sits from the grand mean. This is the
 first of the two variance components, and it is a finding in its own
 right rather than a nuisance parameter. Note that its credible interval
-does not include zero — with nine disciplines it comfortably could have,
+does not include zero — with sixteen disciplines it comfortably could have,
 and that it doesn't is what licenses the rest of the chapter.
 
 **Further Distributional Parameters.** `sigma` is the **within-discipline**
@@ -260,14 +260,14 @@ plot above, and not much else.
 
 **The two columns on the right, on every line.** `Rhat` should read
 `1.00` and `Bulk_ESS` / `Tail_ESS` should be in the hundreds at minimum —
-Chapter 10's step 6 and Chapter 11's subject. A model this simple almost
+Chapter 10's step 7 and Chapter 11's subject. A model this simple almost
 never has trouble, which is exactly why it's worth glancing at now: you
 want the habit established before you meet a model that does.
 
 ::: callout-tip
 Both variance components come with a full credible interval, and that is
 the part a classical variance-components analysis struggles to give you.
-With only nine disciplines, `sd(Intercept)` is genuinely imprecisely
+With only sixteen disciplines, `sd(Intercept)` is genuinely imprecisely
 known — and a method that reported it as a single number would hide that.
 :::
 
@@ -359,7 +359,7 @@ support — the "one chart, one sentence" pairing Chapter 10 asked for:
 
 Two things worth noticing about how that sentence is built. It leads with
 the quantity, not the model. And the interval is wide — which is the
-honest consequence of having only nine disciplines, and precisely what a
+honest consequence of having only sixteen disciplines, and precisely what a
 point-estimate ICC would have concealed. If someone is about to make a
 decision on the strength of that number, the width of the interval is as
 much a part of the finding as the middle of it.
@@ -430,7 +430,7 @@ expected mean squares rather than a posterior. `lme4::lmer()` plus the
 in the frequentist framework, often quickly. The Bayesian version
 earns its keep here for the same reason as Chapter 15: a **full
 posterior distribution for the ICC itself**, which matters when you
-have a modest number of groups (like our 9 disciplines) and don't want
+have a modest number of groups (like our 16 disciplines) and don't want
 to overstate how precisely you know the answer.
 :::
 

@@ -136,6 +136,18 @@ ggplot(salespeople, aes(x = customer_rate, y = sales)) +
     dropped in by `geom_smooth()`. Note `se = FALSE`: we've explicitly
     switched off even the uncertainty band it would have offered.
 
+::: callout-note
+A word on why `customer_rate` goes in as a plain number here, when the
+book elsewhere is careful about ratings. It is an *averaged*
+satisfaction score — several customers' ratings pooled into one figure,
+with decimals — so a step from 3.2 to 3.4 means much the same as a step
+from 4.2 to 4.4. A single ordinal tick, such as the 1-to-4 performance
+rating, is a different animal: nothing guarantees the gaps between its
+levels are equal. That is why the "Your turn" exercise flags performance
+and not customer rating, and why Chapter 18 gives ordered ratings a
+model of their own.
+:::
+
 ### Why not just stop there?
 
 The red line is a perfectly good answer to *"which way does this

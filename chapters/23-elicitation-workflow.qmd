@@ -257,13 +257,13 @@ and it repays a moment on how to read it. Each **column** is a fitted
 distribution family; each **row** is a quantile. The numbers are what that
 fitted distribution says the value at that quantile is.
 
-So find the `0.1`, `0.5` and `0.9` rows and compare them back to the 1, 5
-and 12 she actually said. A good fit reproduces those three almost exactly —
-that's what "fitted" means. The rows that earn their keep are the ones she
-*didn't* give you: `0.25` and `0.75`. Those are the fit's interpolation, a
-claim she never made, and they're the natural thing to test with her:
-*"this says there's a one-in-four chance the reduction comes in below
-[the 0.25 row] — does that sound right to you?"*
+So find the `0.25`, `0.5` and `0.75` rows and compare them back to the
+2.5, 5 and 10 she actually said. A good fit reproduces those three almost
+exactly — that's what "fitted" means. The rows that earn their keep are the
+ones she *didn't* give you: `0.1` and `0.9`. Those are the fit's own
+extrapolation out into the tails, a claim she never made, and they're the
+natural thing to test with her: *"this says there's a one-in-ten chance the
+reduction comes in above [the 0.9 row] — does that sound right to you?"*
 
 If she balks at that number, the three elicited values need revisiting.
 That is the loop working, not a problem with the tool.
@@ -641,7 +641,7 @@ fixef(fit_training)
 
 ### Check the elicited prior before you trust it
 
-An elicited prior gets no exemption from Chapter 10's step 4. If anything
+An elicited prior gets no exemption from Chapter 10's step 5. If anything
 it needs the check more than a weakly-informative default does, because an
 informative prior is by definition capable of doing damage. So: what does
 this prior, combined with the rest of the model, think the pilot data

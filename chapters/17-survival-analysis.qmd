@@ -324,7 +324,7 @@ curve plainly drops off a cliff in year one, the Weibull's shape
 assumption is fighting your data and the coefficients inherit that
 problem.
 
-**`Rhat` and `Bulk_ESS`, on every line.** Chapter 10's step 6. `Rhat`
+**`Rhat` and `Bulk_ESS`, on every line.** Chapter 10's step 7. `Rhat`
 should be `1.00`; ESS in the hundreds or better. Censored models
 occasionally sample less comfortably than the ones so far, so this is the
 first chapter where the glance is more than a formality.
@@ -625,7 +625,7 @@ means the raw number is not even measuring what people think it is.
 Swap `industry` for `manager_id` and this model answers the question
 every HR director eventually asks: *which managers actually lose people
 faster?* Partial pooling handles the manager with four reports the same
-way Chapter 15 handled the small office — it pulls the estimate toward
+way Chapter 8 handled the small office — it pulls the estimate toward
 the average by exactly as much as the thin evidence warrants.
 :::
 

@@ -51,8 +51,9 @@ handle both halves.
     between any two with a credible interval
 4.  Combine categorical and continuous predictors, and say precisely
     what "holding the other constant" does and doesn't mean
-5.  Compare models with **LOO cross-validation** instead of picking
-    the one that fits best
+5.  Compare models with **LOO cross-validation** — a way of scoring a
+    model on data it has not seen, introduced properly later in this
+    chapter — instead of picking the one that fits best
 
 ------------------------------------------------------------------------
 
@@ -240,8 +241,8 @@ where your intuition genuinely does not transfer.
 
 Every non-reference row is a **difference**, not a level.
 
-Read `performance_f3 = 210` as "tier 3 sells about 210 more than tier
-1", never as "tier 3 sells 210". The second reading turns a strong
+Read `performance_f3 = 83.39` as "tier 3 sells about 83 more than tier
+1", never as "tier 3 sells 83". The second reading turns a strong
 finding into a nonsensical one, and because the numbers look plausible
 either way, nobody in the meeting notices.
 
@@ -500,6 +501,13 @@ cross-validation** (Leave One Out cross-validation) estimates exactly that: leav
 predict it from the rest, repeat for every observation. Because the
 left-out point took no part in the fit, there's no way to cheat.
 
+That is the *idea*. The implementation is cleverer than the description
+makes it sound: `loo()` does not refit the model 350 times. It
+approximates what each of those refits would have said, from the single
+posterior you have already got, using Pareto-smoothed importance
+sampling — which is precisely what makes leave-one-out affordable. The
+ML/DS note below says more.
+
 ```{r loo}
 # Same customer_rate-on-sales model as Chapter 6 — priors already
 # visualised there, refit here purely for the LOO comparison.
@@ -564,6 +572,15 @@ likely to be fitting noise.
 Resist the urge to declare a winner from a difference of 1.2 with a
 standard error of 3. That's the same overconfidence the whole chapter
 is warning about, just described in more technical language.
+
+One refinement for ratios near the bottom of that range: `se_diff` is
+itself an estimate, and the normal approximation behind the rule can be
+optimistic when two models are close and one nests inside the other —
+exactly the case here, with `fit_simple` sitting inside `fit_combined`
+(Sivula, Magnusson and Vehtari, 2020). The "smaller than its own
+standard error, pick the simpler one" rule already guards against the
+main mistake; this is only a reason not to treat a ratio of 2 or 3 as
+settling the matter.
 :::
 
 ::: callout-tip

@@ -327,10 +327,12 @@ makes them a distribution rather than a set of relative weights.
 
 ::: callout-tip
 Worth knowing before it causes a problem: if the two vectors are *not* the
-same length, R doesn't complain — it recycles the shorter one from the
-start and silently pairs it up again. Both of ours are 101 long, so
-the pairing is the obvious one, but a length mismatch elsewhere gives
-you a wrong answer rather than an error.
+same length, R still hands you an answer — it recycles the shorter one
+from the start and pairs it up again. If the longer length is an exact
+multiple of the shorter it does this silently; otherwise you get a
+warning, but a result all the same. Both of ours are 101 long, so the
+pairing is the obvious one, but a length mismatch elsewhere can give you
+a wrong answer rather than an error.
 :::
 
 ```{r posterior}
@@ -472,6 +474,13 @@ alone. Either way the assumption was on the table from the start.
 Compare that with the alternative on offer: a method that claims to
 use no prior information at all, run by an analyst who has plenty and
 no legitimate place to declare it.
+
+In fairness, classical practice does let prior-like information in — it
+just doesn't call it a prior. Ridge regression is a Gaussian prior on
+the coefficients; the LASSO is a Laplace one; empirical Bayes (Chapter
+14) estimates the prior from the data itself. That strengthens the
+point rather than weakening it. Everyone has a prior. The question is
+only whether it is written down somewhere you can argue with it.
 :::
 
 ::: callout-note
@@ -650,10 +659,13 @@ rule anything out between 0.2 and 0.7; a hundred pins you to roughly
 0.3–0.5. A percentage on a slide can't distinguish those two
 situations. This can.
 
-One detail worth noticing: at small counts the peak sits slightly
-inside the dashed line, pulled towards 0.5. That's the flat prior
-still exerting a little influence, and it fades as the data grows —
-the same effect you saw with the VP's prior a few sections ago.
+One detail worth noticing: at small counts the distribution's *centre
+of mass* sits slightly inside the dashed line, pulled towards 0.5. The
+peak itself stays right on the raw rate — it is the lopsidedness of the
+curve that shifts the average, with more of the weight lying on the 0.5
+side. That's the flat prior still exerting a little influence, and it
+fades as the data grows — the same effect you saw with the VP's prior a
+few sections ago.
 :::
 
 ### The shortcut itself

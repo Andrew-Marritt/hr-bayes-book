@@ -248,7 +248,7 @@ tibble(b = seq(-4, 4, length.out = 400)) |>
 ::: callout-note
 ## Why there's no separate prior predictive check here
 
-Chapter 10's step 4 asks for a prior predictive check as well as a prior
+Chapter 10's step 5 asks for a prior predictive check as well as a prior
 plot, and this chapter does the plot and not the simulation. That's a
 deliberate choice rather than an omission, and the reason is worth
 knowing.
@@ -309,7 +309,7 @@ residual standard deviation; here the latent scale's spread is fixed at 1
 by convention, because the thresholds and the coefficients are only ever
 identified relative to it. Nothing has gone wrong.
 
-**`Rhat` and `Bulk_ESS`.** Chapter 10's step 6, as always. Ordinal models
+**`Rhat` and `Bulk_ESS`.** Chapter 10's step 7, as always. Ordinal models
 with several correlated predictors — and these four sub-scales *are*
 correlated, since happy people tend to rate everything highly — can
 sample less crisply than the models so far. This is a reasonable place to

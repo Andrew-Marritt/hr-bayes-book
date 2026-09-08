@@ -236,10 +236,13 @@ expensive to collect:
     portfolio average, weighted by how much the group's own data can
     be trusted. You'll meet this exact idea, with the same name for
     the underlying mechanism, in Chapters 8, 14 and 15.
--   **Elections.** The forecasting models run by *The Economist* and
-    by independent modellers like Nate Silver are openly Bayesian —
-    combining polls with a "fundamentals" prior built from the
-    economy and incumbency, updated as new polls arrive.
+-   **Elections.** *The Economist*'s election forecast is openly
+    Bayesian — combining polls with a "fundamentals" prior built from
+    the economy and incumbency, updated as new polls arrive. Other
+    well-known forecasters, Nate Silver among them, work in a
+    recognisably similar spirit, blending prior expectation with
+    incoming polls, though they do not all describe their models in
+    Bayesian terms.
 -   **Football.** Ian Graham, Liverpool FC's former director of
     research, describes in *How to Win the Premier League* how he used
     Bayesian analysis "to counteract luck's influence over players who
@@ -456,11 +459,13 @@ a different column or a different assumption. They are the fastest way to
 find out whether you followed it.
 :::
 
-Plain notes like the one below carry asides, caveats and anything that
-would otherwise interrupt a paragraph.
+A sixth kind carries no title of its own. Plain notes like the one below
+hold asides, caveats and anything that would otherwise interrupt a
+paragraph.
 
 ::: callout-note
-Nothing critical ever hides in a plain note.
+**Nothing critical ever hides in a plain note.** Read one if the aside
+interests you; skip it if it doesn't.
 :::
 
 ### How code is explained
@@ -551,7 +556,7 @@ broken; it's just warming up.
 
 ## Free, unfinished, and open to correction {.unnumbered}
 
-Three things about the status of what you're reading, before you spend
+Four things about the status of what you're reading, before you spend
 an evening on it.
 
 **It's free, and it stays free.** The online edition is the edition.
@@ -559,6 +564,21 @@ There's no paywalled version and nothing held back. If you'd like to
 put something behind it,
 [the last page of Chapter 24](chapters/24-posterior-to-decision.qmd#supporting-the-book)
 says how — but nothing here depends on it.
+
+**You can reuse it.** The words and figures are under a
+[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 licence](https://creativecommons.org/licenses/by-nc-sa/4.0/):
+copy it, translate it, teach from it, build on it — as long as you
+credit it, don't sell it, and pass on the same freedoms to whoever gets
+it from you. The code is MIT licensed instead, with no non-commercial
+restriction, because code in a book like this exists to be pasted into
+real analyses and most real analyses happen at work. And to answer the
+question I'm always asked: the licence covers redistributing *the
+book*, not applying what's in it. Use any of this in your job, in
+client work, in something you sell — that's the whole point of it. The
+data is a separate matter, because it isn't mine to license;
+@sec-data-appendix has each dataset's terms. The share-alike choice is
+a deliberate echo of Keith McNulty's, so that anyone teaching from both
+books is on consistent ground.
 
 **It isn't finished.** Chapters get revised as I teach them and as I
 write about the same ideas in my newsletter. What you have is a version,
