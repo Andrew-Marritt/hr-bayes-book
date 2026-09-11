@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5fd49111c67786fa9da7eec5f8b0b01d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d674355c35ba9b8500a9db5196442da3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d219b26e5c661126e8aec3f67e78b0bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -477,6 +477,7 @@ window.Quarto = {
   <li><a href="#welcome-back" id="toc-welcome-back" class="nav-link active" data-scroll-target="#welcome-back">Welcome back</a>
   <ul class="collapse">
   <li><a href="#back-to-the-question-we-started-with" id="toc-back-to-the-question-we-started-with" class="nav-link" data-scroll-target="#back-to-the-question-we-started-with">Back to the question we started with</a></li>
+  <li><a href="#analysis-strategy" id="toc-analysis-strategy" class="nav-link" data-scroll-target="#analysis-strategy">Analysis strategy</a></li>
   </ul></li>
   <li><a href="#what-youll-be-able-to-do-by-the-end" id="toc-what-youll-be-able-to-do-by-the-end" class="nav-link" data-scroll-target="#what-youll-be-able-to-do-by-the-end">What you’ll be able to do by the end</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">9.1</span> Setup</a></li>
@@ -491,7 +492,8 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#translation-1-odds-ratios" id="toc-translation-1-odds-ratios" class="nav-link" data-scroll-target="#translation-1-odds-ratios"><span class="header-section-number">9.4.1</span> Translation 1 — odds ratios</a></li>
   <li><a href="#translation-2-predicted-probabilities" id="toc-translation-2-predicted-probabilities" class="nav-link" data-scroll-target="#translation-2-predicted-probabilities"><span class="header-section-number">9.4.2</span> Translation 2 — predicted probabilities</a></li>
-  <li><a href="#does-it-fit" id="toc-does-it-fit" class="nav-link" data-scroll-target="#does-it-fit"><span class="header-section-number">9.4.3</span> Does it fit?</a></li>
+  <li><a href="#the-gap-needs-its-own-posterior" id="toc-the-gap-needs-its-own-posterior" class="nav-link" data-scroll-target="#the-gap-needs-its-own-posterior"><span class="header-section-number">9.4.3</span> The gap needs its own posterior</a></li>
+  <li><a href="#does-it-fit" id="toc-does-it-fit" class="nav-link" data-scroll-target="#does-it-fit"><span class="header-section-number">9.4.4</span> Does it fit?</a></li>
   <li><a href="#your-turn" id="toc-your-turn" class="nav-link" data-scroll-target="#your-turn">Your turn</a></li>
   </ul></li>
   <li><a href="#on-the-job" id="toc-on-the-job" class="nav-link" data-scroll-target="#on-the-job">On the job</a></li>
@@ -546,6 +548,14 @@ Note
 <p>This is the last new model family in Part III. Chapter 10 then takes everything from Chapter 1 to here and turns it into a repeatable workflow you can apply to your own questions.</p>
 </div>
 </div>
+</section>
+<section id="analysis-strategy" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="analysis-strategy">Analysis strategy</h3>
+<p><strong>What we have.</strong> One row per salesperson — a customer rating, a performance tier, and a flag saying whether they were promoted. The flag is the outcome and it is the awkward part: it takes exactly two values, so the tools from Chapters 6 and 7, which predict a quantity that can sit anywhere on a line, will not do as they stand.</p>
+<p><strong>What would answer the question.</strong> Not a coefficient. What the VP of Sales can act on is a <strong>probability</strong>: for a salesperson with these characteristics, how likely is promotion, and how much does that change if one characteristic changes? So the target is a probability with an interval on it, and everything we build should be built to produce one.</p>
+<p><strong>What could go wrong.</strong> Promotion is relatively uncommon, so apparent differences between groups may rest on a handful of people — Chapter 3’s warning, and the reason we want intervals rather than point estimates. And the two predictors move together: better-rated salespeople tend to sit in higher tiers, so a model with one will not say what a model with both says.</p>
+<p><strong>So the plan.</strong> Get the outcome onto a scale a regression can work on — the one genuinely new idea here. Fit the same <code>brm()</code> as before, with the family changed. Translate back to probabilities, because that is the scale the question was asked in. Then check that the model reproduces how many people were actually promoted.</p>
+<p><strong>What would make us stop.</strong> If that last check fails, nothing from the three steps before it is worth reporting, and we go back to the specification rather than to the interpretation.</p>
 </section>
 </section>
 <section id="what-youll-be-able-to-do-by-the-end" class="level2 unnumbered">
@@ -940,18 +950,19 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-8"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-8-1"><a href="#annotated-cell-8-1" aria-hidden="true" tabindex="-1"></a>tiers <span class="ot">&lt;-</span> <span class="fu">levels</span>(salespeople<span class="sc">$</span>performance_f)</span>
 <span id="annotated-cell-8-2"><a href="#annotated-cell-8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a>headline <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="annotated-cell-8-3"><a href="#annotated-cell-8-3" aria-hidden="true" tabindex="-1"></a>headline_draws <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-8-4" class="code-annotation-target"><a href="#annotated-cell-8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_rate_s =</span> <span class="dv">0</span>,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-8" data-target-annotation="2" onclick="event.preventDefault();">2</a><span id="annotated-cell-8-5" class="code-annotation-target"><a href="#annotated-cell-8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">performance_f   =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="fu">last</span>(tiers), tiers[<span class="dv">2</span>]),</span>
 <span id="annotated-cell-8-6"><a href="#annotated-cell-8-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels =</span> tiers)</span>
 <span id="annotated-cell-8-7"><a href="#annotated-cell-8-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-8-8"><a href="#annotated-cell-8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_logit) <span class="sc">|&gt;</span></span>
-<span id="annotated-cell-8-9"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>)</span>
-<span id="annotated-cell-8-10"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a>p_top <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> <span class="fu">last</span>(tiers)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
-<span id="annotated-cell-8-12"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>p_mid <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> tiers[<span class="dv">2</span>])    <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
-<span id="annotated-cell-8-13"><a href="#annotated-cell-8-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-8-14"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a>headline</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="annotated-cell-8-8"><a href="#annotated-cell-8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_logit)</span>
+<span id="annotated-cell-8-9"><a href="#annotated-cell-8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-10"><a href="#annotated-cell-8-10" aria-hidden="true" tabindex="-1"></a>headline <span class="ot">&lt;-</span> headline_draws <span class="sc">|&gt;</span> <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>)</span>
+<span id="annotated-cell-8-11"><a href="#annotated-cell-8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-12"><a href="#annotated-cell-8-12" aria-hidden="true" tabindex="-1"></a>p_top <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> <span class="fu">last</span>(tiers)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
+<span id="annotated-cell-8-13"><a href="#annotated-cell-8-13" aria-hidden="true" tabindex="-1"></a>p_mid <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> tiers[<span class="dv">2</span>])    <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
+<span id="annotated-cell-8-14"><a href="#annotated-cell-8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-8-15"><a href="#annotated-cell-8-15" aria-hidden="true" tabindex="-1"></a>headline</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-8" data-target-annotation="1">1</dt>
@@ -973,6 +984,34 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 # ℹ 1 more variable: .interval &lt;chr&gt;</code></pre>
 </div>
 </div>
+</section>
+<section id="the-gap-needs-its-own-posterior" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="the-gap-needs-its-own-posterior"><span class="header-section-number">9.4.3</span> The gap needs its own posterior</h3>
+<p>Those are two intervals, and it is tempting to look at them, see that they do not overlap, and call the gap established. Chapter 7 was careful not to do that, and the reason applies here unchanged: both estimates come out of the <strong>same</strong> model, so their draws are correlated, and summarising each first and then subtracting throws that correlation away.</p>
+<p>So take the difference draw by draw, exactly as Chapter 7 did:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a>gap <span class="ot">&lt;-</span> headline_draws <span class="sc">|&gt;</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-9-2" class="code-annotation-target"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compare_levels</span>(.epred, <span class="at">by =</span> performance_f,</span>
+<span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">comparison =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="fu">last</span>(tiers), tiers[<span class="dv">2</span>]))) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-9-4"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-9-5"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">median_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>)</span>
+<span id="annotated-cell-9-6"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-9-7"><a href="#annotated-cell-9-7" aria-hidden="true" tabindex="-1"></a>gap</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-9" data-code-lines="2" data-code-annotation="1">The same <code>compare_levels()</code> from Chapter 7, now on the probability scale rather than the sales scale. The result is a posterior for <em>the gap itself</em>, in percentage points of promotion probability — which is the quantity the sentence below is about, and therefore the quantity that should carry the interval.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 6
+  .epred .lower .upper .width .point .interval
+   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    
+1  0.300  0.149  0.448   0.95 median qi       </code></pre>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -983,25 +1022,55 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><em>“A top-rated salesperson with average customer scores has about a 51% chance of promotion. A mid-tier one with the same customer scores has about 21%. We’re confident in that gap — and customer rating matters too, but much less than the performance tier does.”</em></p>
-<p>One chart, one sentence, no jargon, and a number attached to every claim. That’s the deliverable.</p>
+<p><em>“A top-rated salesperson with average customer scores has about a 51% chance of promotion. A mid-tier one with the same customer scores has about 21%. The gap between them is about 30 percentage points, and we can put it between 15 and 45 — and customer rating matters too, but much less than the performance tier does.”</em></p>
+<p>One chart, one sentence, no jargon, and a number attached to every claim — including to the comparison, which is the claim the room will actually repeat. That’s the deliverable.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why not just say the intervals don’t overlap?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because it answers a slightly different question, and it happens to be safe here rather than being safe in general.</p>
+<p>Two intervals that don’t overlap do imply a difference. But two intervals that <em>do</em> overlap can still sit either side of a gap the model is confident about — the correlation between the draws can make the difference far better determined than either estimate is on its own. Reading confidence off an overlap is therefore right sometimes and conservative the rest of the time, in a way you can’t tell apart by looking.</p>
+<p>The rule from Chapter 7 stands, and it is short: <strong>if the claim is about a difference, state the posterior of the difference.</strong> It costs one line of code, and it is the number the stakeholder is being asked to rely on.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Closing the loop on the rating itself
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Chapter 7 flagged that these performance ratings are assigned by different managers to different standards, and pooled them anyway for teaching. That assumption is still in force here, and it matters more now than it did there, because the rating has stopped being the thing being described and become a <strong>predictor of who gets promoted</strong>.</p>
+<p>So state it in the deliverable, not in a footnote: this model takes the ratings as given, and reads “top-rated” as <em>“rated 4 by their own manager”</em>. If rating standards vary across managers — and Chapter 8 argued they almost certainly do — then part of what looks like a promotion advantage for top performers is a promotion advantage for people with generous managers, and this model cannot tell you how much.</p>
+<p>The more rigorous version is a multilevel one, and by this point in the book it is a formula rather than a project: add <code>(1 | manager_id)</code> so each manager gets their own baseline, and Chapter 8’s partial pooling handles the managers with only a handful of reports. If your HRIS carries the rater, it is worth the extra term. If it doesn’t — which is common — then say the sentence above and let the reader discount accordingly.</p>
 </div>
 </div>
 </section>
-<section id="does-it-fit" class="level3" data-number="9.4.3">
-<h3 data-number="9.4.3" class="anchored" data-anchor-id="does-it-fit"><span class="header-section-number">9.4.3</span> Does it fit?</h3>
+<section id="does-it-fit" class="level3" data-number="9.4.4">
+<h3 data-number="9.4.4" class="anchored" data-anchor-id="does-it-fit"><span class="header-section-number">9.4.4</span> Does it fit?</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-9-1" class="code-annotation-target"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fit_logit, <span class="at">type =</span> <span class="st">"bars"</span>, <span class="at">ndraws =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
-<span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Not promoted"</span>, <span class="st">"Promoted"</span>)) <span class="sc">+</span></span>
-<span id="annotated-cell-9-4"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior predictive check (binary outcome)"</span>,</span>
-<span id="annotated-cell-9-5"><a href="#annotated-cell-9-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Bars = what the model predicts; points = what actually happened"</span>,</span>
-<span id="annotated-cell-9-6"><a href="#annotated-cell-9-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Number of salespeople"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1" onclick="event.preventDefault();">1</a><span id="annotated-cell-10-1" class="code-annotation-target"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fit_logit, <span class="at">type =</span> <span class="st">"bars"</span>, <span class="at">ndraws =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-10-2"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="annotated-cell-10-3"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Not promoted"</span>, <span class="st">"Promoted"</span>)) <span class="sc">+</span></span>
+<span id="annotated-cell-10-4"><a href="#annotated-cell-10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior predictive check (binary outcome)"</span>,</span>
+<span id="annotated-cell-10-5"><a href="#annotated-cell-10-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Bars = what the model predicts; points = what actually happened"</span>,</span>
+<span id="annotated-cell-10-6"><a href="#annotated-cell-10-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Number of salespeople"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="1" data-code-annotation="1"><code>type = "bars"</code> instead of the default density overlay. With a 0/1 outcome there are only two possible values, so a smooth density curve would be meaningless — we want the observed <em>count</em> of 0s and 1s compared against the counts the model predicts. Match the check to the shape of the outcome.</span>
+<span data-code-cell="annotated-cell-10" data-code-lines="1" data-code-annotation="1"><code>type = "bars"</code> instead of the default density overlay. With a 0/1 outcome there are only two possible values, so a smooth density curve would be meaningless — we want the observed <em>count</em> of 0s and 1s compared against the counts the model predicts. Match the check to the shape of the outcome.</span>
 </dd>
 </dl>
 </div>
@@ -1020,7 +1089,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <p><strong>1.</strong> Add <code>sales</code> to the logistic model. Does higher sales change promotion odds, holding customer rating and performance tier constant? Report its odds ratio — and then convert it into a change in probability at a 30% baseline, which is the version you’d actually present.</p>
 <p><strong>2.</strong> Compare the model with and without <code>sales</code> using LOO from Chapter 7. Does it earn its place?</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <hr>
 </section>
@@ -1062,6 +1131,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <li>An <strong>odds ratio</strong> is not a ratio of probabilities. An OR of 3 at a 30% baseline is a move to 56% — not “three times as likely”. Convert to probabilities before presenting.</li>
 <li><strong>Fit on whatever scale suits the model; present on the scale the business thinks in.</strong></li>
 <li>Match your <strong>posterior predictive check</strong> to the shape of the outcome — <code>type = "bars"</code> for binary.</li>
+<li>When the claim is about a <strong>gap between two groups</strong>, compute the gap’s own posterior with <code>compare_levels()</code>. Two non-overlapping intervals are not the same statement, and the difference is the number the stakeholder will quote.</li>
 </ol>
 </div>
 </div>
@@ -1539,495 +1609,604 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Logistic Regression: Modelling a Yes/No Outcome</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Welcome back {.unnumbered}</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>Every model so far has predicted a **quantity** — a sales figure, an</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>average, a rate. Today the outcome changes shape: it becomes a</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>**yes or no**.</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>That's a bigger share of People Analytics than the continuous case.</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>Did they accept the offer? Did they pass probation? Were they</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>promoted? Did they leave? Each is a coin that landed one way or the</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>other, and each needs a model that respects the fact.</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Back to the question we started with {.unnumbered}</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>Chapter 1 opened on *what predicts who gets promoted?* and we've been</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>circling it ever since. Your VP of Sales has the pieces now — the</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>promotion rate (Chapter 4), what a customer-rating point is worth</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>(Chapter 6), whether the performance ratings track anything real</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>(Chapter 7) — and she wants them assembled into one answer:</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Given what we know about a salesperson, how likely are they to be</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; promoted — and which factors actually move that number?**</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>The outcome <span class="in">`promoted`</span> is **0 or 1**. Everything else you know still</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>applies: same <span class="in">`brm()`</span>, same priors, same posteriors, same credible</span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>intervals. Only the family changes, and one new idea comes with it.</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>This is the last new model family in Part III. Chapter 10 then takes</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>everything from Chapter 1 to here and turns it into a repeatable</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>workflow you can apply to your own questions.</span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you'll be able to do by the end {.unnumbered}</span></span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Explain why a straight line can't model a yes/no outcome, and what</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    **log-odds** do about it</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Fit a **logistic regression** in <span class="in">`brms`</span></span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Interpret coefficients as **odds ratios** — and avoid the mistake</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    almost everyone makes with them</span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Report results as **predicted probabilities** a stakeholder can act</span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>    on</span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Match a **posterior predictive check** to a binary outcome</span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(peopleanalyticsdata)</span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdist)</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>))</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"salespeople"</span>, <span class="at">package =</span> <span class="st">"peopleanalyticsdata"</span>)</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Chapter 1 found a single missing value in each of `sales`,</span></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="co"># `customer_rate` and `performance`; dropping those rows here keeps</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="co"># the rest of this chapter's code simple.</span></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>salespeople <span class="ot">&lt;-</span> salespeople <span class="sc">|&gt;</span></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(sales, customer_rate, performance, promoted) <span class="sc">|&gt;</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">customer_rate_s =</span> <span class="fu">as.numeric</span>(<span class="fu">scale</span>(customer_rate)),   <span class="co"># &lt;1&gt;</span></span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">performance_f   =</span> <span class="fu">factor</span>(performance)                 <span class="co"># &lt;2&gt;</span></span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`scale()`</span> **standardises**: it subtracts the mean and divides by the</span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    standard deviation, so <span class="in">`customer_rate_s`</span> is measured in standard</span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    deviations away from average rather than in rating points. Chapter 6</span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    only centred; the reason for the extra step is in the box below the</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    model.</span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Four labels, not a number, exactly as in Chapter 7.</span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="fu">## Back to our opening question</span></span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>*What predicts who gets promoted?* We asked this in Chapter 1 and have</span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>been building toward it ever since.</span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>The outcome <span class="in">`promoted`</span> is **0 or 1** — and that needs a different kind</span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>of model.</span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why a straight line fails</span></span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>If we fit an ordinary regression to a 0/1 outcome, the line keeps</span>
-<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>going — because that's what lines do.</span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r why-not-linear}</span></span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the plotting code"</span></span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salespeople, <span class="fu">aes</span>(customer_rate, promoted)) <span class="sc">+</span></span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> <span class="fl">0.03</span>, <span class="at">alpha =</span> <span class="fl">0.20</span>, <span class="at">colour =</span> <span class="st">"#122a52"</span>) <span class="sc">+</span></span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">colour =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> binomial),</span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"#3d68a8"</span>) <span class="sc">+</span></span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_limits</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"A straight line runs off the end of the world"</span>,</span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Red = ordinary linear fit; blue = logistic fit; dotted = the 0 and 1 boundaries"</span>,</span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer rating"</span>, <span class="at">y =</span> <span class="st">"Promoted (0/1)"</span>)</span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>Follow the red line far enough and it predicts a **−0.3 probability**</span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>of promotion, or a **1.4**. Both are nonsense — probabilities live</span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>between 0 and 1.</span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a>The blue line bends. It approaches 0 and 1 without ever reaching them,</span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>which is exactly the behaviour a probability should have. The rest of</span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>this section is how it does that.</span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a><span class="fu">### Odds, and then log-odds</span></span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>The trick is to stop modelling the probability directly and model</span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>something unbounded instead. It takes two steps.</span>
-<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>**Step one: odds.** Instead of "30% chance of promotion", say the</span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>**odds** — the chance it happens divided by the chance it doesn't:</span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>$$\text{odds} = \frac{p}{1-p}$$</span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a>A 30% chance is odds of 0.3 / 0.7 ≈ **0.43**, or a bit under one to</span>
-<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a>two. A 50% chance is odds of exactly 1. A 90% chance is odds of 9.</span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>That's progress: probabilities were trapped between 0 and 1, but odds</span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>can be anything from 0 upwards. Still bounded below, though.</span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>**Step two: take the logarithm.** Log-odds — the **logit** — run from</span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a>minus infinity to plus infinity:</span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a>$$\text{logit}(p) = \log<span class="sc">\!</span>\left(\frac{p}{1-p}\right)$$</span>
-<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Probability <span class="pp">|</span> Odds <span class="pp">|</span> Log-odds <span class="pp">|</span></span>
-<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|-------------|-------------|</span></span>
-<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.10 <span class="pp">|</span> 0.11 <span class="pp">|</span> −2.20 <span class="pp">|</span></span>
-<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.30 <span class="pp">|</span> 0.43 <span class="pp">|</span> −0.85 <span class="pp">|</span></span>
-<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.50 <span class="pp">|</span> 1.00 <span class="pp">|</span> **0.00** <span class="pp">|</span></span>
-<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.70 <span class="pp">|</span> 2.33 <span class="pp">|</span> 0.85 <span class="pp">|</span></span>
-<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.90 <span class="pp">|</span> 9.00 <span class="pp">|</span> 2.20 <span class="pp">|</span></span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>Two things worth memorising from that table: **log-odds of 0 means a</span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a>50/50 chance**, and the scale is **symmetric** — 0.3 and 0.7 sit the</span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a>same distance either side of zero.</span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a>Now a straight line is safe. We fit the line on the log-odds scale,</span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>where it can run off in either direction without embarrassment, then</span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>translate back to a probability at the end. That translation is what</span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>bends the blue curve.</span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a>\text{promoted}_i \sim \text{Bernoulli}(p_i), \qquad</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a>\text{logit}(p_i) = \alpha + \beta_1 \text{customer<span class="sc">\_</span>rate}_i + \beta_2 \text{performance}_i</span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a>The cost of this trick is that your coefficients are now in log-odds,</span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>which nobody has intuition for. That's a presentation problem, not a</span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>modelling one, and the two sections after the fit are entirely about</span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>solving it.</span>
-<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a><span class="fu">### One word changes in `brms`</span></span>
-<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a><span class="fu">brm</span>(sales <span class="sc">~</span> customer_rate_c, <span class="at">family =</span> <span class="fu">gaussian</span>())             <span class="co"># continuous outcome</span></span>
-<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a><span class="fu">brm</span>(promoted <span class="sc">~</span> customer_rate_s <span class="sc">+</span> performance_f, <span class="at">family =</span> <span class="fu">bernoulli</span>())  <span class="co"># yes/no outcome</span></span>
-<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>Priors, posteriors, credible intervals, checks — all identical to what</span>
-<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>you already know.</span>
-<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>A prior on the log-odds scale is hard to judge by eye — <span class="in">`1.5`</span></span>
-<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>doesn't mean much until you translate it. So this is the chapter where a</span>
-<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>**prior predictive check** earns its keep, exactly as Chapter 5</span>
-<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a>described: simulate draws from the intercept prior and translate them to a</span>
-<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a>probability:</span>
-<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot-prior-logit}</span></span>
-<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">901</span>)</span>
-<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">logit_intercept =</span> <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">1.5</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">plogis</span>(logit_intercept)) <span class="sc">|&gt;</span>                       <span class="co"># &lt;1&gt;</span></span>
-<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(prob)) <span class="sc">+</span></span>
-<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"#8fabd0"</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"What Normal(0, 1.5) on the log-odds scale implies"</span>,</span>
-<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Simulated draws from the intercept prior, translated to a baseline promotion probability"</span>,</span>
-<span id="cb7-200"><a href="#cb7-200" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Implied baseline promotion probability"</span>, <span class="at">y =</span> <span class="st">"Simulated draws"</span>)</span>
-<span id="cb7-201"><a href="#cb7-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-202"><a href="#cb7-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-203"><a href="#cb7-203" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`plogis()`</span> is the inverse logit — it converts log-odds back to a</span>
-<span id="cb7-204"><a href="#cb7-204" aria-hidden="true" tabindex="-1"></a>    probability, undoing the two-step transformation above. Its</span>
-<span id="cb7-205"><a href="#cb7-205" aria-hidden="true" tabindex="-1"></a>    partner <span class="in">`qlogis()`</span> goes the other way. You will use <span class="in">`plogis()`</span></span>
-<span id="cb7-206"><a href="#cb7-206" aria-hidden="true" tabindex="-1"></a>    constantly from here on.</span>
-<span id="cb7-207"><a href="#cb7-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-208"><a href="#cb7-208" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb7-209"><a href="#cb7-209" aria-hidden="true" tabindex="-1"></a>Spread fairly evenly across plausible promotion rates, with a little</span>
-<span id="cb7-210"><a href="#cb7-210" aria-hidden="true" tabindex="-1"></a>extra weight near the extremes — reasonable for "we don't know the</span>
-<span id="cb7-211"><a href="#cb7-211" aria-hidden="true" tabindex="-1"></a>baseline rate yet," and nowhere near committing to, say, "everyone</span>
-<span id="cb7-212"><a href="#cb7-212" aria-hidden="true" tabindex="-1"></a>gets promoted."</span>
-<span id="cb7-213"><a href="#cb7-213" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-214"><a href="#cb7-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-215"><a href="#cb7-215" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb7-216"><a href="#cb7-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-217"><a href="#cb7-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fit the model</span></span>
-<span id="cb7-218"><a href="#cb7-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-219"><a href="#cb7-219" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fit-logit}</span></span>
-<span id="cb7-220"><a href="#cb7-220" aria-hidden="true" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb7-221"><a href="#cb7-221" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fl">1.5</span>), <span class="at">class =</span> Intercept),</span>
-<span id="cb7-222"><a href="#cb7-222" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">1</span>),   <span class="at">class =</span> b)               <span class="co"># &lt;1&gt;</span></span>
-<span id="cb7-223"><a href="#cb7-223" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-224"><a href="#cb7-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-225"><a href="#cb7-225" aria-hidden="true" tabindex="-1"></a>fit_logit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb7-226"><a href="#cb7-226" aria-hidden="true" tabindex="-1"></a>  promoted <span class="sc">~</span> customer_rate_s <span class="sc">+</span> performance_f,</span>
-<span id="cb7-227"><a href="#cb7-227" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> salespeople, <span class="at">family =</span> <span class="fu">bernoulli</span>(),</span>
-<span id="cb7-228"><a href="#cb7-228" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> priors,</span>
-<span id="cb7-229"><a href="#cb7-229" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">9</span>, <span class="at">refresh =</span> <span class="dv">0</span></span>
-<span id="cb7-230"><a href="#cb7-230" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb7-231"><a href="#cb7-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-232"><a href="#cb7-232" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_logit)</span>
-<span id="cb7-233"><a href="#cb7-233" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-234"><a href="#cb7-234" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-235"><a href="#cb7-235" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>No <span class="in">`sigma`</span> this time. A Bernoulli outcome has no separate spread</span>
-<span id="cb7-236"><a href="#cb7-236" aria-hidden="true" tabindex="-1"></a>    parameter to estimate — once you know the probability, the</span>
-<span id="cb7-237"><a href="#cb7-237" aria-hidden="true" tabindex="-1"></a>    variability is fully determined. One fewer thing to think about.</span>
-<span id="cb7-238"><a href="#cb7-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-239"><a href="#cb7-239" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb7-240"><a href="#cb7-240" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why standardised, not just centred?</span></span>
-<span id="cb7-241"><a href="#cb7-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-242"><a href="#cb7-242" aria-hidden="true" tabindex="-1"></a>Chapter 6 centred <span class="in">`customer_rate`</span>. Here we **standardised** it instead —</span>
-<span id="cb7-243"><a href="#cb7-243" aria-hidden="true" tabindex="-1"></a>that is the <span class="in">`scale()`</span> call in the setup chunk at the top of the chapter,</span>
-<span id="cb7-244"><a href="#cb7-244" aria-hidden="true" tabindex="-1"></a>which centres the variable *and* divides by its standard deviation, so</span>
-<span id="cb7-245"><a href="#cb7-245" aria-hidden="true" tabindex="-1"></a>one unit is now one SD rather than one rating point.</span>
-<span id="cb7-246"><a href="#cb7-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-247"><a href="#cb7-247" aria-hidden="true" tabindex="-1"></a>The reason is the prior. On the log-odds scale, <span class="in">`normal(0, 1)`</span> is a</span>
-<span id="cb7-248"><a href="#cb7-248" aria-hidden="true" tabindex="-1"></a>sensible weakly-informative prior for a coefficient — it says a</span>
-<span id="cb7-249"><a href="#cb7-249" aria-hidden="true" tabindex="-1"></a>one-unit change is unlikely to swing the odds by more than a factor of</span>
-<span id="cb7-250"><a href="#cb7-250" aria-hidden="true" tabindex="-1"></a>about seven. But "one unit" only means something once you've fixed the</span>
-<span id="cb7-251"><a href="#cb7-251" aria-hidden="true" tabindex="-1"></a>scale of the predictor. Standardising makes that prior mean the same</span>
-<span id="cb7-252"><a href="#cb7-252" aria-hidden="true" tabindex="-1"></a>thing regardless of whether the variable is measured in points,</span>
-<span id="cb7-253"><a href="#cb7-253" aria-hidden="true" tabindex="-1"></a>pounds or years.</span>
-<span id="cb7-254"><a href="#cb7-254" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-255"><a href="#cb7-255" aria-hidden="true" tabindex="-1"></a>The cost is that your coefficients are now "per standard deviation",</span>
-<span id="cb7-256"><a href="#cb7-256" aria-hidden="true" tabindex="-1"></a>which is not a unit anyone thinks in — so we translate back before</span>
-<span id="cb7-257"><a href="#cb7-257" aria-hidden="true" tabindex="-1"></a>showing anyone.</span>
-<span id="cb7-258"><a href="#cb7-258" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-259"><a href="#cb7-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-260"><a href="#cb7-260" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb7-261"><a href="#cb7-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-262"><a href="#cb7-262" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpreting the results</span></span>
-<span id="cb7-263"><a href="#cb7-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-264"><a href="#cb7-264" aria-hidden="true" tabindex="-1"></a><span class="fu">### Translation 1 — odds ratios</span></span>
-<span id="cb7-265"><a href="#cb7-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-266"><a href="#cb7-266" aria-hidden="true" tabindex="-1"></a>Exponentiating a log-odds coefficient turns it into an **odds ratio**:</span>
-<span id="cb7-267"><a href="#cb7-267" aria-hidden="true" tabindex="-1"></a>the factor by which the odds multiply.</span>
-<span id="cb7-268"><a href="#cb7-268" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-269"><a href="#cb7-269" aria-hidden="true" tabindex="-1"></a><span class="in">```{r odds-ratios}</span></span>
-<span id="cb7-270"><a href="#cb7-270" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(fit_logit) <span class="sc">|&gt;</span></span>
-<span id="cb7-271"><a href="#cb7-271" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="st">"term"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-272"><a href="#cb7-272" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">odds_ratio =</span> <span class="fu">exp</span>(Estimate)) <span class="sc">|&gt;</span>          <span class="co"># &lt;1&gt;</span></span>
-<span id="cb7-273"><a href="#cb7-273" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, Estimate, odds_ratio)</span>
-<span id="cb7-274"><a href="#cb7-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-275"><a href="#cb7-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-276"><a href="#cb7-276" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`exp()`</span> undoes the logarithm, taking us from log-odds back to</span>
-<span id="cb7-277"><a href="#cb7-277" aria-hidden="true" tabindex="-1"></a>    odds. An odds ratio above 1 means more likely to be promoted;</span>
-<span id="cb7-278"><a href="#cb7-278" aria-hidden="true" tabindex="-1"></a>    below 1, less likely; exactly 1, no effect.</span>
-<span id="cb7-279"><a href="#cb7-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-280"><a href="#cb7-280" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb7-281"><a href="#cb7-281" aria-hidden="true" tabindex="-1"></a><span class="fu">## The mistake almost everyone makes with odds ratios</span></span>
-<span id="cb7-282"><a href="#cb7-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-283"><a href="#cb7-283" aria-hidden="true" tabindex="-1"></a>An odds ratio of 3 does **not** mean "three times as likely".</span>
-<span id="cb7-284"><a href="#cb7-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-285"><a href="#cb7-285" aria-hidden="true" tabindex="-1"></a>It means the *odds* triple, and odds are not probabilities. Work it</span>
-<span id="cb7-286"><a href="#cb7-286" aria-hidden="true" tabindex="-1"></a>through at a 30% baseline promotion rate:</span>
-<span id="cb7-287"><a href="#cb7-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-288"><a href="#cb7-288" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Odds of 0.3 / 0.7 = **0.43**</span>
-<span id="cb7-289"><a href="#cb7-289" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Triple them: **1.29**</span>
-<span id="cb7-290"><a href="#cb7-290" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Convert back: 1.29 / (1 + 1.29) = **56%**</span>
-<span id="cb7-291"><a href="#cb7-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-292"><a href="#cb7-292" aria-hidden="true" tabindex="-1"></a>So an odds ratio of 3 took the probability from 30% to 56% — not quite</span>
-<span id="cb7-293"><a href="#cb7-293" aria-hidden="true" tabindex="-1"></a>**double**, nowhere near triple. Report it as "three times as likely"</span>
-<span id="cb7-294"><a href="#cb7-294" aria-hidden="true" tabindex="-1"></a>and you have overstated your finding by a factor of about 1.6.</span>
-<span id="cb7-295"><a href="#cb7-295" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-296"><a href="#cb7-296" aria-hidden="true" tabindex="-1"></a>The gap depends entirely on the baseline. When an outcome is **rare**</span>
-<span id="cb7-297"><a href="#cb7-297" aria-hidden="true" tabindex="-1"></a>— a 2% chance of something — odds and probabilities are close, and an</span>
-<span id="cb7-298"><a href="#cb7-298" aria-hidden="true" tabindex="-1"></a>odds ratio of 3 really does mean roughly three times as likely. When</span>
-<span id="cb7-299"><a href="#cb7-299" aria-hidden="true" tabindex="-1"></a>the outcome is **common**, which is nearly everything in People</span>
-<span id="cb7-300"><a href="#cb7-300" aria-hidden="true" tabindex="-1"></a>Analytics, the two diverge badly.</span>
-<span id="cb7-301"><a href="#cb7-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-302"><a href="#cb7-302" aria-hidden="true" tabindex="-1"></a>This matters beyond pedantry. Odds ratios turn up constantly in pay</span>
-<span id="cb7-303"><a href="#cb7-303" aria-hidden="true" tabindex="-1"></a>equity, promotion equity and adverse impact analysis — exactly the</span>
-<span id="cb7-304"><a href="#cb7-304" aria-hidden="true" tabindex="-1"></a>places where overstating an effect by 60% is least acceptable. If you</span>
-<span id="cb7-305"><a href="#cb7-305" aria-hidden="true" tabindex="-1"></a>are going to quote one to a non-technical audience, **convert it to</span>
-<span id="cb7-306"><a href="#cb7-306" aria-hidden="true" tabindex="-1"></a>probabilities first**, which is the next section.</span>
-<span id="cb7-307"><a href="#cb7-307" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-308"><a href="#cb7-308" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-309"><a href="#cb7-309" aria-hidden="true" tabindex="-1"></a><span class="fu">### Translation 2 — predicted probabilities</span></span>
-<span id="cb7-310"><a href="#cb7-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-311"><a href="#cb7-311" aria-hidden="true" tabindex="-1"></a>Odds ratios are exact but abstract. **Probabilities** are what a</span>
-<span id="cb7-312"><a href="#cb7-312" aria-hidden="true" tabindex="-1"></a>manager can act on.</span>
-<span id="cb7-313"><a href="#cb7-313" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-314"><a href="#cb7-314" aria-hidden="true" tabindex="-1"></a><span class="in">```{r predicted-prob}</span></span>
-<span id="cb7-315"><a href="#cb7-315" aria-hidden="true" tabindex="-1"></a>rate_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(salespeople<span class="sc">$</span>customer_rate)</span>
-<span id="cb7-316"><a href="#cb7-316" aria-hidden="true" tabindex="-1"></a>rate_sd   <span class="ot">&lt;-</span> <span class="fu">sd</span>(salespeople<span class="sc">$</span>customer_rate)</span>
-<span id="cb7-317"><a href="#cb7-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-318"><a href="#cb7-318" aria-hidden="true" tabindex="-1"></a>tier_colours <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#9db4d4"</span>, <span class="st">"#5a83b8"</span>, <span class="st">"#2f5389"</span>, <span class="st">"#122a52"</span>)</span>
-<span id="cb7-319"><a href="#cb7-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-320"><a href="#cb7-320" aria-hidden="true" tabindex="-1"></a>promo_grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(</span>
-<span id="cb7-321"><a href="#cb7-321" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_rate_s =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">by =</span> <span class="fl">0.1</span>),</span>
-<span id="cb7-322"><a href="#cb7-322" aria-hidden="true" tabindex="-1"></a>  <span class="at">performance_f   =</span> <span class="fu">levels</span>(salespeople<span class="sc">$</span>performance_f)</span>
-<span id="cb7-323"><a href="#cb7-323" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb7-324"><a href="#cb7-324" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">customer_rate =</span> customer_rate_s <span class="sc">*</span> rate_sd <span class="sc">+</span> rate_mean)   <span class="co"># &lt;1&gt;</span></span>
-<span id="cb7-325"><a href="#cb7-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-326"><a href="#cb7-326" aria-hidden="true" tabindex="-1"></a>promo_grid <span class="sc">|&gt;</span></span>
-<span id="cb7-327"><a href="#cb7-327" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_logit) <span class="sc">|&gt;</span></span>
-<span id="cb7-328"><a href="#cb7-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-329"><a href="#cb7-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(customer_rate, .epred,</span>
-<span id="cb7-330"><a href="#cb7-330" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour =</span> performance_f, <span class="at">fill =</span> performance_f)) <span class="sc">+</span></span>
-<span id="cb7-331"><a href="#cb7-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> .lower, <span class="at">ymax =</span> .upper), <span class="at">alpha =</span> <span class="fl">0.15</span>, <span class="at">colour =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb7-332"><a href="#cb7-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb7-333"><a href="#cb7-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> tier_colours) <span class="sc">+</span>                       <span class="co"># &lt;2&gt;</span></span>
-<span id="cb7-334"><a href="#cb7-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> tier_colours) <span class="sc">+</span></span>
-<span id="cb7-335"><a href="#cb7-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
-<span id="cb7-336"><a href="#cb7-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted promotion probability"</span>,</span>
-<span id="cb7-337"><a href="#cb7-337" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Rises with customer rating, and sharply with performance tier"</span>,</span>
-<span id="cb7-338"><a href="#cb7-338" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer rating"</span>, <span class="at">y =</span> <span class="st">"P(promoted)"</span>,</span>
-<span id="cb7-339"><a href="#cb7-339" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">"Performance tier"</span>, <span class="at">fill =</span> <span class="st">"Performance tier"</span>)</span>
-<span id="cb7-340"><a href="#cb7-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-341"><a href="#cb7-341" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-342"><a href="#cb7-342" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Undoing the standardisation for the axis. The model was fitted on</span>
-<span id="cb7-343"><a href="#cb7-343" aria-hidden="true" tabindex="-1"></a>    standardised units because that made the priors sensible — but</span>
-<span id="cb7-344"><a href="#cb7-344" aria-hidden="true" tabindex="-1"></a>    "customer rating of 4.2" is a thing your audience recognises and</span>
-<span id="cb7-345"><a href="#cb7-345" aria-hidden="true" tabindex="-1"></a>    "0.7 standard deviations" is not. **Fit on whatever scale suits</span>
-<span id="cb7-346"><a href="#cb7-346" aria-hidden="true" tabindex="-1"></a>    the model; present on the scale the business thinks in.**</span>
-<span id="cb7-347"><a href="#cb7-347" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>A sequential ramp: light for tier 1, darkest for tier 4. Performance</span>
-<span id="cb7-348"><a href="#cb7-348" aria-hidden="true" tabindex="-1"></a>    tier is **ordered**, so the colours should be ordered too — a reader</span>
-<span id="cb7-349"><a href="#cb7-349" aria-hidden="true" tabindex="-1"></a>    can then rank the lines without consulting the legend. The four</span>
-<span id="cb7-350"><a href="#cb7-350" aria-hidden="true" tabindex="-1"></a>    shades are spaced far enough apart in lightness to stay separable</span>
-<span id="cb7-351"><a href="#cb7-351" aria-hidden="true" tabindex="-1"></a>    when printed or projected.</span>
-<span id="cb7-352"><a href="#cb7-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-353"><a href="#cb7-353" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb7-354"><a href="#cb7-354" aria-hidden="true" tabindex="-1"></a><span class="fu">## This chart is the deliverable</span></span>
-<span id="cb7-355"><a href="#cb7-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-356"><a href="#cb7-356" aria-hidden="true" tabindex="-1"></a>Everything else in this chapter is scaffolding. This is what goes on</span>
-<span id="cb7-357"><a href="#cb7-357" aria-hidden="true" tabindex="-1"></a>the slide.</span>
-<span id="cb7-358"><a href="#cb7-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-359"><a href="#cb7-359" aria-hidden="true" tabindex="-1"></a>Promotion likelihood **climbs with customer rating** and is</span>
-<span id="cb7-360"><a href="#cb7-360" aria-hidden="true" tabindex="-1"></a>**dramatically higher for top performers** — with honest uncertainty</span>
-<span id="cb7-361"><a href="#cb7-361" aria-hidden="true" tabindex="-1"></a>bands around both, on a scale anyone in a meeting can read. A talent team</span>
-<span id="cb7-362"><a href="#cb7-362" aria-hidden="true" tabindex="-1"></a>could act on it tomorrow: check whether the promotion process is</span>
-<span id="cb7-363"><a href="#cb7-363" aria-hidden="true" tabindex="-1"></a>weighting these factors the way leadership intends.</span>
-<span id="cb7-364"><a href="#cb7-364" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-365"><a href="#cb7-365" aria-hidden="true" tabindex="-1"></a>Note what isn't on it. No coefficients, no log-odds, no odds ratios,</span>
-<span id="cb7-366"><a href="#cb7-366" aria-hidden="true" tabindex="-1"></a>no p-values, no mention of <span class="in">`brms`</span>. The rigour is in how the number was</span>
-<span id="cb7-367"><a href="#cb7-367" aria-hidden="true" tabindex="-1"></a>produced, not in how much of the machinery you show.</span>
-<span id="cb7-368"><a href="#cb7-368" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-369"><a href="#cb7-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-370"><a href="#cb7-370" aria-hidden="true" tabindex="-1"></a>To say that out loud you need the two numbers themselves, not the</span>
-<span id="cb7-371"><a href="#cb7-371" aria-hidden="true" tabindex="-1"></a>chart. Pull them straight off the same posterior:</span>
-<span id="cb7-372"><a href="#cb7-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-373"><a href="#cb7-373" aria-hidden="true" tabindex="-1"></a><span class="in">```{r headline-numbers}</span></span>
-<span id="cb7-374"><a href="#cb7-374" aria-hidden="true" tabindex="-1"></a>tiers <span class="ot">&lt;-</span> <span class="fu">levels</span>(salespeople<span class="sc">$</span>performance_f)</span>
-<span id="cb7-375"><a href="#cb7-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-376"><a href="#cb7-376" aria-hidden="true" tabindex="-1"></a>headline <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb7-377"><a href="#cb7-377" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_rate_s =</span> <span class="dv">0</span>,                                   <span class="co"># &lt;1&gt;</span></span>
-<span id="cb7-378"><a href="#cb7-378" aria-hidden="true" tabindex="-1"></a>  <span class="at">performance_f   =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="fu">last</span>(tiers), tiers[<span class="dv">2</span>]),     <span class="co"># &lt;2&gt;</span></span>
-<span id="cb7-379"><a href="#cb7-379" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels =</span> tiers)</span>
-<span id="cb7-380"><a href="#cb7-380" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb7-381"><a href="#cb7-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_logit) <span class="sc">|&gt;</span></span>
-<span id="cb7-382"><a href="#cb7-382" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>)</span>
-<span id="cb7-383"><a href="#cb7-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-384"><a href="#cb7-384" aria-hidden="true" tabindex="-1"></a>p_top <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> <span class="fu">last</span>(tiers)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
-<span id="cb7-385"><a href="#cb7-385" aria-hidden="true" tabindex="-1"></a>p_mid <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> tiers[<span class="dv">2</span>])    <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
-<span id="cb7-386"><a href="#cb7-386" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-387"><a href="#cb7-387" aria-hidden="true" tabindex="-1"></a>headline</span>
-<span id="cb7-388"><a href="#cb7-388" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-389"><a href="#cb7-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-390"><a href="#cb7-390" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Standardised units, so zero **is** the average customer rating —</span>
-<span id="cb7-391"><a href="#cb7-391" aria-hidden="true" tabindex="-1"></a>    the same centring habit from Chapter 6, doing the same job.</span>
-<span id="cb7-392"><a href="#cb7-392" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The top tier and a mid tier, holding customer rating fixed so the</span>
-<span id="cb7-393"><a href="#cb7-393" aria-hidden="true" tabindex="-1"></a>    comparison isolates performance.</span>
-<span id="cb7-394"><a href="#cb7-394" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-395"><a href="#cb7-395" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb7-396"><a href="#cb7-396" aria-hidden="true" tabindex="-1"></a><span class="fu">## The sentence to go with it</span></span>
-<span id="cb7-397"><a href="#cb7-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-398"><a href="#cb7-398" aria-hidden="true" tabindex="-1"></a>*"A top-rated salesperson with average customer scores has about a</span>
-<span id="cb7-399"><a href="#cb7-399" aria-hidden="true" tabindex="-1"></a><span class="in">`r round(100 * p_top)`</span>% chance of promotion. A mid-tier one with the</span>
-<span id="cb7-400"><a href="#cb7-400" aria-hidden="true" tabindex="-1"></a>same customer scores has about <span class="in">`r round(100 * p_mid)`</span>%. We're</span>
-<span id="cb7-401"><a href="#cb7-401" aria-hidden="true" tabindex="-1"></a>confident in that gap — and customer rating matters too, but much less</span>
-<span id="cb7-402"><a href="#cb7-402" aria-hidden="true" tabindex="-1"></a>than the performance tier does."*</span>
-<span id="cb7-403"><a href="#cb7-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-404"><a href="#cb7-404" aria-hidden="true" tabindex="-1"></a>One chart, one sentence, no jargon, and a number attached to every</span>
-<span id="cb7-405"><a href="#cb7-405" aria-hidden="true" tabindex="-1"></a>claim. That's the deliverable.</span>
-<span id="cb7-406"><a href="#cb7-406" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-407"><a href="#cb7-407" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-408"><a href="#cb7-408" aria-hidden="true" tabindex="-1"></a><span class="fu">### Does it fit?</span></span>
-<span id="cb7-409"><a href="#cb7-409" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-410"><a href="#cb7-410" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ppc}</span></span>
-<span id="cb7-411"><a href="#cb7-411" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fit_logit, <span class="at">type =</span> <span class="st">"bars"</span>, <span class="at">ndraws =</span> <span class="dv">100</span>) <span class="sc">+</span>     <span class="co"># &lt;1&gt;</span></span>
-<span id="cb7-412"><a href="#cb7-412" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
-<span id="cb7-413"><a href="#cb7-413" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Not promoted"</span>, <span class="st">"Promoted"</span>)) <span class="sc">+</span></span>
-<span id="cb7-414"><a href="#cb7-414" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior predictive check (binary outcome)"</span>,</span>
-<span id="cb7-415"><a href="#cb7-415" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Bars = what the model predicts; points = what actually happened"</span>,</span>
-<span id="cb7-416"><a href="#cb7-416" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Number of salespeople"</span>)</span>
-<span id="cb7-417"><a href="#cb7-417" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-418"><a href="#cb7-418" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-419"><a href="#cb7-419" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`type = "bars"`</span> instead of the default density overlay. With a 0/1</span>
-<span id="cb7-420"><a href="#cb7-420" aria-hidden="true" tabindex="-1"></a>    outcome there are only two possible values, so a smooth density</span>
-<span id="cb7-421"><a href="#cb7-421" aria-hidden="true" tabindex="-1"></a>    curve would be meaningless — we want the observed *count* of 0s</span>
-<span id="cb7-422"><a href="#cb7-422" aria-hidden="true" tabindex="-1"></a>    and 1s compared against the counts the model predicts. Match the</span>
-<span id="cb7-423"><a href="#cb7-423" aria-hidden="true" tabindex="-1"></a>    check to the shape of the outcome.</span>
-<span id="cb7-424"><a href="#cb7-424" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-425"><a href="#cb7-425" aria-hidden="true" tabindex="-1"></a>You want the observed points to sit inside the predicted intervals for</span>
-<span id="cb7-426"><a href="#cb7-426" aria-hidden="true" tabindex="-1"></a>both bars. If the model systematically predicts too many promotions,</span>
-<span id="cb7-427"><a href="#cb7-427" aria-hidden="true" tabindex="-1"></a>you'll see it here and nowhere else.</span>
-<span id="cb7-428"><a href="#cb7-428" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-429"><a href="#cb7-429" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your turn {.unnumbered}</span></span>
-<span id="cb7-430"><a href="#cb7-430" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-431"><a href="#cb7-431" aria-hidden="true" tabindex="-1"></a>**1.** Add <span class="in">`sales`</span> to the logistic model. Does higher sales change</span>
-<span id="cb7-432"><a href="#cb7-432" aria-hidden="true" tabindex="-1"></a>promotion odds, holding customer rating and performance tier constant?</span>
-<span id="cb7-433"><a href="#cb7-433" aria-hidden="true" tabindex="-1"></a>Report its odds ratio — and then convert it into a change in</span>
-<span id="cb7-434"><a href="#cb7-434" aria-hidden="true" tabindex="-1"></a>probability at a 30% baseline, which is the version you'd actually</span>
-<span id="cb7-435"><a href="#cb7-435" aria-hidden="true" tabindex="-1"></a>present.</span>
-<span id="cb7-436"><a href="#cb7-436" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-437"><a href="#cb7-437" aria-hidden="true" tabindex="-1"></a>**2.** Compare the model with and without <span class="in">`sales`</span> using LOO from</span>
-<span id="cb7-438"><a href="#cb7-438" aria-hidden="true" tabindex="-1"></a>Chapter 7. Does it earn its place?</span>
-<span id="cb7-439"><a href="#cb7-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-440"><a href="#cb7-440" aria-hidden="true" tabindex="-1"></a><span class="in">```{r your-turn}</span></span>
-<span id="cb7-441"><a href="#cb7-441" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span>
-<span id="cb7-442"><a href="#cb7-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-443"><a href="#cb7-443" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-444"><a href="#cb7-444" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-445"><a href="#cb7-445" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb7-446"><a href="#cb7-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-447"><a href="#cb7-447" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
-<span id="cb7-448"><a href="#cb7-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-449"><a href="#cb7-449" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb7-450"><a href="#cb7-450" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
-<span id="cb7-451"><a href="#cb7-451" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-452"><a href="#cb7-452" aria-hidden="true" tabindex="-1"></a>Yes/no outcomes are most of what People Analytics is asked about —</span>
-<span id="cb7-453"><a href="#cb7-453" aria-hidden="true" tabindex="-1"></a>accept or decline, pass or fail probation, promoted or not, stayed or</span>
-<span id="cb7-454"><a href="#cb7-454" aria-hidden="true" tabindex="-1"></a>left. Logistic regression is the workhorse for all of them, and it's</span>
-<span id="cb7-455"><a href="#cb7-455" aria-hidden="true" tabindex="-1"></a>the same <span class="in">`brm()`</span> call you already know with <span class="in">`family = bernoulli()`</span>.</span>
-<span id="cb7-456"><a href="#cb7-456" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-457"><a href="#cb7-457" aria-hidden="true" tabindex="-1"></a>The part that separates a good analyst here is **translation**. The</span>
-<span id="cb7-458"><a href="#cb7-458" aria-hidden="true" tabindex="-1"></a>model speaks log-odds, the software offers you odds ratios, and your</span>
-<span id="cb7-459"><a href="#cb7-459" aria-hidden="true" tabindex="-1"></a>stakeholder needs probabilities. Doing that conversion carefully — and</span>
-<span id="cb7-460"><a href="#cb7-460" aria-hidden="true" tabindex="-1"></a>resisting the temptation to say "three times as likely" when the odds</span>
-<span id="cb7-461"><a href="#cb7-461" aria-hidden="true" tabindex="-1"></a>ratio is 3 — is what keeps your findings both useful and honest.</span>
-<span id="cb7-462"><a href="#cb7-462" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-463"><a href="#cb7-463" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-464"><a href="#cb7-464" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb7-465"><a href="#cb7-465" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-466"><a href="#cb7-466" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
-<span id="cb7-467"><a href="#cb7-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-468"><a href="#cb7-468" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb7-469"><a href="#cb7-469" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
-<span id="cb7-470"><a href="#cb7-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-471"><a href="#cb7-471" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>A straight line can't model a probability, because lines don't</span>
-<span id="cb7-472"><a href="#cb7-472" aria-hidden="true" tabindex="-1"></a>    stop at 0 and 1. **Log-odds** are unbounded, so we fit the line</span>
-<span id="cb7-473"><a href="#cb7-473" aria-hidden="true" tabindex="-1"></a>    there and translate back.</span>
-<span id="cb7-474"><a href="#cb7-474" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Logistic regression** (<span class="in">`family = bernoulli()`</span>) does exactly</span>
-<span id="cb7-475"><a href="#cb7-475" aria-hidden="true" tabindex="-1"></a>    that, and has no <span class="in">`sigma`</span> to estimate.</span>
-<span id="cb7-476"><a href="#cb7-476" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Log-odds of 0 is a 50/50 chance**, and the scale is symmetric</span>
-<span id="cb7-477"><a href="#cb7-477" aria-hidden="true" tabindex="-1"></a>    around it.</span>
-<span id="cb7-478"><a href="#cb7-478" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>An **odds ratio** is not a ratio of probabilities. An OR of 3 at a</span>
-<span id="cb7-479"><a href="#cb7-479" aria-hidden="true" tabindex="-1"></a>    30% baseline is a move to 56% — not "three times as likely".</span>
-<span id="cb7-480"><a href="#cb7-480" aria-hidden="true" tabindex="-1"></a>    Convert to probabilities before presenting.</span>
-<span id="cb7-481"><a href="#cb7-481" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Fit on whatever scale suits the model; present on the scale the</span>
-<span id="cb7-482"><a href="#cb7-482" aria-hidden="true" tabindex="-1"></a>    business thinks in.**</span>
-<span id="cb7-483"><a href="#cb7-483" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>Match your **posterior predictive check** to the shape of the</span>
-<span id="cb7-484"><a href="#cb7-484" aria-hidden="true" tabindex="-1"></a>    outcome — <span class="in">`type = "bars"`</span> for binary.</span>
-<span id="cb7-485"><a href="#cb7-485" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb7-486"><a href="#cb7-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-487"><a href="#cb7-487" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
-<span id="cb7-488"><a href="#cb7-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-489"><a href="#cb7-489" aria-hidden="true" tabindex="-1"></a>**The complete workflow** — you now have every technique in Part III.</span>
-<span id="cb7-490"><a href="#cb7-490" aria-hidden="true" tabindex="-1"></a>Next we assemble them into a single repeatable recipe, and a map of</span>
-<span id="cb7-491"><a href="#cb7-491" aria-hidden="true" tabindex="-1"></a>which model to reach for whatever your outcome looks like.</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Logistic Regression: Modelling a Yes/No Outcome</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## Welcome back {.unnumbered}</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>Every model so far has predicted a **quantity** — a sales figure, an</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>average, a rate. Today the outcome changes shape: it becomes a</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>**yes or no**.</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>That's a bigger share of People Analytics than the continuous case.</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Did they accept the offer? Did they pass probation? Were they</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>promoted? Did they leave? Each is a coin that landed one way or the</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>other, and each needs a model that respects the fact.</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">### Back to the question we started with {.unnumbered}</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>Chapter 1 opened on *what predicts who gets promoted?* and we've been</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>circling it ever since. Your VP of Sales has the pieces now — the</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>promotion rate (Chapter 4), what a customer-rating point is worth</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>(Chapter 6), whether the performance ratings track anything real</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>(Chapter 7) — and she wants them assembled into one answer:</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; **Given what we know about a salesperson, how likely are they to be</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; promoted — and which factors actually move that number?**</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>The outcome <span class="in">`promoted`</span> is **0 or 1**. Everything else you know still</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>applies: same <span class="in">`brm()`</span>, same priors, same posteriors, same credible</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>intervals. Only the family changes, and one new idea comes with it.</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>This is the last new model family in Part III. Chapter 10 then takes</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>everything from Chapter 1 to here and turns it into a repeatable</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>workflow you can apply to your own questions.</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="fu">### Analysis strategy {.unnumbered}</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>**What we have.** One row per salesperson — a customer rating, a performance</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>tier, and a flag saying whether they were promoted. The flag is the outcome</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>and it is the awkward part: it takes exactly two values, so the tools from</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>Chapters 6 and 7, which predict a quantity that can sit anywhere on a line,</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>will not do as they stand.</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>**What would answer the question.** Not a coefficient. What the VP of Sales</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>can act on is a **probability**: for a salesperson with these</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>characteristics, how likely is promotion, and how much does that change if one</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>characteristic changes? So the target is a probability with an interval on it,</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>and everything we build should be built to produce one.</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>**What could go wrong.** Promotion is relatively uncommon, so apparent</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>differences between groups may rest on a handful of people — Chapter 3's</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>warning, and the reason we want intervals rather than point estimates. And the</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>two predictors move together: better-rated salespeople tend to sit in higher</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>tiers, so a model with one will not say what a model with both says.</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>**So the plan.** Get the outcome onto a scale a regression can work on — the</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>one genuinely new idea here. Fit the same <span class="in">`brm()`</span> as before, with the family</span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a>changed. Translate back to probabilities, because that is the scale the</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>question was asked in. Then check that the model reproduces how many people</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>were actually promoted.</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>**What would make us stop.** If that last check fails, nothing from the three</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>steps before it is worth reporting, and we go back to the specification rather</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>than to the interpretation.</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you'll be able to do by the end {.unnumbered}</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Explain why a straight line can't model a yes/no outcome, and what</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>    **log-odds** do about it</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Fit a **logistic regression** in <span class="in">`brms`</span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Interpret coefficients as **odds ratios** — and avoid the mistake</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>    almost everyone makes with them</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Report results as **predicted probabilities** a stakeholder can act</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>    on</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Match a **posterior predictive check** to a binary outcome</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(peopleanalyticsdata)</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggdist)</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>))</span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"salespeople"</span>, <span class="at">package =</span> <span class="st">"peopleanalyticsdata"</span>)</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Chapter 1 found a single missing value in each of `sales`,</span></span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a><span class="co"># `customer_rate` and `performance`; dropping those rows here keeps</span></span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="co"># the rest of this chapter's code simple.</span></span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>salespeople <span class="ot">&lt;-</span> salespeople <span class="sc">|&gt;</span></span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(sales, customer_rate, performance, promoted) <span class="sc">|&gt;</span></span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">customer_rate_s =</span> <span class="fu">as.numeric</span>(<span class="fu">scale</span>(customer_rate)),   <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>    <span class="at">performance_f   =</span> <span class="fu">factor</span>(performance)                 <span class="co"># &lt;2&gt;</span></span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`scale()`</span> **standardises**: it subtracts the mean and divides by the</span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>    standard deviation, so <span class="in">`customer_rate_s`</span> is measured in standard</span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>    deviations away from average rather than in rating points. Chapter 6</span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>    only centred; the reason for the extra step is in the box below the</span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>    model.</span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Four labels, not a number, exactly as in Chapter 7.</span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## Back to our opening question</span></span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>*What predicts who gets promoted?* We asked this in Chapter 1 and have</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>been building toward it ever since.</span>
+<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>The outcome <span class="in">`promoted`</span> is **0 or 1** — and that needs a different kind</span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>of model.</span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why a straight line fails</span></span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>If we fit an ordinary regression to a 0/1 outcome, the line keeps</span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a>going — because that's what lines do.</span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r why-not-linear}</span></span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb8-127"><a href="#cb8-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: "Show the plotting code"</span></span>
+<span id="cb8-128"><a href="#cb8-128" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salespeople, <span class="fu">aes</span>(customer_rate, promoted)) <span class="sc">+</span></span>
+<span id="cb8-129"><a href="#cb8-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">height =</span> <span class="fl">0.03</span>, <span class="at">alpha =</span> <span class="fl">0.20</span>, <span class="at">colour =</span> <span class="st">"#122a52"</span>) <span class="sc">+</span></span>
+<span id="cb8-130"><a href="#cb8-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">linetype =</span> <span class="st">"dotted"</span>, <span class="at">colour =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb8-131"><a href="#cb8-131" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-132"><a href="#cb8-132" aria-hidden="true" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
+<span id="cb8-133"><a href="#cb8-133" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"glm"</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-134"><a href="#cb8-134" aria-hidden="true" tabindex="-1"></a>              <span class="at">method.args =</span> <span class="fu">list</span>(<span class="at">family =</span> binomial),</span>
+<span id="cb8-135"><a href="#cb8-135" aria-hidden="true" tabindex="-1"></a>              <span class="at">fullrange =</span> <span class="cn">TRUE</span>, <span class="at">colour =</span> <span class="st">"#3d68a8"</span>) <span class="sc">+</span></span>
+<span id="cb8-136"><a href="#cb8-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_limits</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb8-137"><a href="#cb8-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"A straight line runs off the end of the world"</span>,</span>
+<span id="cb8-138"><a href="#cb8-138" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Red = ordinary linear fit; blue = logistic fit; dotted = the 0 and 1 boundaries"</span>,</span>
+<span id="cb8-139"><a href="#cb8-139" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer rating"</span>, <span class="at">y =</span> <span class="st">"Promoted (0/1)"</span>)</span>
+<span id="cb8-140"><a href="#cb8-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-141"><a href="#cb8-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-142"><a href="#cb8-142" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb8-143"><a href="#cb8-143" aria-hidden="true" tabindex="-1"></a>Follow the red line far enough and it predicts a **−0.3 probability**</span>
+<span id="cb8-144"><a href="#cb8-144" aria-hidden="true" tabindex="-1"></a>of promotion, or a **1.4**. Both are nonsense — probabilities live</span>
+<span id="cb8-145"><a href="#cb8-145" aria-hidden="true" tabindex="-1"></a>between 0 and 1.</span>
+<span id="cb8-146"><a href="#cb8-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-147"><a href="#cb8-147" aria-hidden="true" tabindex="-1"></a>The blue line bends. It approaches 0 and 1 without ever reaching them,</span>
+<span id="cb8-148"><a href="#cb8-148" aria-hidden="true" tabindex="-1"></a>which is exactly the behaviour a probability should have. The rest of</span>
+<span id="cb8-149"><a href="#cb8-149" aria-hidden="true" tabindex="-1"></a>this section is how it does that.</span>
+<span id="cb8-150"><a href="#cb8-150" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-151"><a href="#cb8-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-152"><a href="#cb8-152" aria-hidden="true" tabindex="-1"></a><span class="fu">### Odds, and then log-odds</span></span>
+<span id="cb8-153"><a href="#cb8-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-154"><a href="#cb8-154" aria-hidden="true" tabindex="-1"></a>The trick is to stop modelling the probability directly and model</span>
+<span id="cb8-155"><a href="#cb8-155" aria-hidden="true" tabindex="-1"></a>something unbounded instead. It takes two steps.</span>
+<span id="cb8-156"><a href="#cb8-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-157"><a href="#cb8-157" aria-hidden="true" tabindex="-1"></a>**Step one: odds.** Instead of "30% chance of promotion", say the</span>
+<span id="cb8-158"><a href="#cb8-158" aria-hidden="true" tabindex="-1"></a>**odds** — the chance it happens divided by the chance it doesn't:</span>
+<span id="cb8-159"><a href="#cb8-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-160"><a href="#cb8-160" aria-hidden="true" tabindex="-1"></a>$$\text{odds} = \frac{p}{1-p}$$</span>
+<span id="cb8-161"><a href="#cb8-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-162"><a href="#cb8-162" aria-hidden="true" tabindex="-1"></a>A 30% chance is odds of 0.3 / 0.7 ≈ **0.43**, or a bit under one to</span>
+<span id="cb8-163"><a href="#cb8-163" aria-hidden="true" tabindex="-1"></a>two. A 50% chance is odds of exactly 1. A 90% chance is odds of 9.</span>
+<span id="cb8-164"><a href="#cb8-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-165"><a href="#cb8-165" aria-hidden="true" tabindex="-1"></a>That's progress: probabilities were trapped between 0 and 1, but odds</span>
+<span id="cb8-166"><a href="#cb8-166" aria-hidden="true" tabindex="-1"></a>can be anything from 0 upwards. Still bounded below, though.</span>
+<span id="cb8-167"><a href="#cb8-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-168"><a href="#cb8-168" aria-hidden="true" tabindex="-1"></a>**Step two: take the logarithm.** Log-odds — the **logit** — run from</span>
+<span id="cb8-169"><a href="#cb8-169" aria-hidden="true" tabindex="-1"></a>minus infinity to plus infinity:</span>
+<span id="cb8-170"><a href="#cb8-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-171"><a href="#cb8-171" aria-hidden="true" tabindex="-1"></a>$$\text{logit}(p) = \log<span class="sc">\!</span>\left(\frac{p}{1-p}\right)$$</span>
+<span id="cb8-172"><a href="#cb8-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-173"><a href="#cb8-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Probability <span class="pp">|</span> Odds <span class="pp">|</span> Log-odds <span class="pp">|</span></span>
+<span id="cb8-174"><a href="#cb8-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|-------------|-------------|-------------|</span></span>
+<span id="cb8-175"><a href="#cb8-175" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.10 <span class="pp">|</span> 0.11 <span class="pp">|</span> −2.20 <span class="pp">|</span></span>
+<span id="cb8-176"><a href="#cb8-176" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.30 <span class="pp">|</span> 0.43 <span class="pp">|</span> −0.85 <span class="pp">|</span></span>
+<span id="cb8-177"><a href="#cb8-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.50 <span class="pp">|</span> 1.00 <span class="pp">|</span> **0.00** <span class="pp">|</span></span>
+<span id="cb8-178"><a href="#cb8-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.70 <span class="pp">|</span> 2.33 <span class="pp">|</span> 0.85 <span class="pp">|</span></span>
+<span id="cb8-179"><a href="#cb8-179" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> 0.90 <span class="pp">|</span> 9.00 <span class="pp">|</span> 2.20 <span class="pp">|</span></span>
+<span id="cb8-180"><a href="#cb8-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-181"><a href="#cb8-181" aria-hidden="true" tabindex="-1"></a>Two things worth memorising from that table: **log-odds of 0 means a</span>
+<span id="cb8-182"><a href="#cb8-182" aria-hidden="true" tabindex="-1"></a>50/50 chance**, and the scale is **symmetric** — 0.3 and 0.7 sit the</span>
+<span id="cb8-183"><a href="#cb8-183" aria-hidden="true" tabindex="-1"></a>same distance either side of zero.</span>
+<span id="cb8-184"><a href="#cb8-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-185"><a href="#cb8-185" aria-hidden="true" tabindex="-1"></a>Now a straight line is safe. We fit the line on the log-odds scale,</span>
+<span id="cb8-186"><a href="#cb8-186" aria-hidden="true" tabindex="-1"></a>where it can run off in either direction without embarrassment, then</span>
+<span id="cb8-187"><a href="#cb8-187" aria-hidden="true" tabindex="-1"></a>translate back to a probability at the end. That translation is what</span>
+<span id="cb8-188"><a href="#cb8-188" aria-hidden="true" tabindex="-1"></a>bends the blue curve.</span>
+<span id="cb8-189"><a href="#cb8-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-190"><a href="#cb8-190" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb8-191"><a href="#cb8-191" aria-hidden="true" tabindex="-1"></a>\text{promoted}_i \sim \text{Bernoulli}(p_i), \qquad</span>
+<span id="cb8-192"><a href="#cb8-192" aria-hidden="true" tabindex="-1"></a>\text{logit}(p_i) = \alpha + \beta_1 \text{customer<span class="sc">\_</span>rate}_i + \beta_2 \text{performance}_i</span>
+<span id="cb8-193"><a href="#cb8-193" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb8-194"><a href="#cb8-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-195"><a href="#cb8-195" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb8-196"><a href="#cb8-196" aria-hidden="true" tabindex="-1"></a>The cost of this trick is that your coefficients are now in log-odds,</span>
+<span id="cb8-197"><a href="#cb8-197" aria-hidden="true" tabindex="-1"></a>which nobody has intuition for. That's a presentation problem, not a</span>
+<span id="cb8-198"><a href="#cb8-198" aria-hidden="true" tabindex="-1"></a>modelling one, and the two sections after the fit are entirely about</span>
+<span id="cb8-199"><a href="#cb8-199" aria-hidden="true" tabindex="-1"></a>solving it.</span>
+<span id="cb8-200"><a href="#cb8-200" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-201"><a href="#cb8-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-202"><a href="#cb8-202" aria-hidden="true" tabindex="-1"></a><span class="fu">### One word changes in `brms`</span></span>
+<span id="cb8-203"><a href="#cb8-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-206"><a href="#cb8-206" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-207"><a href="#cb8-207" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb8-208"><a href="#cb8-208" aria-hidden="true" tabindex="-1"></a><span class="fu">brm</span>(sales <span class="sc">~</span> customer_rate_c, <span class="at">family =</span> <span class="fu">gaussian</span>())             <span class="co"># continuous outcome</span></span>
+<span id="cb8-209"><a href="#cb8-209" aria-hidden="true" tabindex="-1"></a><span class="fu">brm</span>(promoted <span class="sc">~</span> customer_rate_s <span class="sc">+</span> performance_f, <span class="at">family =</span> <span class="fu">bernoulli</span>())  <span class="co"># yes/no outcome</span></span>
+<span id="cb8-210"><a href="#cb8-210" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-211"><a href="#cb8-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-212"><a href="#cb8-212" aria-hidden="true" tabindex="-1"></a>Priors, posteriors, credible intervals, checks — all identical to what</span>
+<span id="cb8-213"><a href="#cb8-213" aria-hidden="true" tabindex="-1"></a>you already know.</span>
+<span id="cb8-214"><a href="#cb8-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-215"><a href="#cb8-215" aria-hidden="true" tabindex="-1"></a>A prior on the log-odds scale is hard to judge by eye — <span class="in">`1.5`</span></span>
+<span id="cb8-216"><a href="#cb8-216" aria-hidden="true" tabindex="-1"></a>doesn't mean much until you translate it. So this is the chapter where a</span>
+<span id="cb8-217"><a href="#cb8-217" aria-hidden="true" tabindex="-1"></a>**prior predictive check** earns its keep, exactly as Chapter 5</span>
+<span id="cb8-218"><a href="#cb8-218" aria-hidden="true" tabindex="-1"></a>described: simulate draws from the intercept prior and translate them to a</span>
+<span id="cb8-219"><a href="#cb8-219" aria-hidden="true" tabindex="-1"></a>probability:</span>
+<span id="cb8-220"><a href="#cb8-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-221"><a href="#cb8-221" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot-prior-logit}</span></span>
+<span id="cb8-222"><a href="#cb8-222" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">901</span>)</span>
+<span id="cb8-223"><a href="#cb8-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-224"><a href="#cb8-224" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">logit_intercept =</span> <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">1.5</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb8-225"><a href="#cb8-225" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prob =</span> <span class="fu">plogis</span>(logit_intercept)) <span class="sc">|&gt;</span>                       <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-226"><a href="#cb8-226" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(prob)) <span class="sc">+</span></span>
+<span id="cb8-227"><a href="#cb8-227" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"#8fabd0"</span>, <span class="at">colour =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
+<span id="cb8-228"><a href="#cb8-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"What Normal(0, 1.5) on the log-odds scale implies"</span>,</span>
+<span id="cb8-229"><a href="#cb8-229" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Simulated draws from the intercept prior, translated to a baseline promotion probability"</span>,</span>
+<span id="cb8-230"><a href="#cb8-230" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Implied baseline promotion probability"</span>, <span class="at">y =</span> <span class="st">"Simulated draws"</span>)</span>
+<span id="cb8-231"><a href="#cb8-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-232"><a href="#cb8-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-233"><a href="#cb8-233" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`plogis()`</span> is the inverse logit — it converts log-odds back to a</span>
+<span id="cb8-234"><a href="#cb8-234" aria-hidden="true" tabindex="-1"></a>    probability, undoing the two-step transformation above. Its</span>
+<span id="cb8-235"><a href="#cb8-235" aria-hidden="true" tabindex="-1"></a>    partner <span class="in">`qlogis()`</span> goes the other way. You will use <span class="in">`plogis()`</span></span>
+<span id="cb8-236"><a href="#cb8-236" aria-hidden="true" tabindex="-1"></a>    constantly from here on.</span>
+<span id="cb8-237"><a href="#cb8-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-238"><a href="#cb8-238" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb8-239"><a href="#cb8-239" aria-hidden="true" tabindex="-1"></a>Spread fairly evenly across plausible promotion rates, with a little</span>
+<span id="cb8-240"><a href="#cb8-240" aria-hidden="true" tabindex="-1"></a>extra weight near the extremes — reasonable for "we don't know the</span>
+<span id="cb8-241"><a href="#cb8-241" aria-hidden="true" tabindex="-1"></a>baseline rate yet," and nowhere near committing to, say, "everyone</span>
+<span id="cb8-242"><a href="#cb8-242" aria-hidden="true" tabindex="-1"></a>gets promoted."</span>
+<span id="cb8-243"><a href="#cb8-243" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-244"><a href="#cb8-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-245"><a href="#cb8-245" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb8-246"><a href="#cb8-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-247"><a href="#cb8-247" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fit the model</span></span>
+<span id="cb8-248"><a href="#cb8-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-249"><a href="#cb8-249" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fit-logit}</span></span>
+<span id="cb8-250"><a href="#cb8-250" aria-hidden="true" tabindex="-1"></a>priors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb8-251"><a href="#cb8-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="fl">1.5</span>), <span class="at">class =</span> Intercept),</span>
+<span id="cb8-252"><a href="#cb8-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">0</span>, <span class="dv">1</span>),   <span class="at">class =</span> b)               <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-253"><a href="#cb8-253" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-254"><a href="#cb8-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-255"><a href="#cb8-255" aria-hidden="true" tabindex="-1"></a>fit_logit <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb8-256"><a href="#cb8-256" aria-hidden="true" tabindex="-1"></a>  promoted <span class="sc">~</span> customer_rate_s <span class="sc">+</span> performance_f,</span>
+<span id="cb8-257"><a href="#cb8-257" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> salespeople, <span class="at">family =</span> <span class="fu">bernoulli</span>(),</span>
+<span id="cb8-258"><a href="#cb8-258" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> priors,</span>
+<span id="cb8-259"><a href="#cb8-259" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">9</span>, <span class="at">refresh =</span> <span class="dv">0</span></span>
+<span id="cb8-260"><a href="#cb8-260" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-261"><a href="#cb8-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-262"><a href="#cb8-262" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_logit)</span>
+<span id="cb8-263"><a href="#cb8-263" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-264"><a href="#cb8-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-265"><a href="#cb8-265" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>No <span class="in">`sigma`</span> this time. A Bernoulli outcome has no separate spread</span>
+<span id="cb8-266"><a href="#cb8-266" aria-hidden="true" tabindex="-1"></a>    parameter to estimate — once you know the probability, the</span>
+<span id="cb8-267"><a href="#cb8-267" aria-hidden="true" tabindex="-1"></a>    variability is fully determined. One fewer thing to think about.</span>
+<span id="cb8-268"><a href="#cb8-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-269"><a href="#cb8-269" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb8-270"><a href="#cb8-270" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why standardised, not just centred?</span></span>
+<span id="cb8-271"><a href="#cb8-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-272"><a href="#cb8-272" aria-hidden="true" tabindex="-1"></a>Chapter 6 centred <span class="in">`customer_rate`</span>. Here we **standardised** it instead —</span>
+<span id="cb8-273"><a href="#cb8-273" aria-hidden="true" tabindex="-1"></a>that is the <span class="in">`scale()`</span> call in the setup chunk at the top of the chapter,</span>
+<span id="cb8-274"><a href="#cb8-274" aria-hidden="true" tabindex="-1"></a>which centres the variable *and* divides by its standard deviation, so</span>
+<span id="cb8-275"><a href="#cb8-275" aria-hidden="true" tabindex="-1"></a>one unit is now one SD rather than one rating point.</span>
+<span id="cb8-276"><a href="#cb8-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-277"><a href="#cb8-277" aria-hidden="true" tabindex="-1"></a>The reason is the prior. On the log-odds scale, <span class="in">`normal(0, 1)`</span> is a</span>
+<span id="cb8-278"><a href="#cb8-278" aria-hidden="true" tabindex="-1"></a>sensible weakly-informative prior for a coefficient — it says a</span>
+<span id="cb8-279"><a href="#cb8-279" aria-hidden="true" tabindex="-1"></a>one-unit change is unlikely to swing the odds by more than a factor of</span>
+<span id="cb8-280"><a href="#cb8-280" aria-hidden="true" tabindex="-1"></a>about seven. But "one unit" only means something once you've fixed the</span>
+<span id="cb8-281"><a href="#cb8-281" aria-hidden="true" tabindex="-1"></a>scale of the predictor. Standardising makes that prior mean the same</span>
+<span id="cb8-282"><a href="#cb8-282" aria-hidden="true" tabindex="-1"></a>thing regardless of whether the variable is measured in points,</span>
+<span id="cb8-283"><a href="#cb8-283" aria-hidden="true" tabindex="-1"></a>pounds or years.</span>
+<span id="cb8-284"><a href="#cb8-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-285"><a href="#cb8-285" aria-hidden="true" tabindex="-1"></a>The cost is that your coefficients are now "per standard deviation",</span>
+<span id="cb8-286"><a href="#cb8-286" aria-hidden="true" tabindex="-1"></a>which is not a unit anyone thinks in — so we translate back before</span>
+<span id="cb8-287"><a href="#cb8-287" aria-hidden="true" tabindex="-1"></a>showing anyone.</span>
+<span id="cb8-288"><a href="#cb8-288" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-289"><a href="#cb8-289" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-290"><a href="#cb8-290" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb8-291"><a href="#cb8-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-292"><a href="#cb8-292" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interpreting the results</span></span>
+<span id="cb8-293"><a href="#cb8-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-294"><a href="#cb8-294" aria-hidden="true" tabindex="-1"></a><span class="fu">### Translation 1 — odds ratios</span></span>
+<span id="cb8-295"><a href="#cb8-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-296"><a href="#cb8-296" aria-hidden="true" tabindex="-1"></a>Exponentiating a log-odds coefficient turns it into an **odds ratio**:</span>
+<span id="cb8-297"><a href="#cb8-297" aria-hidden="true" tabindex="-1"></a>the factor by which the odds multiply.</span>
+<span id="cb8-298"><a href="#cb8-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-299"><a href="#cb8-299" aria-hidden="true" tabindex="-1"></a><span class="in">```{r odds-ratios}</span></span>
+<span id="cb8-300"><a href="#cb8-300" aria-hidden="true" tabindex="-1"></a><span class="fu">fixef</span>(fit_logit) <span class="sc">|&gt;</span></span>
+<span id="cb8-301"><a href="#cb8-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="at">rownames =</span> <span class="st">"term"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-302"><a href="#cb8-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">odds_ratio =</span> <span class="fu">exp</span>(Estimate)) <span class="sc">|&gt;</span>          <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-303"><a href="#cb8-303" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, Estimate, odds_ratio)</span>
+<span id="cb8-304"><a href="#cb8-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-305"><a href="#cb8-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-306"><a href="#cb8-306" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`exp()`</span> undoes the logarithm, taking us from log-odds back to</span>
+<span id="cb8-307"><a href="#cb8-307" aria-hidden="true" tabindex="-1"></a>    odds. An odds ratio above 1 means more likely to be promoted;</span>
+<span id="cb8-308"><a href="#cb8-308" aria-hidden="true" tabindex="-1"></a>    below 1, less likely; exactly 1, no effect.</span>
+<span id="cb8-309"><a href="#cb8-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-310"><a href="#cb8-310" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb8-311"><a href="#cb8-311" aria-hidden="true" tabindex="-1"></a><span class="fu">## The mistake almost everyone makes with odds ratios</span></span>
+<span id="cb8-312"><a href="#cb8-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-313"><a href="#cb8-313" aria-hidden="true" tabindex="-1"></a>An odds ratio of 3 does **not** mean "three times as likely".</span>
+<span id="cb8-314"><a href="#cb8-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-315"><a href="#cb8-315" aria-hidden="true" tabindex="-1"></a>It means the *odds* triple, and odds are not probabilities. Work it</span>
+<span id="cb8-316"><a href="#cb8-316" aria-hidden="true" tabindex="-1"></a>through at a 30% baseline promotion rate:</span>
+<span id="cb8-317"><a href="#cb8-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-318"><a href="#cb8-318" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Odds of 0.3 / 0.7 = **0.43**</span>
+<span id="cb8-319"><a href="#cb8-319" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Triple them: **1.29**</span>
+<span id="cb8-320"><a href="#cb8-320" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>Convert back: 1.29 / (1 + 1.29) = **56%**</span>
+<span id="cb8-321"><a href="#cb8-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-322"><a href="#cb8-322" aria-hidden="true" tabindex="-1"></a>So an odds ratio of 3 took the probability from 30% to 56% — not quite</span>
+<span id="cb8-323"><a href="#cb8-323" aria-hidden="true" tabindex="-1"></a>**double**, nowhere near triple. Report it as "three times as likely"</span>
+<span id="cb8-324"><a href="#cb8-324" aria-hidden="true" tabindex="-1"></a>and you have overstated your finding by a factor of about 1.6.</span>
+<span id="cb8-325"><a href="#cb8-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-326"><a href="#cb8-326" aria-hidden="true" tabindex="-1"></a>The gap depends entirely on the baseline. When an outcome is **rare**</span>
+<span id="cb8-327"><a href="#cb8-327" aria-hidden="true" tabindex="-1"></a>— a 2% chance of something — odds and probabilities are close, and an</span>
+<span id="cb8-328"><a href="#cb8-328" aria-hidden="true" tabindex="-1"></a>odds ratio of 3 really does mean roughly three times as likely. When</span>
+<span id="cb8-329"><a href="#cb8-329" aria-hidden="true" tabindex="-1"></a>the outcome is **common**, which is nearly everything in People</span>
+<span id="cb8-330"><a href="#cb8-330" aria-hidden="true" tabindex="-1"></a>Analytics, the two diverge badly.</span>
+<span id="cb8-331"><a href="#cb8-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-332"><a href="#cb8-332" aria-hidden="true" tabindex="-1"></a>This matters beyond pedantry. Odds ratios turn up constantly in pay</span>
+<span id="cb8-333"><a href="#cb8-333" aria-hidden="true" tabindex="-1"></a>equity, promotion equity and adverse impact analysis — exactly the</span>
+<span id="cb8-334"><a href="#cb8-334" aria-hidden="true" tabindex="-1"></a>places where overstating an effect by 60% is least acceptable. If you</span>
+<span id="cb8-335"><a href="#cb8-335" aria-hidden="true" tabindex="-1"></a>are going to quote one to a non-technical audience, **convert it to</span>
+<span id="cb8-336"><a href="#cb8-336" aria-hidden="true" tabindex="-1"></a>probabilities first**, which is the next section.</span>
+<span id="cb8-337"><a href="#cb8-337" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-338"><a href="#cb8-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-339"><a href="#cb8-339" aria-hidden="true" tabindex="-1"></a><span class="fu">### Translation 2 — predicted probabilities</span></span>
+<span id="cb8-340"><a href="#cb8-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-341"><a href="#cb8-341" aria-hidden="true" tabindex="-1"></a>Odds ratios are exact but abstract. **Probabilities** are what a</span>
+<span id="cb8-342"><a href="#cb8-342" aria-hidden="true" tabindex="-1"></a>manager can act on.</span>
+<span id="cb8-343"><a href="#cb8-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-344"><a href="#cb8-344" aria-hidden="true" tabindex="-1"></a><span class="in">```{r predicted-prob}</span></span>
+<span id="cb8-345"><a href="#cb8-345" aria-hidden="true" tabindex="-1"></a>rate_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(salespeople<span class="sc">$</span>customer_rate)</span>
+<span id="cb8-346"><a href="#cb8-346" aria-hidden="true" tabindex="-1"></a>rate_sd   <span class="ot">&lt;-</span> <span class="fu">sd</span>(salespeople<span class="sc">$</span>customer_rate)</span>
+<span id="cb8-347"><a href="#cb8-347" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-348"><a href="#cb8-348" aria-hidden="true" tabindex="-1"></a>tier_colours <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#9db4d4"</span>, <span class="st">"#5a83b8"</span>, <span class="st">"#2f5389"</span>, <span class="st">"#122a52"</span>)</span>
+<span id="cb8-349"><a href="#cb8-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-350"><a href="#cb8-350" aria-hidden="true" tabindex="-1"></a>promo_grid <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(</span>
+<span id="cb8-351"><a href="#cb8-351" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_rate_s =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>, <span class="at">by =</span> <span class="fl">0.1</span>),</span>
+<span id="cb8-352"><a href="#cb8-352" aria-hidden="true" tabindex="-1"></a>  <span class="at">performance_f   =</span> <span class="fu">levels</span>(salespeople<span class="sc">$</span>performance_f)</span>
+<span id="cb8-353"><a href="#cb8-353" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb8-354"><a href="#cb8-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">customer_rate =</span> customer_rate_s <span class="sc">*</span> rate_sd <span class="sc">+</span> rate_mean)   <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-355"><a href="#cb8-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-356"><a href="#cb8-356" aria-hidden="true" tabindex="-1"></a>promo_grid <span class="sc">|&gt;</span></span>
+<span id="cb8-357"><a href="#cb8-357" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_logit) <span class="sc">|&gt;</span></span>
+<span id="cb8-358"><a href="#cb8-358" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-359"><a href="#cb8-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(customer_rate, .epred,</span>
+<span id="cb8-360"><a href="#cb8-360" aria-hidden="true" tabindex="-1"></a>             <span class="at">colour =</span> performance_f, <span class="at">fill =</span> performance_f)) <span class="sc">+</span></span>
+<span id="cb8-361"><a href="#cb8-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> .lower, <span class="at">ymax =</span> .upper), <span class="at">alpha =</span> <span class="fl">0.15</span>, <span class="at">colour =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb8-362"><a href="#cb8-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-363"><a href="#cb8-363" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> tier_colours) <span class="sc">+</span>                       <span class="co"># &lt;2&gt;</span></span>
+<span id="cb8-364"><a href="#cb8-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> tier_colours) <span class="sc">+</span></span>
+<span id="cb8-365"><a href="#cb8-365" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb8-366"><a href="#cb8-366" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted promotion probability"</span>,</span>
+<span id="cb8-367"><a href="#cb8-367" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Rises with customer rating, and sharply with performance tier"</span>,</span>
+<span id="cb8-368"><a href="#cb8-368" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Customer rating"</span>, <span class="at">y =</span> <span class="st">"P(promoted)"</span>,</span>
+<span id="cb8-369"><a href="#cb8-369" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">"Performance tier"</span>, <span class="at">fill =</span> <span class="st">"Performance tier"</span>)</span>
+<span id="cb8-370"><a href="#cb8-370" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-371"><a href="#cb8-371" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-372"><a href="#cb8-372" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Undoing the standardisation for the axis. The model was fitted on</span>
+<span id="cb8-373"><a href="#cb8-373" aria-hidden="true" tabindex="-1"></a>    standardised units because that made the priors sensible — but</span>
+<span id="cb8-374"><a href="#cb8-374" aria-hidden="true" tabindex="-1"></a>    "customer rating of 4.2" is a thing your audience recognises and</span>
+<span id="cb8-375"><a href="#cb8-375" aria-hidden="true" tabindex="-1"></a>    "0.7 standard deviations" is not. **Fit on whatever scale suits</span>
+<span id="cb8-376"><a href="#cb8-376" aria-hidden="true" tabindex="-1"></a>    the model; present on the scale the business thinks in.**</span>
+<span id="cb8-377"><a href="#cb8-377" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>A sequential ramp: light for tier 1, darkest for tier 4. Performance</span>
+<span id="cb8-378"><a href="#cb8-378" aria-hidden="true" tabindex="-1"></a>    tier is **ordered**, so the colours should be ordered too — a reader</span>
+<span id="cb8-379"><a href="#cb8-379" aria-hidden="true" tabindex="-1"></a>    can then rank the lines without consulting the legend. The four</span>
+<span id="cb8-380"><a href="#cb8-380" aria-hidden="true" tabindex="-1"></a>    shades are spaced far enough apart in lightness to stay separable</span>
+<span id="cb8-381"><a href="#cb8-381" aria-hidden="true" tabindex="-1"></a>    when printed or projected.</span>
+<span id="cb8-382"><a href="#cb8-382" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-383"><a href="#cb8-383" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb8-384"><a href="#cb8-384" aria-hidden="true" tabindex="-1"></a><span class="fu">## This chart is the deliverable</span></span>
+<span id="cb8-385"><a href="#cb8-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-386"><a href="#cb8-386" aria-hidden="true" tabindex="-1"></a>Everything else in this chapter is scaffolding. This is what goes on</span>
+<span id="cb8-387"><a href="#cb8-387" aria-hidden="true" tabindex="-1"></a>the slide.</span>
+<span id="cb8-388"><a href="#cb8-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-389"><a href="#cb8-389" aria-hidden="true" tabindex="-1"></a>Promotion likelihood **climbs with customer rating** and is</span>
+<span id="cb8-390"><a href="#cb8-390" aria-hidden="true" tabindex="-1"></a>**dramatically higher for top performers** — with honest uncertainty</span>
+<span id="cb8-391"><a href="#cb8-391" aria-hidden="true" tabindex="-1"></a>bands around both, on a scale anyone in a meeting can read. A talent team</span>
+<span id="cb8-392"><a href="#cb8-392" aria-hidden="true" tabindex="-1"></a>could act on it tomorrow: check whether the promotion process is</span>
+<span id="cb8-393"><a href="#cb8-393" aria-hidden="true" tabindex="-1"></a>weighting these factors the way leadership intends.</span>
+<span id="cb8-394"><a href="#cb8-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-395"><a href="#cb8-395" aria-hidden="true" tabindex="-1"></a>Note what isn't on it. No coefficients, no log-odds, no odds ratios,</span>
+<span id="cb8-396"><a href="#cb8-396" aria-hidden="true" tabindex="-1"></a>no p-values, no mention of <span class="in">`brms`</span>. The rigour is in how the number was</span>
+<span id="cb8-397"><a href="#cb8-397" aria-hidden="true" tabindex="-1"></a>produced, not in how much of the machinery you show.</span>
+<span id="cb8-398"><a href="#cb8-398" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-399"><a href="#cb8-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-400"><a href="#cb8-400" aria-hidden="true" tabindex="-1"></a>To say that out loud you need the two numbers themselves, not the</span>
+<span id="cb8-401"><a href="#cb8-401" aria-hidden="true" tabindex="-1"></a>chart. Pull them straight off the same posterior:</span>
+<span id="cb8-402"><a href="#cb8-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-403"><a href="#cb8-403" aria-hidden="true" tabindex="-1"></a><span class="in">```{r headline-numbers}</span></span>
+<span id="cb8-404"><a href="#cb8-404" aria-hidden="true" tabindex="-1"></a>tiers <span class="ot">&lt;-</span> <span class="fu">levels</span>(salespeople<span class="sc">$</span>performance_f)</span>
+<span id="cb8-405"><a href="#cb8-405" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-406"><a href="#cb8-406" aria-hidden="true" tabindex="-1"></a>headline_draws <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb8-407"><a href="#cb8-407" aria-hidden="true" tabindex="-1"></a>  <span class="at">customer_rate_s =</span> <span class="dv">0</span>,                                   <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-408"><a href="#cb8-408" aria-hidden="true" tabindex="-1"></a>  <span class="at">performance_f   =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="fu">last</span>(tiers), tiers[<span class="dv">2</span>]),     <span class="co"># &lt;2&gt;</span></span>
+<span id="cb8-409"><a href="#cb8-409" aria-hidden="true" tabindex="-1"></a>                           <span class="at">levels =</span> tiers)</span>
+<span id="cb8-410"><a href="#cb8-410" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb8-411"><a href="#cb8-411" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_logit)</span>
+<span id="cb8-412"><a href="#cb8-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-413"><a href="#cb8-413" aria-hidden="true" tabindex="-1"></a>headline <span class="ot">&lt;-</span> headline_draws <span class="sc">|&gt;</span> <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>)</span>
+<span id="cb8-414"><a href="#cb8-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-415"><a href="#cb8-415" aria-hidden="true" tabindex="-1"></a>p_top <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> <span class="fu">last</span>(tiers)) <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
+<span id="cb8-416"><a href="#cb8-416" aria-hidden="true" tabindex="-1"></a>p_mid <span class="ot">&lt;-</span> headline <span class="sc">|&gt;</span> <span class="fu">filter</span>(performance_f <span class="sc">==</span> tiers[<span class="dv">2</span>])    <span class="sc">|&gt;</span> <span class="fu">pull</span>(.epred)</span>
+<span id="cb8-417"><a href="#cb8-417" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-418"><a href="#cb8-418" aria-hidden="true" tabindex="-1"></a>headline</span>
+<span id="cb8-419"><a href="#cb8-419" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-420"><a href="#cb8-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-421"><a href="#cb8-421" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Standardised units, so zero **is** the average customer rating —</span>
+<span id="cb8-422"><a href="#cb8-422" aria-hidden="true" tabindex="-1"></a>    the same centring habit from Chapter 6, doing the same job.</span>
+<span id="cb8-423"><a href="#cb8-423" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>The top tier and a mid tier, holding customer rating fixed so the</span>
+<span id="cb8-424"><a href="#cb8-424" aria-hidden="true" tabindex="-1"></a>    comparison isolates performance.</span>
+<span id="cb8-425"><a href="#cb8-425" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-426"><a href="#cb8-426" aria-hidden="true" tabindex="-1"></a><span class="fu">### The gap needs its own posterior</span></span>
+<span id="cb8-427"><a href="#cb8-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-428"><a href="#cb8-428" aria-hidden="true" tabindex="-1"></a>Those are two intervals, and it is tempting to look at them, see that</span>
+<span id="cb8-429"><a href="#cb8-429" aria-hidden="true" tabindex="-1"></a>they do not overlap, and call the gap established. Chapter 7 was careful</span>
+<span id="cb8-430"><a href="#cb8-430" aria-hidden="true" tabindex="-1"></a>not to do that, and the reason applies here unchanged: both estimates</span>
+<span id="cb8-431"><a href="#cb8-431" aria-hidden="true" tabindex="-1"></a>come out of the **same** model, so their draws are correlated, and</span>
+<span id="cb8-432"><a href="#cb8-432" aria-hidden="true" tabindex="-1"></a>summarising each first and then subtracting throws that correlation</span>
+<span id="cb8-433"><a href="#cb8-433" aria-hidden="true" tabindex="-1"></a>away.</span>
+<span id="cb8-434"><a href="#cb8-434" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-435"><a href="#cb8-435" aria-hidden="true" tabindex="-1"></a>So take the difference draw by draw, exactly as Chapter 7 did:</span>
+<span id="cb8-436"><a href="#cb8-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-437"><a href="#cb8-437" aria-hidden="true" tabindex="-1"></a><span class="in">```{r headline-gap}</span></span>
+<span id="cb8-438"><a href="#cb8-438" aria-hidden="true" tabindex="-1"></a>gap <span class="ot">&lt;-</span> headline_draws <span class="sc">|&gt;</span></span>
+<span id="cb8-439"><a href="#cb8-439" aria-hidden="true" tabindex="-1"></a>  <span class="fu">compare_levels</span>(.epred, <span class="at">by =</span> performance_f,             <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-440"><a href="#cb8-440" aria-hidden="true" tabindex="-1"></a>                 <span class="at">comparison =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="fu">last</span>(tiers), tiers[<span class="dv">2</span>]))) <span class="sc">|&gt;</span></span>
+<span id="cb8-441"><a href="#cb8-441" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb8-442"><a href="#cb8-442" aria-hidden="true" tabindex="-1"></a>  <span class="fu">median_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>)</span>
+<span id="cb8-443"><a href="#cb8-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-444"><a href="#cb8-444" aria-hidden="true" tabindex="-1"></a>gap</span>
+<span id="cb8-445"><a href="#cb8-445" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-446"><a href="#cb8-446" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-447"><a href="#cb8-447" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The same <span class="in">`compare_levels()`</span> from Chapter 7, now on the probability</span>
+<span id="cb8-448"><a href="#cb8-448" aria-hidden="true" tabindex="-1"></a>    scale rather than the sales scale. The result is a posterior for</span>
+<span id="cb8-449"><a href="#cb8-449" aria-hidden="true" tabindex="-1"></a>    *the gap itself*, in percentage points of promotion probability —</span>
+<span id="cb8-450"><a href="#cb8-450" aria-hidden="true" tabindex="-1"></a>    which is the quantity the sentence below is about, and therefore the</span>
+<span id="cb8-451"><a href="#cb8-451" aria-hidden="true" tabindex="-1"></a>    quantity that should carry the interval.</span>
+<span id="cb8-452"><a href="#cb8-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-453"><a href="#cb8-453" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb8-454"><a href="#cb8-454" aria-hidden="true" tabindex="-1"></a><span class="fu">## The sentence to go with it</span></span>
+<span id="cb8-455"><a href="#cb8-455" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-456"><a href="#cb8-456" aria-hidden="true" tabindex="-1"></a>*"A top-rated salesperson with average customer scores has about a</span>
+<span id="cb8-457"><a href="#cb8-457" aria-hidden="true" tabindex="-1"></a><span class="in">`r round(100 * p_top)`</span>% chance of promotion. A mid-tier one with the</span>
+<span id="cb8-458"><a href="#cb8-458" aria-hidden="true" tabindex="-1"></a>same customer scores has about <span class="in">`r round(100 * p_mid)`</span>%. The gap between</span>
+<span id="cb8-459"><a href="#cb8-459" aria-hidden="true" tabindex="-1"></a>them is about <span class="in">`r round(100 * gap$.epred)`</span> percentage points, and we can</span>
+<span id="cb8-460"><a href="#cb8-460" aria-hidden="true" tabindex="-1"></a>put it between <span class="in">`r round(100 * gap$.lower)`</span> and</span>
+<span id="cb8-461"><a href="#cb8-461" aria-hidden="true" tabindex="-1"></a><span class="in">`r round(100 * gap$.upper)`</span> — and customer rating matters too, but much</span>
+<span id="cb8-462"><a href="#cb8-462" aria-hidden="true" tabindex="-1"></a>less than the performance tier does."*</span>
+<span id="cb8-463"><a href="#cb8-463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-464"><a href="#cb8-464" aria-hidden="true" tabindex="-1"></a>One chart, one sentence, no jargon, and a number attached to every</span>
+<span id="cb8-465"><a href="#cb8-465" aria-hidden="true" tabindex="-1"></a>claim — including to the comparison, which is the claim the room will</span>
+<span id="cb8-466"><a href="#cb8-466" aria-hidden="true" tabindex="-1"></a>actually repeat. That's the deliverable.</span>
+<span id="cb8-467"><a href="#cb8-467" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-468"><a href="#cb8-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-469"><a href="#cb8-469" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb8-470"><a href="#cb8-470" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why not just say the intervals don't overlap?</span></span>
+<span id="cb8-471"><a href="#cb8-471" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-472"><a href="#cb8-472" aria-hidden="true" tabindex="-1"></a>Because it answers a slightly different question, and it happens to be</span>
+<span id="cb8-473"><a href="#cb8-473" aria-hidden="true" tabindex="-1"></a>safe here rather than being safe in general.</span>
+<span id="cb8-474"><a href="#cb8-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-475"><a href="#cb8-475" aria-hidden="true" tabindex="-1"></a>Two intervals that don't overlap do imply a difference. But two</span>
+<span id="cb8-476"><a href="#cb8-476" aria-hidden="true" tabindex="-1"></a>intervals that *do* overlap can still sit either side of a gap the model</span>
+<span id="cb8-477"><a href="#cb8-477" aria-hidden="true" tabindex="-1"></a>is confident about — the correlation between the draws can make the</span>
+<span id="cb8-478"><a href="#cb8-478" aria-hidden="true" tabindex="-1"></a>difference far better determined than either estimate is on its own.</span>
+<span id="cb8-479"><a href="#cb8-479" aria-hidden="true" tabindex="-1"></a>Reading confidence off an overlap is therefore right sometimes and</span>
+<span id="cb8-480"><a href="#cb8-480" aria-hidden="true" tabindex="-1"></a>conservative the rest of the time, in a way you can't tell apart by</span>
+<span id="cb8-481"><a href="#cb8-481" aria-hidden="true" tabindex="-1"></a>looking.</span>
+<span id="cb8-482"><a href="#cb8-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-483"><a href="#cb8-483" aria-hidden="true" tabindex="-1"></a>The rule from Chapter 7 stands, and it is short: **if the claim is about</span>
+<span id="cb8-484"><a href="#cb8-484" aria-hidden="true" tabindex="-1"></a>a difference, state the posterior of the difference.** It costs one line</span>
+<span id="cb8-485"><a href="#cb8-485" aria-hidden="true" tabindex="-1"></a>of code, and it is the number the stakeholder is being asked to rely on.</span>
+<span id="cb8-486"><a href="#cb8-486" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-487"><a href="#cb8-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-488"><a href="#cb8-488" aria-hidden="true" tabindex="-1"></a>::: callout-warning</span>
+<span id="cb8-489"><a href="#cb8-489" aria-hidden="true" tabindex="-1"></a><span class="fu">## Closing the loop on the rating itself</span></span>
+<span id="cb8-490"><a href="#cb8-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-491"><a href="#cb8-491" aria-hidden="true" tabindex="-1"></a>Chapter 7 flagged that these performance ratings are assigned by</span>
+<span id="cb8-492"><a href="#cb8-492" aria-hidden="true" tabindex="-1"></a>different managers to different standards, and pooled them anyway for</span>
+<span id="cb8-493"><a href="#cb8-493" aria-hidden="true" tabindex="-1"></a>teaching. That assumption is still in force here, and it matters more</span>
+<span id="cb8-494"><a href="#cb8-494" aria-hidden="true" tabindex="-1"></a>now than it did there, because the rating has stopped being the thing</span>
+<span id="cb8-495"><a href="#cb8-495" aria-hidden="true" tabindex="-1"></a>being described and become a **predictor of who gets promoted**.</span>
+<span id="cb8-496"><a href="#cb8-496" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-497"><a href="#cb8-497" aria-hidden="true" tabindex="-1"></a>So state it in the deliverable, not in a footnote: this model takes the</span>
+<span id="cb8-498"><a href="#cb8-498" aria-hidden="true" tabindex="-1"></a>ratings as given, and reads "top-rated" as *"rated 4 by their own</span>
+<span id="cb8-499"><a href="#cb8-499" aria-hidden="true" tabindex="-1"></a>manager"*. If rating standards vary across managers — and Chapter 8</span>
+<span id="cb8-500"><a href="#cb8-500" aria-hidden="true" tabindex="-1"></a>argued they almost certainly do — then part of what looks like a</span>
+<span id="cb8-501"><a href="#cb8-501" aria-hidden="true" tabindex="-1"></a>promotion advantage for top performers is a promotion advantage for</span>
+<span id="cb8-502"><a href="#cb8-502" aria-hidden="true" tabindex="-1"></a>people with generous managers, and this model cannot tell you how much.</span>
+<span id="cb8-503"><a href="#cb8-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-504"><a href="#cb8-504" aria-hidden="true" tabindex="-1"></a>The more rigorous version is a multilevel one, and by this point in the</span>
+<span id="cb8-505"><a href="#cb8-505" aria-hidden="true" tabindex="-1"></a>book it is a formula rather than a project: add <span class="in">`(1 | manager_id)`</span> so</span>
+<span id="cb8-506"><a href="#cb8-506" aria-hidden="true" tabindex="-1"></a>each manager gets their own baseline, and Chapter 8's partial pooling</span>
+<span id="cb8-507"><a href="#cb8-507" aria-hidden="true" tabindex="-1"></a>handles the managers with only a handful of reports. If your HRIS</span>
+<span id="cb8-508"><a href="#cb8-508" aria-hidden="true" tabindex="-1"></a>carries the rater, it is worth the extra term. If it doesn't — which is</span>
+<span id="cb8-509"><a href="#cb8-509" aria-hidden="true" tabindex="-1"></a>common — then say the sentence above and let the reader discount</span>
+<span id="cb8-510"><a href="#cb8-510" aria-hidden="true" tabindex="-1"></a>accordingly.</span>
+<span id="cb8-511"><a href="#cb8-511" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-512"><a href="#cb8-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-513"><a href="#cb8-513" aria-hidden="true" tabindex="-1"></a><span class="fu">### Does it fit?</span></span>
+<span id="cb8-514"><a href="#cb8-514" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-515"><a href="#cb8-515" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ppc}</span></span>
+<span id="cb8-516"><a href="#cb8-516" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fit_logit, <span class="at">type =</span> <span class="st">"bars"</span>, <span class="at">ndraws =</span> <span class="dv">100</span>) <span class="sc">+</span>     <span class="co"># &lt;1&gt;</span></span>
+<span id="cb8-517"><a href="#cb8-517" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb8-518"><a href="#cb8-518" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Not promoted"</span>, <span class="st">"Promoted"</span>)) <span class="sc">+</span></span>
+<span id="cb8-519"><a href="#cb8-519" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior predictive check (binary outcome)"</span>,</span>
+<span id="cb8-520"><a href="#cb8-520" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Bars = what the model predicts; points = what actually happened"</span>,</span>
+<span id="cb8-521"><a href="#cb8-521" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Number of salespeople"</span>)</span>
+<span id="cb8-522"><a href="#cb8-522" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-523"><a href="#cb8-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-524"><a href="#cb8-524" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span><span class="in">`type = "bars"`</span> instead of the default density overlay. With a 0/1</span>
+<span id="cb8-525"><a href="#cb8-525" aria-hidden="true" tabindex="-1"></a>    outcome there are only two possible values, so a smooth density</span>
+<span id="cb8-526"><a href="#cb8-526" aria-hidden="true" tabindex="-1"></a>    curve would be meaningless — we want the observed *count* of 0s</span>
+<span id="cb8-527"><a href="#cb8-527" aria-hidden="true" tabindex="-1"></a>    and 1s compared against the counts the model predicts. Match the</span>
+<span id="cb8-528"><a href="#cb8-528" aria-hidden="true" tabindex="-1"></a>    check to the shape of the outcome.</span>
+<span id="cb8-529"><a href="#cb8-529" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-530"><a href="#cb8-530" aria-hidden="true" tabindex="-1"></a>You want the observed points to sit inside the predicted intervals for</span>
+<span id="cb8-531"><a href="#cb8-531" aria-hidden="true" tabindex="-1"></a>both bars. If the model systematically predicts too many promotions,</span>
+<span id="cb8-532"><a href="#cb8-532" aria-hidden="true" tabindex="-1"></a>you'll see it here and nowhere else.</span>
+<span id="cb8-533"><a href="#cb8-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-534"><a href="#cb8-534" aria-hidden="true" tabindex="-1"></a><span class="fu">### Your turn {.unnumbered}</span></span>
+<span id="cb8-535"><a href="#cb8-535" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-536"><a href="#cb8-536" aria-hidden="true" tabindex="-1"></a>**1.** Add <span class="in">`sales`</span> to the logistic model. Does higher sales change</span>
+<span id="cb8-537"><a href="#cb8-537" aria-hidden="true" tabindex="-1"></a>promotion odds, holding customer rating and performance tier constant?</span>
+<span id="cb8-538"><a href="#cb8-538" aria-hidden="true" tabindex="-1"></a>Report its odds ratio — and then convert it into a change in</span>
+<span id="cb8-539"><a href="#cb8-539" aria-hidden="true" tabindex="-1"></a>probability at a 30% baseline, which is the version you'd actually</span>
+<span id="cb8-540"><a href="#cb8-540" aria-hidden="true" tabindex="-1"></a>present.</span>
+<span id="cb8-541"><a href="#cb8-541" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-542"><a href="#cb8-542" aria-hidden="true" tabindex="-1"></a>**2.** Compare the model with and without <span class="in">`sales`</span> using LOO from</span>
+<span id="cb8-543"><a href="#cb8-543" aria-hidden="true" tabindex="-1"></a>Chapter 7. Does it earn its place?</span>
+<span id="cb8-544"><a href="#cb8-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-545"><a href="#cb8-545" aria-hidden="true" tabindex="-1"></a><span class="in">```{r your-turn}</span></span>
+<span id="cb8-546"><a href="#cb8-546" aria-hidden="true" tabindex="-1"></a><span class="co"># Your code here</span></span>
+<span id="cb8-547"><a href="#cb8-547" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-548"><a href="#cb8-548" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-549"><a href="#cb8-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-550"><a href="#cb8-550" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb8-551"><a href="#cb8-551" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-552"><a href="#cb8-552" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
+<span id="cb8-553"><a href="#cb8-553" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-554"><a href="#cb8-554" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb8-555"><a href="#cb8-555" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
+<span id="cb8-556"><a href="#cb8-556" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-557"><a href="#cb8-557" aria-hidden="true" tabindex="-1"></a>Yes/no outcomes are most of what People Analytics is asked about —</span>
+<span id="cb8-558"><a href="#cb8-558" aria-hidden="true" tabindex="-1"></a>accept or decline, pass or fail probation, promoted or not, stayed or</span>
+<span id="cb8-559"><a href="#cb8-559" aria-hidden="true" tabindex="-1"></a>left. Logistic regression is the workhorse for all of them, and it's</span>
+<span id="cb8-560"><a href="#cb8-560" aria-hidden="true" tabindex="-1"></a>the same <span class="in">`brm()`</span> call you already know with <span class="in">`family = bernoulli()`</span>.</span>
+<span id="cb8-561"><a href="#cb8-561" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-562"><a href="#cb8-562" aria-hidden="true" tabindex="-1"></a>The part that separates a good analyst here is **translation**. The</span>
+<span id="cb8-563"><a href="#cb8-563" aria-hidden="true" tabindex="-1"></a>model speaks log-odds, the software offers you odds ratios, and your</span>
+<span id="cb8-564"><a href="#cb8-564" aria-hidden="true" tabindex="-1"></a>stakeholder needs probabilities. Doing that conversion carefully — and</span>
+<span id="cb8-565"><a href="#cb8-565" aria-hidden="true" tabindex="-1"></a>resisting the temptation to say "three times as likely" when the odds</span>
+<span id="cb8-566"><a href="#cb8-566" aria-hidden="true" tabindex="-1"></a>ratio is 3 — is what keeps your findings both useful and honest.</span>
+<span id="cb8-567"><a href="#cb8-567" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-568"><a href="#cb8-568" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-569"><a href="#cb8-569" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb8-570"><a href="#cb8-570" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-571"><a href="#cb8-571" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
+<span id="cb8-572"><a href="#cb8-572" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-573"><a href="#cb8-573" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb8-574"><a href="#cb8-574" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
+<span id="cb8-575"><a href="#cb8-575" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-576"><a href="#cb8-576" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>A straight line can't model a probability, because lines don't</span>
+<span id="cb8-577"><a href="#cb8-577" aria-hidden="true" tabindex="-1"></a>    stop at 0 and 1. **Log-odds** are unbounded, so we fit the line</span>
+<span id="cb8-578"><a href="#cb8-578" aria-hidden="true" tabindex="-1"></a>    there and translate back.</span>
+<span id="cb8-579"><a href="#cb8-579" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Logistic regression** (<span class="in">`family = bernoulli()`</span>) does exactly</span>
+<span id="cb8-580"><a href="#cb8-580" aria-hidden="true" tabindex="-1"></a>    that, and has no <span class="in">`sigma`</span> to estimate.</span>
+<span id="cb8-581"><a href="#cb8-581" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Log-odds of 0 is a 50/50 chance**, and the scale is symmetric</span>
+<span id="cb8-582"><a href="#cb8-582" aria-hidden="true" tabindex="-1"></a>    around it.</span>
+<span id="cb8-583"><a href="#cb8-583" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>An **odds ratio** is not a ratio of probabilities. An OR of 3 at a</span>
+<span id="cb8-584"><a href="#cb8-584" aria-hidden="true" tabindex="-1"></a>    30% baseline is a move to 56% — not "three times as likely".</span>
+<span id="cb8-585"><a href="#cb8-585" aria-hidden="true" tabindex="-1"></a>    Convert to probabilities before presenting.</span>
+<span id="cb8-586"><a href="#cb8-586" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Fit on whatever scale suits the model; present on the scale the</span>
+<span id="cb8-587"><a href="#cb8-587" aria-hidden="true" tabindex="-1"></a>    business thinks in.**</span>
+<span id="cb8-588"><a href="#cb8-588" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>Match your **posterior predictive check** to the shape of the</span>
+<span id="cb8-589"><a href="#cb8-589" aria-hidden="true" tabindex="-1"></a>    outcome — <span class="in">`type = "bars"`</span> for binary.</span>
+<span id="cb8-590"><a href="#cb8-590" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>When the claim is about a **gap between two groups**, compute the</span>
+<span id="cb8-591"><a href="#cb8-591" aria-hidden="true" tabindex="-1"></a>    gap's own posterior with <span class="in">`compare_levels()`</span>. Two non-overlapping</span>
+<span id="cb8-592"><a href="#cb8-592" aria-hidden="true" tabindex="-1"></a>    intervals are not the same statement, and the difference is the</span>
+<span id="cb8-593"><a href="#cb8-593" aria-hidden="true" tabindex="-1"></a>    number the stakeholder will quote.</span>
+<span id="cb8-594"><a href="#cb8-594" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb8-595"><a href="#cb8-595" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-596"><a href="#cb8-596" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
+<span id="cb8-597"><a href="#cb8-597" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-598"><a href="#cb8-598" aria-hidden="true" tabindex="-1"></a>**The complete workflow** — you now have every technique in Part III.</span>
+<span id="cb8-599"><a href="#cb8-599" aria-hidden="true" tabindex="-1"></a>Next we assemble them into a single repeatable recipe, and a map of</span>
+<span id="cb8-600"><a href="#cb8-600" aria-hidden="true" tabindex="-1"></a>which model to reach for whatever your outcome looks like.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
@@ -2037,8 +2216,8 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <p>Bayesian Thinking for People Analytics</p>
 </div>   
     <div class="nav-footer-center">
-      &nbsp;
-    </div>
+<p>© 2026 Andrew Marritt · Text <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> · Code MIT</p>
+</div>
     <div class="nav-footer-right">
 <p>Built with <a href="https://quarto.org">Quarto</a></p>
 </div>

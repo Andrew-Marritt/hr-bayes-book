@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5fd49111c67786fa9da7eec5f8b0b01d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d674355c35ba9b8500a9db5196442da3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d219b26e5c661126e8aec3f67e78b0bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -434,6 +434,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-finish-line" id="toc-the-finish-line" class="nav-link active" data-scroll-target="#the-finish-line">The finish line!</a>
   <ul class="collapse">
   <li><a href="#twenty-minutes-with-the-exec-committee" id="toc-twenty-minutes-with-the-exec-committee" class="nav-link" data-scroll-target="#twenty-minutes-with-the-exec-committee">Twenty minutes with the exec committee</a></li>
+  <li><a href="#analysis-strategy" id="toc-analysis-strategy" class="nav-link" data-scroll-target="#analysis-strategy">Analysis strategy</a></li>
   </ul></li>
   <li><a href="#what-youll-be-able-to-do-by-the-end" id="toc-what-youll-be-able-to-do-by-the-end" class="nav-link" data-scroll-target="#what-youll-be-able-to-do-by-the-end">What you’ll be able to do by the end</a></li>
   <li><a href="#what-the-deliverable-looks-like" id="toc-what-the-deliverable-looks-like" class="nav-link" data-scroll-target="#what-the-deliverable-looks-like"><span class="header-section-number">10.1</span> What the deliverable looks like</a></li>
@@ -491,6 +492,15 @@ Note
 <p>Everything in Parts I to III has been building one analysis. This chapter turns it into a slide — and into a recipe you can re-run on whatever you’re asked next.</p>
 </div>
 </div>
+</section>
+<section id="analysis-strategy" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="analysis-strategy">Analysis strategy</h3>
+<p>This chapter’s strategy is the chapter, so this section is short — but it still has the same shape, and the point is that the shape does not change when the audience is an exec committee.</p>
+<p><strong>What we have.</strong> Everything from Chapters 1 to 9: a question, a dataset, a fitted model, and a set of results that are individually correct and collectively not yet a recommendation.</p>
+<p><strong>What would answer the question.</strong> Twenty minutes of exec attention buys <strong>one chart and one sentence</strong>, plus enough visible rigour that someone will sign off on acting. Not a model, not a method, and not a walk through what you did — the deliverable is a decision they can take.</p>
+<p><strong>What could go wrong.</strong> The two steps everyone skips are the two a reviewer asks about first, and skipping them is invisible in the output. Beyond that, the characteristic failure of a chapter like this is the opposite of under-preparation: showing the working, in order, because it was hard, and spending the twenty minutes on the analysis rather than on the answer.</p>
+<p><strong>So the plan.</strong> Run the workflow in order, name the steps that get skipped, match the model family to the outcome using the map of the whole book, and then reduce all of it to the chart and the sentence.</p>
+<p><strong>What would make us stop.</strong> The checklist at the end of this chapter has a question on it that should stop you before any of this: <em>what would we do differently depending on the answer?</em> If there is no answer to that, the right move is to say so and not to spend the twenty minutes at all.</p>
 </section>
 </section>
 <section id="what-youll-be-able-to-do-by-the-end" class="level2 unnumbered">
@@ -645,49 +655,49 @@ Tip
 <td>A rate needing a fast, closed-form fix</td>
 <td>Empirical Bayes</td>
 <td><em>conjugate shortcut</em></td>
-<td>13</td>
+<td>14</td>
 </tr>
 <tr class="even">
 <td>Ranking many small groups fairly</td>
 <td>Shrinkage / partial pooling</td>
 <td><code>poisson()</code> + offset</td>
-<td>14</td>
+<td>15</td>
 </tr>
 <tr class="odd">
 <td>Variance across levels of structure</td>
 <td>Hierarchical variance components</td>
 <td><code>gaussian()</code></td>
-<td>15</td>
+<td>16</td>
 </tr>
 <tr class="even">
 <td>Time until an event</td>
 <td>Survival model</td>
 <td><code>weibull()</code> + <code>cens()</code></td>
-<td>16</td>
+<td>17</td>
 </tr>
 <tr class="odd">
 <td>Likert / ordered-category</td>
 <td>Ordinal (proportional-odds)</td>
 <td><code>cumulative("logit")</code></td>
-<td>17</td>
+<td>18</td>
 </tr>
 <tr class="even">
 <td>Comparing two rates</td>
 <td>Bayesian A/B test</td>
 <td><em>conjugate shortcut</em></td>
-<td>19</td>
+<td>20</td>
 </tr>
 <tr class="odd">
 <td>A predictor measured with error</td>
 <td>Measurement-error model</td>
 <td><code>me()</code> wrapper</td>
-<td>18</td>
+<td>19</td>
 </tr>
 <tr class="even">
 <td>Missing values in a predictor</td>
 <td>In-model imputation</td>
 <td><code>mi()</code> wrapper</td>
-<td>18</td>
+<td>19</td>
 </tr>
 <tr class="odd">
 <td>Counts</td>
@@ -776,8 +786,8 @@ Tip
 </div>
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>The <strong>complete Bayesian workflow</strong> ties every chapter so far into one repeatable recipe: question, data, model, priors, fit, diagnose, check, interpret, communicate.</li>
-<li><strong>Steps 6 and 7 — diagnose and check — are the ones people skip</strong>, and the first two a technical reviewer asks about.</li>
+<li>The <strong>complete Bayesian workflow</strong> ties every chapter so far into one repeatable recipe: question, claim, data, model, priors, fit, diagnose, check, interpret, temper, communicate.</li>
+<li><strong>Steps 7 and 8 — diagnose and check — are the ones people skip</strong>, and the first two a technical reviewer asks about.</li>
 <li>Choosing a model is mostly choosing a <strong>family to match your outcome</strong>. The formula and the workflow barely change.</li>
 <li>You have a <strong>project checklist</strong> you can run against any question you’re handed.</li>
 <li>The deliverable is <strong>one chart and one sentence</strong>. None of the machinery goes on the slide — the rigour is in how the number was produced, not in how much of it you display.</li>
@@ -1289,200 +1299,230 @@ Tip
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>whatever you're asked next.</span>
 <span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you'll be able to do by the end {.unnumbered}</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="fu">### Analysis strategy {.unnumbered}</span></span>
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Run the **complete Bayesian workflow** end to end, in order</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Recognise which two steps everyone skips, and why a reviewer asks</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    about them first</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Choose the right **model family for your outcome**, using a map of</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    the whole book</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Apply a **project checklist** to your own question</span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Present a finding as **one chart and one sentence**</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>This chapter's strategy is the chapter, so this section is short — but it</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>still has the same shape, and the point is that the shape does not change</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>when the audience is an exec committee.</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>**What we have.** Everything from Chapters 1 to 9: a question, a dataset, a</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>fitted model, and a set of results that are individually correct and</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>collectively not yet a recommendation.</span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">## What the deliverable looks like</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>Before the recipe, the destination. Chapter 9 ended with a chart of</span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>predicted promotion probability by performance tier and customer</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>rating, and a sentence to go with it.</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>That pairing — **one chart, one sentence, a number attached to every</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>claim** — is what lands in the meeting. No coefficients, no log-odds,</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>no p-values, no mention of <span class="in">`brms`</span>.</span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>The rigour lives in **how the number was produced**, not in how much</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>of the machinery you show. Everything below is that production</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>process. The exec committee will never see any of it, and the whole</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>analysis depends on you having done it.</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="fu">## The complete Bayesian workflow</span></span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>Every analysis you do from now on follows the same eleven steps. Working</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>through them deliberately is what separates a defensible analysis from</span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>a lucky one.</span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="fu">## The workflow, start to finish</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>**What would answer the question.** Twenty minutes of exec attention buys</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>**one chart and one sentence**, plus enough visible rigour that someone will</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>sign off on acting. Not a model, not a method, and not a walk through what</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>you did — the deliverable is a decision they can take.</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>**What could go wrong.** The two steps everyone skips are the two a reviewer</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>asks about first, and skipping them is invisible in the output. Beyond that,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>the characteristic failure of a chapter like this is the opposite of</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>under-preparation: showing the working, in order, because it was hard, and</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>spending the twenty minutes on the analysis rather than on the answer.</span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>**So the plan.** Run the workflow in order, name the steps that get skipped,</span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>match the model family to the outcome using the map of the whole book, and</span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>then reduce all of it to the chart and the sentence.</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>**What would make us stop.** The checklist at the end of this chapter has a</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>question on it that should stop you before any of this: *what would we do</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>differently depending on the answer?* If there is no answer to that, the</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>right move is to say so and not to spend the twenty minutes at all.</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you'll be able to do by the end {.unnumbered}</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Run the **complete Bayesian workflow** end to end, in order</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Recognise which two steps everyone skips, and why a reviewer asks</span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>    about them first</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Choose the right **model family for your outcome**, using a map of</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>    the whole book</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Apply a **project checklist** to your own question</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Present a finding as **one chart and one sentence**</span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Question** — a clear, answerable question about a quantity or</span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>    relationship.</span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Claim** — decide what kind of answer you are being asked for.</span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>    *Describing* what is true of the people you have, *predicting* what</span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>    happens next, or *estimating what would change if you intervened*.</span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a>    These need different models and licence different sentences, and the</span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>    third is the one usually being asked for (Chapters 21–22).</span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Data** — describe it, plot it, and ask not just how much is</span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>    missing but **why** (Chapters 1 and 19).</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Model** — pick an outcome family (Normal, Bernoulli, …), and</span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>    decide which predictors belong. That second half is a question about</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>    cause and effect, not about fit — no statistic will answer it for</span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>    you (Chapter 21).</span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Priors** — choose weakly-informative priors; **visualise** them;</span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>    run a **prior predictive check** (Chapter 5).</span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>**Fit** — with <span class="in">`brms`</span>.</span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>**Diagnose** — check <span class="in">`Rhat`</span> ≈ 1 and healthy <span class="in">`ESS`</span> (Chapter 11).</span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**Check** — posterior predictive check: does the model reproduce</span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>    the data?</span>
-<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>**Interpret** — report posteriors as estimates + credible</span>
-<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a>    intervals; prefer probabilities to jargon.</span>
-<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>**Temper** — say what your measures can and cannot support. A noisy</span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>    measure understates effects; a sample that is only the people you</span>
-<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>    hired and kept cannot speak for anyone else (Chapters 19 and 21).</span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>**Communicate** — one clear chart and one plain-English sentence</span>
-<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>    per finding.</span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>Steps 7 and 8 are the ones people skip, and the ones a technical</span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>reviewer asks about first. Steps 2 and 10 are the ones nobody skips</span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>deliberately — they get left out because no software prompts for them.</span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matching model to outcome: the whole book's toolkit</span></span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your project checklist</span></span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What is my outcome**, and so which model?</span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What are my predictors**, and why those?</span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What priors** can I defend? (visualise + prior predictive check,</span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>    or a full elicitation session per Chapter 23)</span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Did the sampler converge?** (Rhat, ESS)</span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Does the model fit?** (posterior predictive check)</span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What do I conclude?** (estimates + credible intervals, one chart</span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>    per finding)</span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>Answer these and you have a rigorous, defensible Bayesian analysis.</span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Your outcome <span class="pp">|</span> The model <span class="pp">|</span> <span class="in">`brm(..., family = )`</span> <span class="pp">|</span> Chapter <span class="pp">|</span></span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Continuous <span class="pp">|</span> Normal regression <span class="pp">|</span> <span class="in">`gaussian()`</span> <span class="pp">|</span> 6–7 <span class="pp">|</span></span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Yes / no <span class="pp">|</span> Logistic <span class="pp">|</span> <span class="in">`bernoulli()`</span> <span class="pp">|</span> 9 <span class="pp">|</span></span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A rate or proportion <span class="pp">|</span> Beta-Binomial <span class="pp">|</span> *conjugate shortcut* <span class="pp">|</span> 4 <span class="pp">|</span></span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Grouped / nested data <span class="pp">|</span> add <span class="in">`(1 \| group)`</span> <span class="pp">|</span> *(same family, new formula)* <span class="pp">|</span> 8 <span class="pp">|</span></span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A rate needing a fast, closed-form fix <span class="pp">|</span> Empirical Bayes <span class="pp">|</span> *conjugate shortcut* <span class="pp">|</span> 13 <span class="pp">|</span></span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Ranking many small groups fairly <span class="pp">|</span> Shrinkage / partial pooling <span class="pp">|</span> <span class="in">`poisson()`</span> + offset <span class="pp">|</span> 14 <span class="pp">|</span></span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Variance across levels of structure <span class="pp">|</span> Hierarchical variance components <span class="pp">|</span> <span class="in">`gaussian()`</span> <span class="pp">|</span> 15 <span class="pp">|</span></span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Time until an event <span class="pp">|</span> Survival model <span class="pp">|</span> <span class="in">`weibull()`</span> + <span class="in">`cens()`</span> <span class="pp">|</span> 16 <span class="pp">|</span></span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Likert / ordered-category <span class="pp">|</span> Ordinal (proportional-odds) <span class="pp">|</span> <span class="in">`cumulative("logit")`</span> <span class="pp">|</span> 17 <span class="pp">|</span></span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Comparing two rates <span class="pp">|</span> Bayesian A/B test <span class="pp">|</span> *conjugate shortcut* <span class="pp">|</span> 19 <span class="pp">|</span></span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A predictor measured with error <span class="pp">|</span> Measurement-error model <span class="pp">|</span> <span class="in">`me()`</span> wrapper <span class="pp">|</span> 18 <span class="pp">|</span></span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Missing values in a predictor <span class="pp">|</span> In-model imputation <span class="pp">|</span> <span class="in">`mi()`</span> wrapper <span class="pp">|</span> 18 <span class="pp">|</span></span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Counts <span class="pp">|</span> Poisson / negative binomial <span class="pp">|</span> <span class="in">`poisson()`</span> / <span class="in">`negbinomial()`</span> <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> An effect that may vary by group <span class="pp">|</span> Varying slopes <span class="pp">|</span> *(same family, new formula)* <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Several unordered categories <span class="pp">|</span> Multinomial <span class="pp">|</span> <span class="in">`categorical()`</span> <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> One person measured many times <span class="pp">|</span> Crossed effects <span class="pp">|</span> *(same family, new formula)* <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="fu">## What this table cannot tell you</span></span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>Every row answers the same question: *what shape is my outcome?* That is</span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>the right first question, and it is not the only one.</span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>Nothing in this table says whether your answer is allowed to be causal.</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>Two analyses can use the identical row — <span class="in">`bernoulli()`</span>, say — and one is</span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>a fair description of who gets promoted while the other is a claim about</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>what would happen if you changed something. The family is the same; the</span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>sentence you are entitled to say is not.</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>Chapters 21 and 22 are about that second question, and they do not fit</span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>in a table organised by outcome type. Pick your row here. Then go and</span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>decide what you are claiming.</span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="fu">## Notice what doesn't change</span></span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>Read down that third column and the real pattern in this book shows</span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>up: it's the same <span class="in">`brm(formula, family = ..., prior = ...)`</span> call,</span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>chapter after chapter. A continuous outcome, a yes/no, a count, an</span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>ordered survey response, a time-to-event — none of them need a</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>different tool, a different function, or a different mental model.</span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>Only the <span class="in">`family`</span>, the formula, and the priors change. The rows marked</span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>*conjugate shortcut* are the deliberate exceptions (Chapters 4, 14, and 19) — simple enough to solve exactly by hand, which is precisely why</span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>they're taught that way before <span class="in">`brms`</span> takes over as the one tool for</span>
-<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a>everything else.</span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>This table is the map for the rest of the book — Part IV goes deeper</span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>on trusting a fit and richer model families, and Part V is built</span>
-<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>specifically around the People Analytics questions this table's later</span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>rows point to.</span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="fu">## What the deliverable looks like</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a>Before the recipe, the destination. Chapter 9 ended with a chart of</span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a>predicted promotion probability by performance tier and customer</span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a>rating, and a sentence to go with it.</span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a>That pairing — **one chart, one sentence, a number attached to every</span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a>claim** — is what lands in the meeting. No coefficients, no log-odds,</span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>no p-values, no mention of <span class="in">`brms`</span>.</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a>The rigour lives in **how the number was produced**, not in how much</span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a>of the machinery you show. Everything below is that production</span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>process. The exec committee will never see any of it, and the whole</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>analysis depends on you having done it.</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## The complete Bayesian workflow</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>Every analysis you do from now on follows the same eleven steps. Working</span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>through them deliberately is what separates a defensible analysis from</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>a lucky one.</span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## The workflow, start to finish</span></span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Question** — a clear, answerable question about a quantity or</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>    relationship.</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Claim** — decide what kind of answer you are being asked for.</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>    *Describing* what is true of the people you have, *predicting* what</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>    happens next, or *estimating what would change if you intervened*.</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>    These need different models and licence different sentences, and the</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>    third is the one usually being asked for (Chapters 21–22).</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Data** — describe it, plot it, and ask not just how much is</span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a>    missing but **why** (Chapters 1 and 19).</span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>**Model** — pick an outcome family (Normal, Bernoulli, …), and</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>    decide which predictors belong. That second half is a question about</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>    cause and effect, not about fit — no statistic will answer it for</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>    you (Chapter 21).</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>**Priors** — choose weakly-informative priors; **visualise** them;</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>    run a **prior predictive check** (Chapter 5).</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="ss">6.  </span>**Fit** — with <span class="in">`brms`</span>.</span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="ss">7.  </span>**Diagnose** — check <span class="in">`Rhat`</span> ≈ 1 and healthy <span class="in">`ESS`</span> (Chapter 11).</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="ss">8.  </span>**Check** — posterior predictive check: does the model reproduce</span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>    the data?</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="ss">9.  </span>**Interpret** — report posteriors as estimates + credible</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>    intervals; prefer probabilities to jargon.</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>**Temper** — say what your measures can and cannot support. A noisy</span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>    measure understates effects; a sample that is only the people you</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>    hired and kept cannot speak for anyone else (Chapters 19 and 21).</span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="ss">11. </span>**Communicate** — one clear chart and one plain-English sentence</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>    per finding.</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>Steps 7 and 8 are the ones people skip, and the ones a technical</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>reviewer asks about first. Steps 2 and 10 are the ones nobody skips</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>deliberately — they get left out because no software prompts for them.</span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matching model to outcome: the whole book's toolkit</span></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="fu">## Your project checklist</span></span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What is my outcome**, and so which model?</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What are my predictors**, and why those?</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What priors** can I defend? (visualise + prior predictive check,</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>    or a full elicitation session per Chapter 23)</span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Did the sampler converge?** (Rhat, ESS)</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Does the model fit?** (posterior predictive check)</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**What do I conclude?** (estimates + credible intervals, one chart</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>    per finding)</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>Answer these and you have a rigorous, defensible Bayesian analysis.</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Your outcome <span class="pp">|</span> The model <span class="pp">|</span> <span class="in">`brm(..., family = )`</span> <span class="pp">|</span> Chapter <span class="pp">|</span></span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Continuous <span class="pp">|</span> Normal regression <span class="pp">|</span> <span class="in">`gaussian()`</span> <span class="pp">|</span> 6–7 <span class="pp">|</span></span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Yes / no <span class="pp">|</span> Logistic <span class="pp">|</span> <span class="in">`bernoulli()`</span> <span class="pp">|</span> 9 <span class="pp">|</span></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A rate or proportion <span class="pp">|</span> Beta-Binomial <span class="pp">|</span> *conjugate shortcut* <span class="pp">|</span> 4 <span class="pp">|</span></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Grouped / nested data <span class="pp">|</span> add <span class="in">`(1 \| group)`</span> <span class="pp">|</span> *(same family, new formula)* <span class="pp">|</span> 8 <span class="pp">|</span></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A rate needing a fast, closed-form fix <span class="pp">|</span> Empirical Bayes <span class="pp">|</span> *conjugate shortcut* <span class="pp">|</span> 14 <span class="pp">|</span></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Ranking many small groups fairly <span class="pp">|</span> Shrinkage / partial pooling <span class="pp">|</span> <span class="in">`poisson()`</span> + offset <span class="pp">|</span> 15 <span class="pp">|</span></span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Variance across levels of structure <span class="pp">|</span> Hierarchical variance components <span class="pp">|</span> <span class="in">`gaussian()`</span> <span class="pp">|</span> 16 <span class="pp">|</span></span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Time until an event <span class="pp">|</span> Survival model <span class="pp">|</span> <span class="in">`weibull()`</span> + <span class="in">`cens()`</span> <span class="pp">|</span> 17 <span class="pp">|</span></span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Likert / ordered-category <span class="pp">|</span> Ordinal (proportional-odds) <span class="pp">|</span> <span class="in">`cumulative("logit")`</span> <span class="pp">|</span> 18 <span class="pp">|</span></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Comparing two rates <span class="pp">|</span> Bayesian A/B test <span class="pp">|</span> *conjugate shortcut* <span class="pp">|</span> 20 <span class="pp">|</span></span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> A predictor measured with error <span class="pp">|</span> Measurement-error model <span class="pp">|</span> <span class="in">`me()`</span> wrapper <span class="pp">|</span> 19 <span class="pp">|</span></span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Missing values in a predictor <span class="pp">|</span> In-model imputation <span class="pp">|</span> <span class="in">`mi()`</span> wrapper <span class="pp">|</span> 19 <span class="pp">|</span></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Counts <span class="pp">|</span> Poisson / negative binomial <span class="pp">|</span> <span class="in">`poisson()`</span> / <span class="in">`negbinomial()`</span> <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> An effect that may vary by group <span class="pp">|</span> Varying slopes <span class="pp">|</span> *(same family, new formula)* <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Several unordered categories <span class="pp">|</span> Multinomial <span class="pp">|</span> <span class="in">`categorical()`</span> <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> One person measured many times <span class="pp">|</span> Crossed effects <span class="pp">|</span> *(same family, new formula)* <span class="pp">|</span> 12 (optional) <span class="pp">|</span></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a><span class="fu">## What this table cannot tell you</span></span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>Every row answers the same question: *what shape is my outcome?* That is</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>the right first question, and it is not the only one.</span>
 <span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
-<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
-<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>This is the checklist to pin up. Almost every analysis you're asked to</span>
-<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>do is a version of "pick the model that matches the outcome, state</span>
-<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>your assumptions, check your work, report uncertainty honestly." Doing</span>
-<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>that consistently — and being able to explain each step in one</span>
-<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>sentence — is what makes an analysis something a stakeholder can act</span>
-<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>on rather than something they have to take on faith.</span>
-<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
-<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
-<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The **complete Bayesian workflow** ties every chapter so far into</span>
-<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>    one repeatable recipe: question, data, model, priors, fit,</span>
-<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>    diagnose, check, interpret, communicate.</span>
-<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Steps 6 and 7 — diagnose and check — are the ones people skip**,</span>
-<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>    and the first two a technical reviewer asks about.</span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Choosing a model is mostly choosing a **family to match your</span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>    outcome**. The formula and the workflow barely change.</span>
-<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>You have a **project checklist** you can run against any question</span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>    you're handed.</span>
-<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>The deliverable is **one chart and one sentence**. None of the</span>
-<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>    machinery goes on the slide — the rigour is in how the number was</span>
-<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>    produced, not in how much of it you display.</span>
-<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
-<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>Part IV goes further: **Chapter 11** on MCMC diagnostics (trusting your</span>
-<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>model), and **Chapter 12** on richer models (varying slopes and count</span>
-<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>outcomes). Part V, from Chapter 14, is built specifically around</span>
-<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>People Analytics — empirical Bayes, shrinkage, survival analysis,</span>
-<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>Likert data, A/B testing, and the elicitation workflow that closes the</span>
-<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>book.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>Nothing in this table says whether your answer is allowed to be causal.</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>Two analyses can use the identical row — <span class="in">`bernoulli()`</span>, say — and one is</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>a fair description of who gets promoted while the other is a claim about</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a>what would happen if you changed something. The family is the same; the</span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>sentence you are entitled to say is not.</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>Chapters 21 and 22 are about that second question, and they do not fit</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>in a table organised by outcome type. Pick your row here. Then go and</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>decide what you are claiming.</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a><span class="fu">## Notice what doesn't change</span></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a>Read down that third column and the real pattern in this book shows</span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>up: it's the same <span class="in">`brm(formula, family = ..., prior = ...)`</span> call,</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>chapter after chapter. A continuous outcome, a yes/no, a count, an</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>ordered survey response, a time-to-event — none of them need a</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>different tool, a different function, or a different mental model.</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>Only the <span class="in">`family`</span>, the formula, and the priors change. The rows marked</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>*conjugate shortcut* are the deliberate exceptions (Chapters 4, 14, and 19) — simple enough to solve exactly by hand, which is precisely why</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>they're taught that way before <span class="in">`brms`</span> takes over as the one tool for</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>everything else.</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a>This table is the map for the rest of the book — Part IV goes deeper</span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>on trusting a fit and richer model families, and Part V is built</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>specifically around the People Analytics questions this table's later</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>rows point to.</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>This is the checklist to pin up. Almost every analysis you're asked to</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>do is a version of "pick the model that matches the outcome, state</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>your assumptions, check your work, report uncertainty honestly." Doing</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>that consistently — and being able to explain each step in one</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>sentence — is what makes an analysis something a stakeholder can act</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>on rather than something they have to take on faith.</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>The **complete Bayesian workflow** ties every chapter so far into</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>    one repeatable recipe: question, claim, data, model, priors, fit,</span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>    diagnose, check, interpret, temper, communicate.</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Steps 7 and 8 — diagnose and check — are the ones people skip**,</span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a>    and the first two a technical reviewer asks about.</span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Choosing a model is mostly choosing a **family to match your</span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>    outcome**. The formula and the workflow barely change.</span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>You have a **project checklist** you can run against any question</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>    you're handed.</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>The deliverable is **one chart and one sentence**. None of the</span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>    machinery goes on the slide — the rigour is in how the number was</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>    produced, not in how much of it you display.</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>Part IV goes further: **Chapter 11** on MCMC diagnostics (trusting your</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a>model), and **Chapter 12** on richer models (varying slopes and count</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>outcomes). Part V, from Chapter 14, is built specifically around</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>People Analytics — empirical Bayes, shrinkage, survival analysis,</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>Likert data, A/B testing, and the elicitation workflow that closes the</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>book.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -1491,8 +1531,8 @@ Tip
 <p>Bayesian Thinking for People Analytics</p>
 </div>   
     <div class="nav-footer-center">
-      &nbsp;
-    </div>
+<p>© 2026 Andrew Marritt · Text <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> · Code MIT</p>
+</div>
     <div class="nav-footer-right">
 <p>Built with <a href="https://quarto.org">Quarto</a></p>
 </div>

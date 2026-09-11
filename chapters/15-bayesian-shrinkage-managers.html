@@ -82,7 +82,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-5fd49111c67786fa9da7eec5f8b0b01d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-d674355c35ba9b8500a9db5196442da3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d219b26e5c661126e8aec3f67e78b0bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -431,7 +431,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome-back" id="toc-welcome-back" class="nav-link active" data-scroll-target="#welcome-back">Welcome back</a></li>
+  <li><a href="#welcome-back" id="toc-welcome-back" class="nav-link active" data-scroll-target="#welcome-back">Welcome back</a>
+  <ul class="collapse">
+  <li><a href="#analysis-strategy" id="toc-analysis-strategy" class="nav-link" data-scroll-target="#analysis-strategy">Analysis strategy</a></li>
+  </ul></li>
   <li><a href="#what-youll-be-able-to-do-by-the-end" id="toc-what-youll-be-able-to-do-by-the-end" class="nav-link" data-scroll-target="#what-youll-be-able-to-do-by-the-end">What you’ll be able to do by the end</a></li>
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">15.1</span> Setup</a></li>
   <li><a href="#the-problem-a-league-table-that-misleads" id="toc-the-problem-a-league-table-that-misleads" class="nav-link" data-scroll-target="#the-problem-a-league-table-that-misleads"><span class="header-section-number">15.2</span> The problem: a league table that misleads</a>
@@ -496,6 +499,14 @@ Important
 <p>If you take one technique from this book back to your desk, make it this one. It changes how you should present <em>any</em> manager or team comparison you’re ever asked to produce.</p>
 </div>
 </div>
+<section id="analysis-strategy" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="analysis-strategy">Analysis strategy</h3>
+<p><strong>What we have.</strong> One row per manager: how many transfer requests their team filed, and how many people they manage. Team sizes range from a handful to dozens, which is what makes the obvious metric unsafe.</p>
+<p><strong>What would answer the question.</strong> Each manager’s <strong>underlying</strong> rate of transfer requests per person managed, with an interval — and a ranking that a manager on the wrong end of it could not fairly object to, which is a higher bar than a ranking that is arithmetically correct.</p>
+<p><strong>What could go wrong.</strong> Transfers divided by headcount looks like a rate and behaves like a lottery for the small teams: one person asking to move puts a three-report manager at the top of the list. This is Chapter 8’s problem again, with two things that make it worse. The unit is now an individual person with a name, so the cost of being wrong is borne by them rather than by an office. And the denominator hides an assumption — requests accumulate over a manager’s whole tenure while headcount is a snapshot of today.</p>
+<p><strong>So the plan.</strong> Model the counts as counts, with team size as an exposure rather than a divisor. Give each manager their own intercept, tied to the organisation-wide rate so that thin evidence gets pulled toward it. Report the shrunken estimates with intervals, and never the raw table.</p>
+<p><strong>What would make us stop.</strong> If the between-manager variation comes back small relative to the noise, the deliverable is “we cannot reliably tell these managers apart on this data” — and no list goes out. Given what a list like this is used for, that is the outcome worth being most willing to deliver.</p>
+</section>
 </section>
 <section id="what-youll-be-able-to-do-by-the-end" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="what-youll-be-able-to-do-by-the-end">What you’ll be able to do by the end</h2>
@@ -531,6 +542,25 @@ Important
 <li><code>transfers</code> — the number of transfer requests filed by people in a manager’s group while they’ve been the manager. Read as a warning signal: a group asking to leave.</li>
 <li><code>group_size</code> — how many people the manager is responsible for. This is the <strong>exposure</strong>: the number of chances a transfer request had to happen.</li>
 </ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Two assumptions in that word “exposure”, stated up front
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>transfers</code> accumulates over however long someone has been a manager. <code>group_size</code> is a snapshot of the team <strong>now</strong>. Dividing one by the other quietly assumes two things, and this chapter assumes both:</p>
+<ol type="1">
+<li><strong>Every manager has been observed for the same length of time.</strong> If they haven’t, a manager of eight years looks worse than a manager of two for no reason other than having been watched longer, and the model will read that as a difference in management.</li>
+<li><strong>Team sizes have been roughly stable.</strong> A manager whose team has doubled since most of those requests were filed has the wrong denominator.</li>
+</ol>
+<p>On real data, neither usually holds, and the fix is not difficult: use <strong>person-months at risk</strong> as the offset instead of headcount — <code>log(group_size * months_managed)</code> in place of <code>log(group_size)</code>. Every line of code below works unchanged; only the offset changes. The teaching dataset doesn’t carry a tenure-as-manager column, so we assume equal windows and stable teams and say so, rather than computing a rate per unit of <em>something</em> and hoping nobody asks which unit.</p>
+<p>This is the single most common way a manager league table goes wrong before any statistics are involved, and it is worth checking before you model anything: <strong>is the denominator the same kind of thing for everyone?</strong></p>
+</div>
+</div>
 <hr>
 </section>
 <section id="the-problem-a-league-table-that-misleads" class="level2" data-number="15.2">
@@ -728,7 +758,22 @@ sd(Intercept) 0.8801281 0.09520379 0.6989286 1.076519 1.001642 986.0813
 sd(Intercept) 1912.429</code></pre>
 </div>
 </div>
-<p><code>sd(Intercept)</code> here is a genuine finding: it says how much managers’ <em>true</em> transfer rates actually vary, once you strip away the noise from different team sizes. A large value says management quality (or at least whatever drives transfer requests) varies a lot across the organisation; a small value says most of the raw league table’s spread was noise all along.</p>
+<p><code>sd(Intercept)</code> here is a genuine finding: it bounds how much managers’ <em>true</em> transfer rates could vary — or at least, how much whatever drives transfer requests varies — once you strip away the noise from different team sizes. A large value says that whatever it is varies a lot across the organisation; a small value says most of the raw league table’s spread was noise all along.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why “bounds” rather than “measures”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There is one row per manager in this data, so the manager-level term is also an <strong>observation-level</strong> random effect: there is exactly one observation inside each group. Mathematically that makes it indistinguishable from an overdispersion term — a parameter that mops up any spread the Poisson alone cannot produce, whatever its source.</p>
+<p>So <code>sd(Intercept)</code> here is an upper bound on genuine between-manager variation rather than a clean isolation of it. Real differences between managers are in there; so is anything else that makes the counts more spread out than Poisson expects, from team composition to how consistently requests get logged.</p>
+<p>None of this touches the shrinkage or the ranking, which is what the chapter is about — the estimates still move by exactly as much as each manager’s evidence warrants. It does mean that if you want to quote the between-manager spread as a <em>number</em>, you need repeated observations per manager (several quarters, say), so the model can tell manager-level variation apart from period-to-period noise. With one row each, the honest sentence is “at most this much”.</p>
+</div>
+</div>
 <hr>
 </section>
 <section id="diagnose-then-check" class="level3" data-number="15.4.2">
@@ -1482,448 +1527,531 @@ Important
 <span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>comparison you're ever asked to produce.</span>
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you'll be able to do by the end {.unnumbered}</span></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="fu">### Analysis strategy {.unnumbered}</span></span>
 <span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Explain why a manager's team size affects how much you should trust</span>
-<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    a metric calculated about their team</span>
-<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Fit a Bayesian multilevel model for a **rate with an exposure**</span>
-<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    (events per person managed)</span>
-<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Extract and visualise **shrinkage** for individual managers, not</span>
-<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>    just for aggregate groups</span>
-<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Compare a shrunk ranking to a raw one, and to an existing</span>
-<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    performance rating</span>
-<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Present shrunk results to a business audience that wants a simple</span>
-<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>    league table</span>
-<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
-<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
-<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(peopleanalyticsdata)</span>
-<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
-<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
-<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>))</span>
-<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
-<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"managers"</span>, <span class="at">package =</span> <span class="st">"peopleanalyticsdata"</span>)</span>
-<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Guard against missing values before modelling (Chapter 1 found gaps</span></span>
-<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a><span class="co"># in a similar teaching dataset).</span></span>
-<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>managers <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
-<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(transfers, group_size, employee_id, city, performance_group)</span>
-<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a>We're back with <span class="in">`managers`</span> (571 managers, one row each). Two columns do</span>
-<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a>the work in this chapter:</span>
-<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`transfers`</span> — the number of transfer requests filed by people in a</span>
-<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a>    manager's group while they've been the manager. Read as a warning</span>
-<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a>    signal: a group asking to leave.</span>
-<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`group_size`</span> — how many people the manager is responsible for. This</span>
-<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a>    is the **exposure**: the number of chances a transfer request had</span>
-<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a>    to happen.</span>
-<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a><span class="fu">## The problem: a league table that misleads</span></span>
-<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a><span class="fu">### The raw rate</span></span>
-<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a>The obvious metric is transfers **per person managed**:</span>
-<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r raw-rate}</span></span>
-<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a>managers <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
-<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">raw_rate =</span> transfers <span class="sc">/</span> group_size)</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>**What we have.** One row per manager: how many transfer requests their team</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>filed, and how many people they manage. Team sizes range from a handful to</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>dozens, which is what makes the obvious metric unsafe.</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>**What would answer the question.** Each manager's **underlying** rate of</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>transfer requests per person managed, with an interval — and a ranking that a</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>manager on the wrong end of it could not fairly object to, which is a higher</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>bar than a ranking that is arithmetically correct.</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>**What could go wrong.** Transfers divided by headcount looks like a rate and</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>behaves like a lottery for the small teams: one person asking to move puts a</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>three-report manager at the top of the list. This is Chapter 8's problem</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>again, with two things that make it worse. The unit is now an individual</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>person with a name, so the cost of being wrong is borne by them rather than</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>by an office. And the denominator hides an assumption — requests accumulate</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>over a manager's whole tenure while headcount is a snapshot of today.</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>**So the plan.** Model the counts as counts, with team size as an exposure</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>rather than a divisor. Give each manager their own intercept, tied to the</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>organisation-wide rate so that thin evidence gets pulled toward it. Report</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>the shrunken estimates with intervals, and never the raw table.</span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>**What would make us stop.** If the between-manager variation comes back</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>small relative to the noise, the deliverable is "we cannot reliably tell</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a>these managers apart on this data" — and no list goes out. Given what a list</span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a>like this is used for, that is the outcome worth being most willing to</span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a>deliver.</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## What you'll be able to do by the end {.unnumbered}</span></span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Explain why a manager's team size affects how much you should trust</span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a>    a metric calculated about their team</span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>Fit a Bayesian multilevel model for a **rate with an exposure**</span>
+<span id="cb19-59"><a href="#cb19-59" aria-hidden="true" tabindex="-1"></a>    (events per person managed)</span>
+<span id="cb19-60"><a href="#cb19-60" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>Extract and visualise **shrinkage** for individual managers, not</span>
+<span id="cb19-61"><a href="#cb19-61" aria-hidden="true" tabindex="-1"></a>    just for aggregate groups</span>
+<span id="cb19-62"><a href="#cb19-62" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Compare a shrunk ranking to a raw one, and to an existing</span>
+<span id="cb19-63"><a href="#cb19-63" aria-hidden="true" tabindex="-1"></a>    performance rating</span>
+<span id="cb19-64"><a href="#cb19-64" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>Present shrunk results to a business audience that wants a simple</span>
+<span id="cb19-65"><a href="#cb19-65" aria-hidden="true" tabindex="-1"></a>    league table</span>
+<span id="cb19-66"><a href="#cb19-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-67"><a href="#cb19-67" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-68"><a href="#cb19-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-69"><a href="#cb19-69" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb19-70"><a href="#cb19-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-71"><a href="#cb19-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
+<span id="cb19-72"><a href="#cb19-72" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb19-73"><a href="#cb19-73" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(peopleanalyticsdata)</span>
+<span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>))</span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
 <span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a>managers <span class="sc">|&gt;</span></span>
-<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(employee_id, city, group_size, transfers, raw_rate,</span>
-<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a>         performance_group) <span class="sc">|&gt;</span></span>
-<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(raw_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span>
-<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-87"><a href="#cb19-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r raw-rate-plot}</span></span>
-<span id="cb19-88"><a href="#cb19-88" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(managers, <span class="fu">aes</span>(<span class="at">x =</span> group_size, <span class="at">y =</span> raw_rate)) <span class="sc">+</span></span>
-<span id="cb19-89"><a href="#cb19-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">colour =</span> <span class="st">"#122a52"</span>) <span class="sc">+</span></span>
-<span id="cb19-90"><a href="#cb19-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">sum</span>(managers<span class="sc">$</span>transfers) <span class="sc">/</span> <span class="fu">sum</span>(managers<span class="sc">$</span>group_size),</span>
-<span id="cb19-91"><a href="#cb19-91" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
-<span id="cb19-92"><a href="#cb19-92" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb19-93"><a href="#cb19-93" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb19-94"><a href="#cb19-94" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Raw transfer rate by manager"</span>,</span>
-<span id="cb19-95"><a href="#cb19-95" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Dashed line = organisation-wide rate. Small teams scatter to extremes."</span>,</span>
-<span id="cb19-96"><a href="#cb19-96" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Group size (log scale)"</span>, <span class="at">y =</span> <span class="st">"Transfers per person managed"</span></span>
-<span id="cb19-97"><a href="#cb19-97" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-98"><a href="#cb19-98" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-99"><a href="#cb19-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-100"><a href="#cb19-100" aria-hidden="true" tabindex="-1"></a><span class="fu">### The five-report problem</span></span>
-<span id="cb19-101"><a href="#cb19-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-102"><a href="#cb19-102" aria-hidden="true" tabindex="-1"></a>Look at the top of that table, and at the scatter plot: the most</span>
-<span id="cb19-103"><a href="#cb19-103" aria-hidden="true" tabindex="-1"></a>alarming raw rates cluster among managers with the **smallest teams**.</span>
+<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"managers"</span>, <span class="at">package =</span> <span class="st">"peopleanalyticsdata"</span>)</span>
+<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Guard against missing values before modelling (Chapter 1 found gaps</span></span>
+<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a><span class="co"># in a similar teaching dataset).</span></span>
+<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>managers <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
+<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(transfers, group_size, employee_id, city, performance_group)</span>
+<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-87"><a href="#cb19-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-88"><a href="#cb19-88" aria-hidden="true" tabindex="-1"></a>We're back with <span class="in">`managers`</span> (571 managers, one row each). Two columns do</span>
+<span id="cb19-89"><a href="#cb19-89" aria-hidden="true" tabindex="-1"></a>the work in this chapter:</span>
+<span id="cb19-90"><a href="#cb19-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-91"><a href="#cb19-91" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`transfers`</span> — the number of transfer requests filed by people in a</span>
+<span id="cb19-92"><a href="#cb19-92" aria-hidden="true" tabindex="-1"></a>    manager's group while they've been the manager. Read as a warning</span>
+<span id="cb19-93"><a href="#cb19-93" aria-hidden="true" tabindex="-1"></a>    signal: a group asking to leave.</span>
+<span id="cb19-94"><a href="#cb19-94" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`group_size`</span> — how many people the manager is responsible for. This</span>
+<span id="cb19-95"><a href="#cb19-95" aria-hidden="true" tabindex="-1"></a>    is the **exposure**: the number of chances a transfer request had</span>
+<span id="cb19-96"><a href="#cb19-96" aria-hidden="true" tabindex="-1"></a>    to happen.</span>
+<span id="cb19-97"><a href="#cb19-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-98"><a href="#cb19-98" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb19-99"><a href="#cb19-99" aria-hidden="true" tabindex="-1"></a><span class="fu">## Two assumptions in that word "exposure", stated up front</span></span>
+<span id="cb19-100"><a href="#cb19-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-101"><a href="#cb19-101" aria-hidden="true" tabindex="-1"></a><span class="in">`transfers`</span> accumulates over however long someone has been a manager.</span>
+<span id="cb19-102"><a href="#cb19-102" aria-hidden="true" tabindex="-1"></a><span class="in">`group_size`</span> is a snapshot of the team **now**. Dividing one by the</span>
+<span id="cb19-103"><a href="#cb19-103" aria-hidden="true" tabindex="-1"></a>other quietly assumes two things, and this chapter assumes both:</span>
 <span id="cb19-104"><a href="#cb19-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-105"><a href="#cb19-105" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb19-106"><a href="#cb19-106" aria-hidden="true" tabindex="-1"></a>A manager with 3 reports and 1 transfer request has a raw rate of</span>
-<span id="cb19-107"><a href="#cb19-107" aria-hidden="true" tabindex="-1"></a>**33%** — worse than almost anyone else in the company on paper. A</span>
-<span id="cb19-108"><a href="#cb19-108" aria-hidden="true" tabindex="-1"></a>manager with 80 reports and 5 transfer requests has a raw rate of just</span>
-<span id="cb19-109"><a href="#cb19-109" aria-hidden="true" tabindex="-1"></a>**6%**. Is the first manager really eight times worse? Or did one</span>
-<span id="cb19-110"><a href="#cb19-110" aria-hidden="true" tabindex="-1"></a>person, for reasons that might have nothing to do with management</span>
-<span id="cb19-111"><a href="#cb19-111" aria-hidden="true" tabindex="-1"></a>quality, ask for a transfer?</span>
-<span id="cb19-112"><a href="#cb19-112" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-113"><a href="#cb19-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-114"><a href="#cb19-114" aria-hidden="true" tabindex="-1"></a>This is exactly the same arithmetic trap as Chapter 8's guest-review</span>
-<span id="cb19-115"><a href="#cb19-115" aria-hidden="true" tabindex="-1"></a>counts and Chapter 14's city complaint rates — but now the "group" with</span>
-<span id="cb19-116"><a href="#cb19-116" aria-hidden="true" tabindex="-1"></a>too little data is an *individual manager*, which is precisely the</span>
-<span id="cb19-117"><a href="#cb19-117" aria-hidden="true" tabindex="-1"></a>population most PA teams are asked to rank.</span>
-<span id="cb19-118"><a href="#cb19-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-119"><a href="#cb19-119" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-105"><a href="#cb19-105" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Every manager has been observed for the same length of time.** If</span>
+<span id="cb19-106"><a href="#cb19-106" aria-hidden="true" tabindex="-1"></a>    they haven't, a manager of eight years looks worse than a manager of</span>
+<span id="cb19-107"><a href="#cb19-107" aria-hidden="true" tabindex="-1"></a>    two for no reason other than having been watched longer, and the</span>
+<span id="cb19-108"><a href="#cb19-108" aria-hidden="true" tabindex="-1"></a>    model will read that as a difference in management.</span>
+<span id="cb19-109"><a href="#cb19-109" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Team sizes have been roughly stable.** A manager whose team has</span>
+<span id="cb19-110"><a href="#cb19-110" aria-hidden="true" tabindex="-1"></a>    doubled since most of those requests were filed has the wrong</span>
+<span id="cb19-111"><a href="#cb19-111" aria-hidden="true" tabindex="-1"></a>    denominator.</span>
+<span id="cb19-112"><a href="#cb19-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-113"><a href="#cb19-113" aria-hidden="true" tabindex="-1"></a>On real data, neither usually holds, and the fix is not difficult: use</span>
+<span id="cb19-114"><a href="#cb19-114" aria-hidden="true" tabindex="-1"></a>**person-months at risk** as the offset instead of headcount —</span>
+<span id="cb19-115"><a href="#cb19-115" aria-hidden="true" tabindex="-1"></a><span class="in">`log(group_size * months_managed)`</span> in place of <span class="in">`log(group_size)`</span>. Every</span>
+<span id="cb19-116"><a href="#cb19-116" aria-hidden="true" tabindex="-1"></a>line of code below works unchanged; only the offset changes. The</span>
+<span id="cb19-117"><a href="#cb19-117" aria-hidden="true" tabindex="-1"></a>teaching dataset doesn't carry a tenure-as-manager column, so we assume</span>
+<span id="cb19-118"><a href="#cb19-118" aria-hidden="true" tabindex="-1"></a>equal windows and stable teams and say so, rather than computing a rate</span>
+<span id="cb19-119"><a href="#cb19-119" aria-hidden="true" tabindex="-1"></a>per unit of *something* and hoping nobody asks which unit.</span>
 <span id="cb19-120"><a href="#cb19-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-121"><a href="#cb19-121" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three ways to handle it (recap)</span></span>
-<span id="cb19-122"><a href="#cb19-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-123"><a href="#cb19-123" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Complete pooling** — assume every manager has the same true rate.</span>
-<span id="cb19-124"><a href="#cb19-124" aria-hidden="true" tabindex="-1"></a>    Ignores real differences between managers.</span>
-<span id="cb19-125"><a href="#cb19-125" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**No pooling** — trust every manager's raw rate exactly as</span>
-<span id="cb19-126"><a href="#cb19-126" aria-hidden="true" tabindex="-1"></a>    calculated. Over-trusts the small teams shown above.</span>
-<span id="cb19-127"><a href="#cb19-127" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Partial pooling** — each manager gets their own estimate, pulled</span>
-<span id="cb19-128"><a href="#cb19-128" aria-hidden="true" tabindex="-1"></a>    toward the organisation-wide rate by an amount the data itself</span>
-<span id="cb19-129"><a href="#cb19-129" aria-hidden="true" tabindex="-1"></a>    decides, based on <span class="in">`group_size`</span>.</span>
+<span id="cb19-121"><a href="#cb19-121" aria-hidden="true" tabindex="-1"></a>This is the single most common way a manager league table goes wrong</span>
+<span id="cb19-122"><a href="#cb19-122" aria-hidden="true" tabindex="-1"></a>before any statistics are involved, and it is worth checking before you</span>
+<span id="cb19-123"><a href="#cb19-123" aria-hidden="true" tabindex="-1"></a>model anything: **is the denominator the same kind of thing for</span>
+<span id="cb19-124"><a href="#cb19-124" aria-hidden="true" tabindex="-1"></a>everyone?**</span>
+<span id="cb19-125"><a href="#cb19-125" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-126"><a href="#cb19-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-127"><a href="#cb19-127" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-128"><a href="#cb19-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-129"><a href="#cb19-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## The problem: a league table that misleads</span></span>
 <span id="cb19-130"><a href="#cb19-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-131"><a href="#cb19-131" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-131"><a href="#cb19-131" aria-hidden="true" tabindex="-1"></a><span class="fu">### The raw rate</span></span>
 <span id="cb19-132"><a href="#cb19-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-133"><a href="#cb19-133" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fitting the model</span></span>
+<span id="cb19-133"><a href="#cb19-133" aria-hidden="true" tabindex="-1"></a>The obvious metric is transfers **per person managed**:</span>
 <span id="cb19-134"><a href="#cb19-134" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-135"><a href="#cb19-135" aria-hidden="true" tabindex="-1"></a>This is count data with an exposure that varies hugely across</span>
-<span id="cb19-136"><a href="#cb19-136" aria-hidden="true" tabindex="-1"></a>managers — the right tool is a Poisson (or negative binomial) model</span>
-<span id="cb19-137"><a href="#cb19-137" aria-hidden="true" tabindex="-1"></a>with <span class="in">`group_size`</span> entered as an **offset**, and a varying intercept per</span>
-<span id="cb19-138"><a href="#cb19-138" aria-hidden="true" tabindex="-1"></a>manager so the model can borrow strength across all 571 of them:</span>
-<span id="cb19-139"><a href="#cb19-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-140"><a href="#cb19-140" aria-hidden="true" tabindex="-1"></a>Another log-scale intercept, so — same habit as Chapters 9 and 12 —</span>
-<span id="cb19-141"><a href="#cb19-141" aria-hidden="true" tabindex="-1"></a>translate it before trusting it:</span>
-<span id="cb19-142"><a href="#cb19-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-143"><a href="#cb19-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot-prior-shrink}</span></span>
-<span id="cb19-144"><a href="#cb19-144" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">13</span>)</span>
+<span id="cb19-135"><a href="#cb19-135" aria-hidden="true" tabindex="-1"></a><span class="in">```{r raw-rate}</span></span>
+<span id="cb19-136"><a href="#cb19-136" aria-hidden="true" tabindex="-1"></a>managers <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
+<span id="cb19-137"><a href="#cb19-137" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">raw_rate =</span> transfers <span class="sc">/</span> group_size)</span>
+<span id="cb19-138"><a href="#cb19-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-139"><a href="#cb19-139" aria-hidden="true" tabindex="-1"></a>managers <span class="sc">|&gt;</span></span>
+<span id="cb19-140"><a href="#cb19-140" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(employee_id, city, group_size, transfers, raw_rate,</span>
+<span id="cb19-141"><a href="#cb19-141" aria-hidden="true" tabindex="-1"></a>         performance_group) <span class="sc">|&gt;</span></span>
+<span id="cb19-142"><a href="#cb19-142" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(raw_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb19-143"><a href="#cb19-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span>
+<span id="cb19-144"><a href="#cb19-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb19-145"><a href="#cb19-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-146"><a href="#cb19-146" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">log_intercept =</span> <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="sc">-</span><span class="fl">2.5</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb19-147"><a href="#cb19-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate =</span> <span class="fu">exp</span>(log_intercept)) <span class="sc">|&gt;</span></span>
-<span id="cb19-148"><a href="#cb19-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rate)) <span class="sc">+</span></span>
-<span id="cb19-149"><a href="#cb19-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"#122a52"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb19-150"><a href="#cb19-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"What Normal(-2.5, 1) on the log scale implies"</span>,</span>
-<span id="cb19-151"><a href="#cb19-151" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Simulated draws from the intercept prior, translated to a per-person transfer rate"</span>,</span>
-<span id="cb19-152"><a href="#cb19-152" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Implied baseline transfer rate per team member"</span>, <span class="at">y =</span> <span class="st">"Simulated draws"</span>)</span>
-<span id="cb19-153"><a href="#cb19-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-154"><a href="#cb19-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-155"><a href="#cb19-155" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb19-156"><a href="#cb19-156" aria-hidden="true" tabindex="-1"></a>Centred around 8% (<span class="in">`exp(-2.5)`</span>), with plenty of room either side —</span>
-<span id="cb19-157"><a href="#cb19-157" aria-hidden="true" tabindex="-1"></a>a sensible starting point for a rate we haven't looked at yet, and</span>
-<span id="cb19-158"><a href="#cb19-158" aria-hidden="true" tabindex="-1"></a>nothing like a confident claim about the true organisation-wide figure.</span>
-<span id="cb19-159"><a href="#cb19-159" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-146"><a href="#cb19-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{r raw-rate-plot}</span></span>
+<span id="cb19-147"><a href="#cb19-147" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(managers, <span class="fu">aes</span>(<span class="at">x =</span> group_size, <span class="at">y =</span> raw_rate)) <span class="sc">+</span></span>
+<span id="cb19-148"><a href="#cb19-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">colour =</span> <span class="st">"#122a52"</span>) <span class="sc">+</span></span>
+<span id="cb19-149"><a href="#cb19-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">sum</span>(managers<span class="sc">$</span>transfers) <span class="sc">/</span> <span class="fu">sum</span>(managers<span class="sc">$</span>group_size),</span>
+<span id="cb19-150"><a href="#cb19-150" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
+<span id="cb19-151"><a href="#cb19-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb19-152"><a href="#cb19-152" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-153"><a href="#cb19-153" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Raw transfer rate by manager"</span>,</span>
+<span id="cb19-154"><a href="#cb19-154" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Dashed line = organisation-wide rate. Small teams scatter to extremes."</span>,</span>
+<span id="cb19-155"><a href="#cb19-155" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Group size (log scale)"</span>, <span class="at">y =</span> <span class="st">"Transfers per person managed"</span></span>
+<span id="cb19-156"><a href="#cb19-156" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-157"><a href="#cb19-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-158"><a href="#cb19-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-159"><a href="#cb19-159" aria-hidden="true" tabindex="-1"></a><span class="fu">### The five-report problem</span></span>
 <span id="cb19-160"><a href="#cb19-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-161"><a href="#cb19-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fit-shrink}</span></span>
-<span id="cb19-162"><a href="#cb19-162" aria-hidden="true" tabindex="-1"></a>fit_shrink <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
-<span id="cb19-163"><a href="#cb19-163" aria-hidden="true" tabindex="-1"></a>  transfers <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> employee_id) <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(group_size)),</span>
-<span id="cb19-164"><a href="#cb19-164" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> managers, <span class="at">family =</span> <span class="fu">poisson</span>(),</span>
-<span id="cb19-165"><a href="#cb19-165" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">c</span>(<span class="fu">prior</span>(<span class="fu">normal</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="dv">1</span>), <span class="at">class =</span> Intercept),</span>
-<span id="cb19-166"><a href="#cb19-166" aria-hidden="true" tabindex="-1"></a>            <span class="fu">prior</span>(<span class="fu">exponential</span>(<span class="dv">2</span>), <span class="at">class =</span> sd)),</span>
-<span id="cb19-167"><a href="#cb19-167" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">13</span>, <span class="at">refresh =</span> <span class="dv">0</span></span>
-<span id="cb19-168"><a href="#cb19-168" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb19-169"><a href="#cb19-169" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-170"><a href="#cb19-170" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_shrink)</span>
-<span id="cb19-171"><a href="#cb19-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-161"><a href="#cb19-161" aria-hidden="true" tabindex="-1"></a>Look at the top of that table, and at the scatter plot: the most</span>
+<span id="cb19-162"><a href="#cb19-162" aria-hidden="true" tabindex="-1"></a>alarming raw rates cluster among managers with the **smallest teams**.</span>
+<span id="cb19-163"><a href="#cb19-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-164"><a href="#cb19-164" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb19-165"><a href="#cb19-165" aria-hidden="true" tabindex="-1"></a>A manager with 3 reports and 1 transfer request has a raw rate of</span>
+<span id="cb19-166"><a href="#cb19-166" aria-hidden="true" tabindex="-1"></a>**33%** — worse than almost anyone else in the company on paper. A</span>
+<span id="cb19-167"><a href="#cb19-167" aria-hidden="true" tabindex="-1"></a>manager with 80 reports and 5 transfer requests has a raw rate of just</span>
+<span id="cb19-168"><a href="#cb19-168" aria-hidden="true" tabindex="-1"></a>**6%**. Is the first manager really eight times worse? Or did one</span>
+<span id="cb19-169"><a href="#cb19-169" aria-hidden="true" tabindex="-1"></a>person, for reasons that might have nothing to do with management</span>
+<span id="cb19-170"><a href="#cb19-170" aria-hidden="true" tabindex="-1"></a>quality, ask for a transfer?</span>
+<span id="cb19-171"><a href="#cb19-171" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb19-172"><a href="#cb19-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-173"><a href="#cb19-173" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb19-174"><a href="#cb19-174" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading this formula</span></span>
-<span id="cb19-175"><a href="#cb19-175" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-176"><a href="#cb19-176" aria-hidden="true" tabindex="-1"></a><span class="in">`transfers ~ 1 + (1 | employee_id) + offset(log(group_size))`</span> says:</span>
-<span id="cb19-177"><a href="#cb19-177" aria-hidden="true" tabindex="-1"></a>each manager's expected transfer count is their <span class="in">`group_size`</span> (the</span>
-<span id="cb19-178"><a href="#cb19-178" aria-hidden="true" tabindex="-1"></a>offset — not something we're estimating, just accounting for) times a</span>
-<span id="cb19-179"><a href="#cb19-179" aria-hidden="true" tabindex="-1"></a>rate. That rate is the organisation-wide rate (<span class="in">`1`</span>, the Intercept) plus</span>
-<span id="cb19-180"><a href="#cb19-180" aria-hidden="true" tabindex="-1"></a>a manager-specific adjustment drawn from a shared distribution</span>
-<span id="cb19-181"><a href="#cb19-181" aria-hidden="true" tabindex="-1"></a>(<span class="in">`(1 | employee_id)`</span>) — exactly the varying-intercepts idea from</span>
-<span id="cb19-182"><a href="#cb19-182" aria-hidden="true" tabindex="-1"></a>Chapter 8, just applied one manager at a time instead of one property</span>
-<span id="cb19-183"><a href="#cb19-183" aria-hidden="true" tabindex="-1"></a>at a time.</span>
-<span id="cb19-184"><a href="#cb19-184" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-185"><a href="#cb19-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-186"><a href="#cb19-186" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb19-187"><a href="#cb19-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## A different lens: this is a Bayesian version of a model you may already know</span></span>
-<span id="cb19-188"><a href="#cb19-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-189"><a href="#cb19-189" aria-hidden="true" tabindex="-1"></a>If you've fitted a **mixed-effects / random-effects model** before —</span>
-<span id="cb19-190"><a href="#cb19-190" aria-hidden="true" tabindex="-1"></a><span class="in">`lme4::lmer()`</span> or <span class="in">`glmer()`</span> in R, or their equivalents elsewhere — you've</span>
-<span id="cb19-191"><a href="#cb19-191" aria-hidden="true" tabindex="-1"></a>already used the frequentist cousin of this exact model. The</span>
-<span id="cb19-192"><a href="#cb19-192" aria-hidden="true" tabindex="-1"></a><span class="in">`(1 | employee_id)`</span> syntax is even identical. The classical version</span>
-<span id="cb19-193"><a href="#cb19-193" aria-hidden="true" tabindex="-1"></a>gives you a point estimate for each manager's random effect (a **BLUP**,</span>
-<span id="cb19-194"><a href="#cb19-194" aria-hidden="true" tabindex="-1"></a>"best linear unbiased predictor") and a standard error built on</span>
-<span id="cb19-195"><a href="#cb19-195" aria-hidden="true" tabindex="-1"></a>asymptotic approximations that get shaky for small groups — precisely</span>
-<span id="cb19-196"><a href="#cb19-196" aria-hidden="true" tabindex="-1"></a>the groups we care most about here. The Bayesian version gives every</span>
-<span id="cb19-197"><a href="#cb19-197" aria-hidden="true" tabindex="-1"></a>manager a full posterior distribution instead of a point-plus-error-bar,</span>
-<span id="cb19-198"><a href="#cb19-198" aria-hidden="true" tabindex="-1"></a>which turns out to matter exactly when a manager's team is small enough</span>
-<span id="cb19-199"><a href="#cb19-199" aria-hidden="true" tabindex="-1"></a>that "asymptotic" assumptions stop being a safe bet. Same shrinkage</span>
-<span id="cb19-200"><a href="#cb19-200" aria-hidden="true" tabindex="-1"></a>mechanism either way — the difference is what you get to say about the</span>
-<span id="cb19-201"><a href="#cb19-201" aria-hidden="true" tabindex="-1"></a>uncertainty afterward.</span>
-<span id="cb19-202"><a href="#cb19-202" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-203"><a href="#cb19-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-204"><a href="#cb19-204" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb19-205"><a href="#cb19-205" aria-hidden="true" tabindex="-1"></a><span class="fu">## Only one row per manager — does that break anything?</span></span>
-<span id="cb19-206"><a href="#cb19-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-207"><a href="#cb19-207" aria-hidden="true" tabindex="-1"></a>No. The model doesn't need *repeated* observations for each manager to</span>
-<span id="cb19-208"><a href="#cb19-208" aria-hidden="true" tabindex="-1"></a>learn from them collectively — it needs *many managers*, each</span>
-<span id="cb19-209"><a href="#cb19-209" aria-hidden="true" tabindex="-1"></a>contributing one data point of varying precision (set by</span>
-<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a><span class="in">`group_size`</span>). It's the same logic as estimating 571 baseball players'</span>
-<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>true batting averages from a single season each: no one player gives</span>
-<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a>you much, but the *pattern across all 571* tells the model how much any</span>
-<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a>one manager's raw rate should be trusted.</span>
-<span id="cb19-214"><a href="#cb19-214" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a><span class="fu">### What the group-level parameter tells you</span></span>
-<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a><span class="in">```{r sd-check}</span></span>
-<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a>sd_estimate <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit_shrink)<span class="sc">$</span>random<span class="sc">$</span>employee_id</span>
-<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a>sd_estimate</span>
-<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a><span class="in">`sd(Intercept)`</span> here is a genuine finding: it says how much managers'</span>
-<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a>*true* transfer rates actually vary, once you strip away the noise from</span>
-<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a>different team sizes. A large value says management quality (or at</span>
-<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a>least whatever drives transfer requests) varies a lot across the</span>
-<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a>organisation; a small value says most of the raw league table's spread</span>
-<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a>was noise all along.</span>
-<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-173"><a href="#cb19-173" aria-hidden="true" tabindex="-1"></a>This is exactly the same arithmetic trap as Chapter 8's guest-review</span>
+<span id="cb19-174"><a href="#cb19-174" aria-hidden="true" tabindex="-1"></a>counts and Chapter 14's city complaint rates — but now the "group" with</span>
+<span id="cb19-175"><a href="#cb19-175" aria-hidden="true" tabindex="-1"></a>too little data is an *individual manager*, which is precisely the</span>
+<span id="cb19-176"><a href="#cb19-176" aria-hidden="true" tabindex="-1"></a>population most PA teams are asked to rank.</span>
+<span id="cb19-177"><a href="#cb19-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-178"><a href="#cb19-178" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-179"><a href="#cb19-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-180"><a href="#cb19-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three ways to handle it (recap)</span></span>
+<span id="cb19-181"><a href="#cb19-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-182"><a href="#cb19-182" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Complete pooling** — assume every manager has the same true rate.</span>
+<span id="cb19-183"><a href="#cb19-183" aria-hidden="true" tabindex="-1"></a>    Ignores real differences between managers.</span>
+<span id="cb19-184"><a href="#cb19-184" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**No pooling** — trust every manager's raw rate exactly as</span>
+<span id="cb19-185"><a href="#cb19-185" aria-hidden="true" tabindex="-1"></a>    calculated. Over-trusts the small teams shown above.</span>
+<span id="cb19-186"><a href="#cb19-186" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Partial pooling** — each manager gets their own estimate, pulled</span>
+<span id="cb19-187"><a href="#cb19-187" aria-hidden="true" tabindex="-1"></a>    toward the organisation-wide rate by an amount the data itself</span>
+<span id="cb19-188"><a href="#cb19-188" aria-hidden="true" tabindex="-1"></a>    decides, based on <span class="in">`group_size`</span>.</span>
+<span id="cb19-189"><a href="#cb19-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-190"><a href="#cb19-190" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-191"><a href="#cb19-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-192"><a href="#cb19-192" aria-hidden="true" tabindex="-1"></a><span class="fu">## Fitting the model</span></span>
+<span id="cb19-193"><a href="#cb19-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-194"><a href="#cb19-194" aria-hidden="true" tabindex="-1"></a>This is count data with an exposure that varies hugely across</span>
+<span id="cb19-195"><a href="#cb19-195" aria-hidden="true" tabindex="-1"></a>managers — the right tool is a Poisson (or negative binomial) model</span>
+<span id="cb19-196"><a href="#cb19-196" aria-hidden="true" tabindex="-1"></a>with <span class="in">`group_size`</span> entered as an **offset**, and a varying intercept per</span>
+<span id="cb19-197"><a href="#cb19-197" aria-hidden="true" tabindex="-1"></a>manager so the model can borrow strength across all 571 of them:</span>
+<span id="cb19-198"><a href="#cb19-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-199"><a href="#cb19-199" aria-hidden="true" tabindex="-1"></a>Another log-scale intercept, so — same habit as Chapters 9 and 12 —</span>
+<span id="cb19-200"><a href="#cb19-200" aria-hidden="true" tabindex="-1"></a>translate it before trusting it:</span>
+<span id="cb19-201"><a href="#cb19-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-202"><a href="#cb19-202" aria-hidden="true" tabindex="-1"></a><span class="in">```{r plot-prior-shrink}</span></span>
+<span id="cb19-203"><a href="#cb19-203" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">13</span>)</span>
+<span id="cb19-204"><a href="#cb19-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-205"><a href="#cb19-205" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">log_intercept =</span> <span class="fu">rnorm</span>(<span class="dv">4000</span>, <span class="sc">-</span><span class="fl">2.5</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb19-206"><a href="#cb19-206" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate =</span> <span class="fu">exp</span>(log_intercept)) <span class="sc">|&gt;</span></span>
+<span id="cb19-207"><a href="#cb19-207" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(rate)) <span class="sc">+</span></span>
+<span id="cb19-208"><a href="#cb19-208" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"#122a52"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb19-209"><a href="#cb19-209" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"What Normal(-2.5, 1) on the log scale implies"</span>,</span>
+<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Simulated draws from the intercept prior, translated to a per-person transfer rate"</span>,</span>
+<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Implied baseline transfer rate per team member"</span>, <span class="at">y =</span> <span class="st">"Simulated draws"</span>)</span>
+<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-214"><a href="#cb19-214" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a>Centred around 8% (<span class="in">`exp(-2.5)`</span>), with plenty of room either side —</span>
+<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a>a sensible starting point for a rate we haven't looked at yet, and</span>
+<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a>nothing like a confident claim about the true organisation-wide figure.</span>
+<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a><span class="in">```{r fit-shrink}</span></span>
+<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a>fit_shrink <span class="ot">&lt;-</span> <span class="fu">brm</span>(</span>
+<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a>  transfers <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> employee_id) <span class="sc">+</span> <span class="fu">offset</span>(<span class="fu">log</span>(group_size)),</span>
+<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> managers, <span class="at">family =</span> <span class="fu">poisson</span>(),</span>
+<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">c</span>(<span class="fu">prior</span>(<span class="fu">normal</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="dv">1</span>), <span class="at">class =</span> Intercept),</span>
+<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a>            <span class="fu">prior</span>(<span class="fu">exponential</span>(<span class="dv">2</span>), <span class="at">class =</span> sd)),</span>
+<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">13</span>, <span class="at">refresh =</span> <span class="dv">0</span></span>
+<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit_shrink)</span>
+<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb19-231"><a href="#cb19-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a><span class="fu">### Diagnose, then check</span></span>
-<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a>Two steps of the workflow before any estimate leaves this model, and</span>
-<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a>they answer different questions.</span>
-<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a>**Did the sampler work?** <span class="in">`summary()`</span> above reports <span class="in">`Rhat`</span> and <span class="in">`ESS`</span> for</span>
-<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a>every parameter. This model has a group-level <span class="in">`sd`</span> estimated from many</span>
-<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a>small groups, which is the geometry Chapter 11 warns about, so it is</span>
-<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a>worth a deliberate look rather than a glance.</span>
-<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a>**Can the model produce data like ours?** A count outcome needs the</span>
-<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a>bar version of the check, as in Chapter 12:</span>
+<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reading this formula</span></span>
+<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a><span class="in">`transfers ~ 1 + (1 | employee_id) + offset(log(group_size))`</span> says:</span>
+<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a>each manager's expected transfer count is their <span class="in">`group_size`</span> (the</span>
+<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a>offset — not something we're estimating, just accounting for) times a</span>
+<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a>rate. That rate is the organisation-wide rate (<span class="in">`1`</span>, the Intercept) plus</span>
+<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a>a manager-specific adjustment drawn from a shared distribution</span>
+<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a>(<span class="in">`(1 | employee_id)`</span>) — exactly the varying-intercepts idea from</span>
+<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a>Chapter 8, just applied one manager at a time instead of one property</span>
+<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a>at a time.</span>
+<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb19-244"><a href="#cb19-244" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ppc-shrink}</span></span>
-<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fit_shrink, <span class="at">type =</span> <span class="st">"bars"</span>, <span class="at">ndraws =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
-<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior predictive check"</span>,</span>
-<span id="cb19-248"><a href="#cb19-248" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Bars = what the model predicts; points = what actually happened"</span>,</span>
-<span id="cb19-249"><a href="#cb19-249" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Transfer requests"</span>, <span class="at">y =</span> <span class="st">"Number of managers"</span>)</span>
-<span id="cb19-250"><a href="#cb19-250" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-251"><a href="#cb19-251" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-252"><a href="#cb19-252" aria-hidden="true" tabindex="-1"></a>The failure to watch for here is the one Chapter 12 named: if the</span>
-<span id="cb19-253"><a href="#cb19-253" aria-hidden="true" tabindex="-1"></a>observed counts in the right-hand tail sit above their bars, the Poisson</span>
-<span id="cb19-254"><a href="#cb19-254" aria-hidden="true" tabindex="-1"></a>is under-covering and the shrunk estimates will be too confident. The</span>
-<span id="cb19-255"><a href="#cb19-255" aria-hidden="true" tabindex="-1"></a><span class="in">`negbinomial()`</span> swap from Chapter 12 is the fix, and it changes the</span>
-<span id="cb19-256"><a href="#cb19-256" aria-hidden="true" tabindex="-1"></a>intervals rather than the ranking.</span>
-<span id="cb19-257"><a href="#cb19-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-258"><a href="#cb19-258" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb19-259"><a href="#cb19-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-260"><a href="#cb19-260" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extracting each manager's shrunk rate</span></span>
-<span id="cb19-261"><a href="#cb19-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-262"><a href="#cb19-262" aria-hidden="true" tabindex="-1"></a>To compare fairly, we ask the model for each manager's expected rate</span>
-<span id="cb19-263"><a href="#cb19-263" aria-hidden="true" tabindex="-1"></a>**per single person managed** — set <span class="in">`group_size`</span> to 1 in new data so</span>
-<span id="cb19-264"><a href="#cb19-264" aria-hidden="true" tabindex="-1"></a>the offset drops out, while keeping each manager's own fitted</span>
-<span id="cb19-265"><a href="#cb19-265" aria-hidden="true" tabindex="-1"></a>adjustment:</span>
-<span id="cb19-266"><a href="#cb19-266" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-267"><a href="#cb19-267" aria-hidden="true" tabindex="-1"></a><span class="in">```{r shrunk-rates}</span></span>
-<span id="cb19-268"><a href="#cb19-268" aria-hidden="true" tabindex="-1"></a>shrunk <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
-<span id="cb19-269"><a href="#cb19-269" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group_size =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-270"><a href="#cb19-270" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_shrink, <span class="at">re_formula =</span> <span class="cn">NULL</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-271"><a href="#cb19-271" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>) <span class="sc">|&gt;</span></span>
-<span id="cb19-272"><a href="#cb19-272" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">shrunk_rate =</span> .epred, <span class="at">lower =</span> .lower, <span class="at">upper =</span> .upper)</span>
-<span id="cb19-273"><a href="#cb19-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-274"><a href="#cb19-274" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
-<span id="cb19-275"><a href="#cb19-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(employee_id, city, group_size, transfers, raw_rate,</span>
-<span id="cb19-276"><a href="#cb19-276" aria-hidden="true" tabindex="-1"></a>         performance_group) <span class="sc">|&gt;</span></span>
-<span id="cb19-277"><a href="#cb19-277" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(shrunk <span class="sc">|&gt;</span> <span class="fu">select</span>(employee_id, shrunk_rate, lower, upper),</span>
-<span id="cb19-278"><a href="#cb19-278" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"employee_id"</span>)</span>
-<span id="cb19-279"><a href="#cb19-279" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-280"><a href="#cb19-280" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(shrunk_rate)) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">10</span>)</span>
-<span id="cb19-281"><a href="#cb19-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-282"><a href="#cb19-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-283"><a href="#cb19-283" aria-hidden="true" tabindex="-1"></a><span class="fu">### See the shrinkage</span></span>
-<span id="cb19-284"><a href="#cb19-284" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-285"><a href="#cb19-285" aria-hidden="true" tabindex="-1"></a><span class="in">```{r shrinkage-plot}</span></span>
-<span id="cb19-286"><a href="#cb19-286" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(managers_compare, <span class="fu">aes</span>(<span class="at">x =</span> group_size)) <span class="sc">+</span></span>
-<span id="cb19-287"><a href="#cb19-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">sum</span>(managers<span class="sc">$</span>transfers) <span class="sc">/</span> <span class="fu">sum</span>(managers<span class="sc">$</span>group_size),</span>
-<span id="cb19-288"><a href="#cb19-288" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
-<span id="cb19-289"><a href="#cb19-289" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> group_size, <span class="at">y =</span> raw_rate, <span class="at">yend =</span> shrunk_rate),</span>
-<span id="cb19-290"><a href="#cb19-290" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour =</span> <span class="st">"grey70"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb19-291"><a href="#cb19-291" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> raw_rate), <span class="at">colour =</span> <span class="st">"grey50"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb19-292"><a href="#cb19-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> shrunk_rate), <span class="at">colour =</span> <span class="st">"#122a52"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb19-293"><a href="#cb19-293" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb19-294"><a href="#cb19-294" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.4</span>)) <span class="sc">+</span></span>
-<span id="cb19-295"><a href="#cb19-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb19-296"><a href="#cb19-296" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Shrinkage across all 571 managers"</span>,</span>
-<span id="cb19-297"><a href="#cb19-297" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Grey = raw rate, navy = model estimate, red dashed = org-wide rate"</span>,</span>
-<span id="cb19-298"><a href="#cb19-298" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Group size (log scale)"</span>, <span class="at">y =</span> <span class="st">"Transfers per person managed"</span></span>
-<span id="cb19-299"><a href="#cb19-299" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-300"><a href="#cb19-300" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-301"><a href="#cb19-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-302"><a href="#cb19-302" aria-hidden="true" tabindex="-1"></a>Small-team managers move the furthest — often dramatically — while</span>
-<span id="cb19-303"><a href="#cb19-303" aria-hidden="true" tabindex="-1"></a>large-team managers barely move, because their own data is already</span>
-<span id="cb19-304"><a href="#cb19-304" aria-hidden="true" tabindex="-1"></a>trustworthy.</span>
-<span id="cb19-305"><a href="#cb19-305" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-306"><a href="#cb19-306" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb19-307"><a href="#cb19-307" aria-hidden="true" tabindex="-1"></a>The manager with 3 reports and a 33% raw rate is not "the worst manager</span>
-<span id="cb19-308"><a href="#cb19-308" aria-hidden="true" tabindex="-1"></a>in the company" once you shrink properly — their small-team estimate</span>
-<span id="cb19-309"><a href="#cb19-309" aria-hidden="true" tabindex="-1"></a>gets pulled hard toward the organisational average, because three</span>
-<span id="cb19-310"><a href="#cb19-310" aria-hidden="true" tabindex="-1"></a>observations tell you almost nothing on their own.</span>
+<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a><span class="fu">## A different lens: this is a Bayesian version of a model you may already know</span></span>
+<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-248"><a href="#cb19-248" aria-hidden="true" tabindex="-1"></a>If you've fitted a **mixed-effects / random-effects model** before —</span>
+<span id="cb19-249"><a href="#cb19-249" aria-hidden="true" tabindex="-1"></a><span class="in">`lme4::lmer()`</span> or <span class="in">`glmer()`</span> in R, or their equivalents elsewhere — you've</span>
+<span id="cb19-250"><a href="#cb19-250" aria-hidden="true" tabindex="-1"></a>already used the frequentist cousin of this exact model. The</span>
+<span id="cb19-251"><a href="#cb19-251" aria-hidden="true" tabindex="-1"></a><span class="in">`(1 | employee_id)`</span> syntax is even identical. The classical version</span>
+<span id="cb19-252"><a href="#cb19-252" aria-hidden="true" tabindex="-1"></a>gives you a point estimate for each manager's random effect (a **BLUP**,</span>
+<span id="cb19-253"><a href="#cb19-253" aria-hidden="true" tabindex="-1"></a>"best linear unbiased predictor") and a standard error built on</span>
+<span id="cb19-254"><a href="#cb19-254" aria-hidden="true" tabindex="-1"></a>asymptotic approximations that get shaky for small groups — precisely</span>
+<span id="cb19-255"><a href="#cb19-255" aria-hidden="true" tabindex="-1"></a>the groups we care most about here. The Bayesian version gives every</span>
+<span id="cb19-256"><a href="#cb19-256" aria-hidden="true" tabindex="-1"></a>manager a full posterior distribution instead of a point-plus-error-bar,</span>
+<span id="cb19-257"><a href="#cb19-257" aria-hidden="true" tabindex="-1"></a>which turns out to matter exactly when a manager's team is small enough</span>
+<span id="cb19-258"><a href="#cb19-258" aria-hidden="true" tabindex="-1"></a>that "asymptotic" assumptions stop being a safe bet. Same shrinkage</span>
+<span id="cb19-259"><a href="#cb19-259" aria-hidden="true" tabindex="-1"></a>mechanism either way — the difference is what you get to say about the</span>
+<span id="cb19-260"><a href="#cb19-260" aria-hidden="true" tabindex="-1"></a>uncertainty afterward.</span>
+<span id="cb19-261"><a href="#cb19-261" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-262"><a href="#cb19-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-263"><a href="#cb19-263" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb19-264"><a href="#cb19-264" aria-hidden="true" tabindex="-1"></a><span class="fu">## Only one row per manager — does that break anything?</span></span>
+<span id="cb19-265"><a href="#cb19-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-266"><a href="#cb19-266" aria-hidden="true" tabindex="-1"></a>No. The model doesn't need *repeated* observations for each manager to</span>
+<span id="cb19-267"><a href="#cb19-267" aria-hidden="true" tabindex="-1"></a>learn from them collectively — it needs *many managers*, each</span>
+<span id="cb19-268"><a href="#cb19-268" aria-hidden="true" tabindex="-1"></a>contributing one data point of varying precision (set by</span>
+<span id="cb19-269"><a href="#cb19-269" aria-hidden="true" tabindex="-1"></a><span class="in">`group_size`</span>). It's the same logic as estimating 571 baseball players'</span>
+<span id="cb19-270"><a href="#cb19-270" aria-hidden="true" tabindex="-1"></a>true batting averages from a single season each: no one player gives</span>
+<span id="cb19-271"><a href="#cb19-271" aria-hidden="true" tabindex="-1"></a>you much, but the *pattern across all 571* tells the model how much any</span>
+<span id="cb19-272"><a href="#cb19-272" aria-hidden="true" tabindex="-1"></a>one manager's raw rate should be trusted.</span>
+<span id="cb19-273"><a href="#cb19-273" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-274"><a href="#cb19-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-275"><a href="#cb19-275" aria-hidden="true" tabindex="-1"></a><span class="fu">### What the group-level parameter tells you</span></span>
+<span id="cb19-276"><a href="#cb19-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-277"><a href="#cb19-277" aria-hidden="true" tabindex="-1"></a><span class="in">```{r sd-check}</span></span>
+<span id="cb19-278"><a href="#cb19-278" aria-hidden="true" tabindex="-1"></a>sd_estimate <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit_shrink)<span class="sc">$</span>random<span class="sc">$</span>employee_id</span>
+<span id="cb19-279"><a href="#cb19-279" aria-hidden="true" tabindex="-1"></a>sd_estimate</span>
+<span id="cb19-280"><a href="#cb19-280" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-281"><a href="#cb19-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-282"><a href="#cb19-282" aria-hidden="true" tabindex="-1"></a><span class="in">`sd(Intercept)`</span> here is a genuine finding: it bounds how much managers'</span>
+<span id="cb19-283"><a href="#cb19-283" aria-hidden="true" tabindex="-1"></a>*true* transfer rates could vary — or at least, how much whatever drives</span>
+<span id="cb19-284"><a href="#cb19-284" aria-hidden="true" tabindex="-1"></a>transfer requests varies — once you strip away the noise from different</span>
+<span id="cb19-285"><a href="#cb19-285" aria-hidden="true" tabindex="-1"></a>team sizes. A large value says that whatever it is varies a lot across</span>
+<span id="cb19-286"><a href="#cb19-286" aria-hidden="true" tabindex="-1"></a>the organisation; a small value says most of the raw league table's</span>
+<span id="cb19-287"><a href="#cb19-287" aria-hidden="true" tabindex="-1"></a>spread was noise all along.</span>
+<span id="cb19-288"><a href="#cb19-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-289"><a href="#cb19-289" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb19-290"><a href="#cb19-290" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why "bounds" rather than "measures"</span></span>
+<span id="cb19-291"><a href="#cb19-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-292"><a href="#cb19-292" aria-hidden="true" tabindex="-1"></a>There is one row per manager in this data, so the manager-level term is</span>
+<span id="cb19-293"><a href="#cb19-293" aria-hidden="true" tabindex="-1"></a>also an **observation-level** random effect: there is exactly one</span>
+<span id="cb19-294"><a href="#cb19-294" aria-hidden="true" tabindex="-1"></a>observation inside each group. Mathematically that makes it</span>
+<span id="cb19-295"><a href="#cb19-295" aria-hidden="true" tabindex="-1"></a>indistinguishable from an overdispersion term — a parameter that mops up</span>
+<span id="cb19-296"><a href="#cb19-296" aria-hidden="true" tabindex="-1"></a>any spread the Poisson alone cannot produce, whatever its source.</span>
+<span id="cb19-297"><a href="#cb19-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-298"><a href="#cb19-298" aria-hidden="true" tabindex="-1"></a>So <span class="in">`sd(Intercept)`</span> here is an upper bound on genuine between-manager</span>
+<span id="cb19-299"><a href="#cb19-299" aria-hidden="true" tabindex="-1"></a>variation rather than a clean isolation of it. Real differences between</span>
+<span id="cb19-300"><a href="#cb19-300" aria-hidden="true" tabindex="-1"></a>managers are in there; so is anything else that makes the counts more</span>
+<span id="cb19-301"><a href="#cb19-301" aria-hidden="true" tabindex="-1"></a>spread out than Poisson expects, from team composition to how</span>
+<span id="cb19-302"><a href="#cb19-302" aria-hidden="true" tabindex="-1"></a>consistently requests get logged.</span>
+<span id="cb19-303"><a href="#cb19-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-304"><a href="#cb19-304" aria-hidden="true" tabindex="-1"></a>None of this touches the shrinkage or the ranking, which is what the</span>
+<span id="cb19-305"><a href="#cb19-305" aria-hidden="true" tabindex="-1"></a>chapter is about — the estimates still move by exactly as much as each</span>
+<span id="cb19-306"><a href="#cb19-306" aria-hidden="true" tabindex="-1"></a>manager's evidence warrants. It does mean that if you want to quote the</span>
+<span id="cb19-307"><a href="#cb19-307" aria-hidden="true" tabindex="-1"></a>between-manager spread as a *number*, you need repeated observations per</span>
+<span id="cb19-308"><a href="#cb19-308" aria-hidden="true" tabindex="-1"></a>manager (several quarters, say), so the model can tell manager-level</span>
+<span id="cb19-309"><a href="#cb19-309" aria-hidden="true" tabindex="-1"></a>variation apart from period-to-period noise. With one row each, the</span>
+<span id="cb19-310"><a href="#cb19-310" aria-hidden="true" tabindex="-1"></a>honest sentence is "at most this much".</span>
 <span id="cb19-311"><a href="#cb19-311" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb19-312"><a href="#cb19-312" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-313"><a href="#cb19-313" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
 <span id="cb19-314"><a href="#cb19-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-315"><a href="#cb19-315" aria-hidden="true" tabindex="-1"></a><span class="fu">## Does the shrunk ranking agree with the official rating?</span></span>
+<span id="cb19-315"><a href="#cb19-315" aria-hidden="true" tabindex="-1"></a><span class="fu">### Diagnose, then check</span></span>
 <span id="cb19-316"><a href="#cb19-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-317"><a href="#cb19-317" aria-hidden="true" tabindex="-1"></a><span class="in">`managers`</span> also has a <span class="in">`performance_group`</span> label (Bottom / Middle / Top</span>
-<span id="cb19-318"><a href="#cb19-318" aria-hidden="true" tabindex="-1"></a>performer) from an actual review process. A useful sanity check: where</span>
-<span id="cb19-319"><a href="#cb19-319" aria-hidden="true" tabindex="-1"></a>does the shrunk transfer-rate ranking disagree with that rating, and is</span>
-<span id="cb19-320"><a href="#cb19-320" aria-hidden="true" tabindex="-1"></a>disagreement more common for small-team managers?</span>
-<span id="cb19-321"><a href="#cb19-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-322"><a href="#cb19-322" aria-hidden="true" tabindex="-1"></a><span class="in">```{r vs-performance-group}</span></span>
-<span id="cb19-323"><a href="#cb19-323" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span></span>
-<span id="cb19-324"><a href="#cb19-324" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(performance_group) <span class="sc">|&gt;</span></span>
-<span id="cb19-325"><a href="#cb19-325" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb19-326"><a href="#cb19-326" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb19-327"><a href="#cb19-327" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_raw =</span> <span class="fu">mean</span>(raw_rate),</span>
-<span id="cb19-328"><a href="#cb19-328" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_shrunk =</span> <span class="fu">mean</span>(shrunk_rate),</span>
-<span id="cb19-329"><a href="#cb19-329" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_group_size =</span> <span class="fu">mean</span>(group_size)</span>
-<span id="cb19-330"><a href="#cb19-330" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-331"><a href="#cb19-331" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-332"><a href="#cb19-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-333"><a href="#cb19-333" aria-hidden="true" tabindex="-1"></a><span class="in">```{r disagreement-plot}</span></span>
-<span id="cb19-334"><a href="#cb19-334" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span></span>
-<span id="cb19-335"><a href="#cb19-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gap =</span> <span class="fu">abs</span>(raw_rate <span class="sc">-</span> shrunk_rate)) <span class="sc">|&gt;</span></span>
-<span id="cb19-336"><a href="#cb19-336" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> group_size, <span class="at">y =</span> gap, <span class="at">colour =</span> performance_group)) <span class="sc">+</span></span>
-<span id="cb19-337"><a href="#cb19-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb19-338"><a href="#cb19-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb19-339"><a href="#cb19-339" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb19-340"><a href="#cb19-340" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Raw vs. shrunk gap, by team size and performance rating"</span>,</span>
-<span id="cb19-341"><a href="#cb19-341" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The gap that shrinkage corrects is concentrated among small teams"</span>,</span>
-<span id="cb19-342"><a href="#cb19-342" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Group size (log scale)"</span>, <span class="at">y =</span> <span class="st">"|raw rate − shrunk rate|"</span>,</span>
-<span id="cb19-343"><a href="#cb19-343" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Performance rating"</span></span>
-<span id="cb19-344"><a href="#cb19-344" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb19-345"><a href="#cb19-345" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-346"><a href="#cb19-346" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-347"><a href="#cb19-347" aria-hidden="true" tabindex="-1"></a>::: callout-caution</span>
-<span id="cb19-348"><a href="#cb19-348" aria-hidden="true" tabindex="-1"></a><span class="fu">## Try it yourself</span></span>
+<span id="cb19-317"><a href="#cb19-317" aria-hidden="true" tabindex="-1"></a>Two steps of the workflow before any estimate leaves this model, and</span>
+<span id="cb19-318"><a href="#cb19-318" aria-hidden="true" tabindex="-1"></a>they answer different questions.</span>
+<span id="cb19-319"><a href="#cb19-319" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-320"><a href="#cb19-320" aria-hidden="true" tabindex="-1"></a>**Did the sampler work?** <span class="in">`summary()`</span> above reports <span class="in">`Rhat`</span> and <span class="in">`ESS`</span> for</span>
+<span id="cb19-321"><a href="#cb19-321" aria-hidden="true" tabindex="-1"></a>every parameter. This model has a group-level <span class="in">`sd`</span> estimated from many</span>
+<span id="cb19-322"><a href="#cb19-322" aria-hidden="true" tabindex="-1"></a>small groups, which is the geometry Chapter 11 warns about, so it is</span>
+<span id="cb19-323"><a href="#cb19-323" aria-hidden="true" tabindex="-1"></a>worth a deliberate look rather than a glance.</span>
+<span id="cb19-324"><a href="#cb19-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-325"><a href="#cb19-325" aria-hidden="true" tabindex="-1"></a>**Can the model produce data like ours?** A count outcome needs the</span>
+<span id="cb19-326"><a href="#cb19-326" aria-hidden="true" tabindex="-1"></a>bar version of the check, as in Chapter 12:</span>
+<span id="cb19-327"><a href="#cb19-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-328"><a href="#cb19-328" aria-hidden="true" tabindex="-1"></a><span class="in">```{r ppc-shrink}</span></span>
+<span id="cb19-329"><a href="#cb19-329" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(fit_shrink, <span class="at">type =</span> <span class="st">"bars"</span>, <span class="at">ndraws =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb19-330"><a href="#cb19-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Posterior predictive check"</span>,</span>
+<span id="cb19-331"><a href="#cb19-331" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Bars = what the model predicts; points = what actually happened"</span>,</span>
+<span id="cb19-332"><a href="#cb19-332" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Transfer requests"</span>, <span class="at">y =</span> <span class="st">"Number of managers"</span>)</span>
+<span id="cb19-333"><a href="#cb19-333" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-334"><a href="#cb19-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-335"><a href="#cb19-335" aria-hidden="true" tabindex="-1"></a>The failure to watch for here is the one Chapter 12 named: if the</span>
+<span id="cb19-336"><a href="#cb19-336" aria-hidden="true" tabindex="-1"></a>observed counts in the right-hand tail sit above their bars, the Poisson</span>
+<span id="cb19-337"><a href="#cb19-337" aria-hidden="true" tabindex="-1"></a>is under-covering and the shrunk estimates will be too confident. The</span>
+<span id="cb19-338"><a href="#cb19-338" aria-hidden="true" tabindex="-1"></a><span class="in">`negbinomial()`</span> swap from Chapter 12 is the fix, and it changes the</span>
+<span id="cb19-339"><a href="#cb19-339" aria-hidden="true" tabindex="-1"></a>intervals rather than the ranking.</span>
+<span id="cb19-340"><a href="#cb19-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-341"><a href="#cb19-341" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-342"><a href="#cb19-342" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-343"><a href="#cb19-343" aria-hidden="true" tabindex="-1"></a><span class="fu">## Extracting each manager's shrunk rate</span></span>
+<span id="cb19-344"><a href="#cb19-344" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-345"><a href="#cb19-345" aria-hidden="true" tabindex="-1"></a>To compare fairly, we ask the model for each manager's expected rate</span>
+<span id="cb19-346"><a href="#cb19-346" aria-hidden="true" tabindex="-1"></a>**per single person managed** — set <span class="in">`group_size`</span> to 1 in new data so</span>
+<span id="cb19-347"><a href="#cb19-347" aria-hidden="true" tabindex="-1"></a>the offset drops out, while keeping each manager's own fitted</span>
+<span id="cb19-348"><a href="#cb19-348" aria-hidden="true" tabindex="-1"></a>adjustment:</span>
 <span id="cb19-349"><a href="#cb19-349" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-350"><a href="#cb19-350" aria-hidden="true" tabindex="-1"></a>Filter to managers where the raw rate would have put them in the</span>
-<span id="cb19-351"><a href="#cb19-351" aria-hidden="true" tabindex="-1"></a>"worst 10%" of the league table, but the shrunk rate does not. How many</span>
-<span id="cb19-352"><a href="#cb19-352" aria-hidden="true" tabindex="-1"></a>are there, and what does their <span class="in">`performance_group`</span> say? This is</span>
-<span id="cb19-353"><a href="#cb19-353" aria-hidden="true" tabindex="-1"></a>precisely the group a naive league table would have unfairly flagged.</span>
-<span id="cb19-354"><a href="#cb19-354" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-355"><a href="#cb19-355" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-356"><a href="#cb19-356" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb19-357"><a href="#cb19-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-358"><a href="#cb19-358" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
-<span id="cb19-359"><a href="#cb19-359" aria-hidden="true" tabindex="-1"></a><span class="fu">## For the ML/DS crowd</span></span>
-<span id="cb19-360"><a href="#cb19-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-361"><a href="#cb19-361" aria-hidden="true" tabindex="-1"></a>This exact problem — stabilising an estimate for an entity with too</span>
-<span id="cb19-362"><a href="#cb19-362" aria-hidden="true" tabindex="-1"></a>little of its own data, by borrowing strength from everyone else's — is</span>
-<span id="cb19-363"><a href="#cb19-363" aria-hidden="true" tabindex="-1"></a>also how production recommender systems handle new or low-activity</span>
-<span id="cb19-364"><a href="#cb19-364" aria-hidden="true" tabindex="-1"></a>users and items. A user with two ratings gets their predicted</span>
-<span id="cb19-365"><a href="#cb19-365" aria-hidden="true" tabindex="-1"></a>preferences shrunk toward the population average; one with two thousand</span>
-<span id="cb19-366"><a href="#cb19-366" aria-hidden="true" tabindex="-1"></a>ratings is trusted almost entirely on their own history. It's the same</span>
-<span id="cb19-367"><a href="#cb19-367" aria-hidden="true" tabindex="-1"></a>partial-pooling logic as this chapter, usually fitted with matrix</span>
-<span id="cb19-368"><a href="#cb19-368" aria-hidden="true" tabindex="-1"></a>factorisation and a regularisation term rather than <span class="in">`brms`</span>, but solving</span>
-<span id="cb19-369"><a href="#cb19-369" aria-hidden="true" tabindex="-1"></a>an identical problem: don't let sparse data pretend to be confident.</span>
-<span id="cb19-370"><a href="#cb19-370" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-371"><a href="#cb19-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-372"><a href="#cb19-372" aria-hidden="true" tabindex="-1"></a><span class="fu">## Presenting this to a business audience that wants a league table anyway</span></span>
-<span id="cb19-373"><a href="#cb19-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-374"><a href="#cb19-374" aria-hidden="true" tabindex="-1"></a>Stakeholders often want exactly the artefact this chapter argues</span>
-<span id="cb19-375"><a href="#cb19-375" aria-hidden="true" tabindex="-1"></a>against: a ranked list. You don't have to refuse — you have to change</span>
-<span id="cb19-376"><a href="#cb19-376" aria-hidden="true" tabindex="-1"></a>*what the list shows*.</span>
-<span id="cb19-377"><a href="#cb19-377" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-378"><a href="#cb19-378" aria-hidden="true" tabindex="-1"></a>The deeper fix is to change what the list is *for*. A ranking invites</span>
-<span id="cb19-379"><a href="#cb19-379" aria-hidden="true" tabindex="-1"></a>the question "who is worst?"; a decision invites "who should we act on,</span>
-<span id="cb19-380"><a href="#cb19-380" aria-hidden="true" tabindex="-1"></a>and is acting worth it?" Chapter 24 takes these same posteriors and</span>
-<span id="cb19-381"><a href="#cb19-381" aria-hidden="true" tabindex="-1"></a>answers the second question, including the uncomfortable part — how</span>
-<span id="cb19-382"><a href="#cb19-382" aria-hidden="true" tabindex="-1"></a>many of the managers you pick will turn out to have been the wrong</span>
-<span id="cb19-383"><a href="#cb19-383" aria-hidden="true" tabindex="-1"></a>choice.</span>
+<span id="cb19-350"><a href="#cb19-350" aria-hidden="true" tabindex="-1"></a><span class="in">```{r shrunk-rates}</span></span>
+<span id="cb19-351"><a href="#cb19-351" aria-hidden="true" tabindex="-1"></a>shrunk <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
+<span id="cb19-352"><a href="#cb19-352" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">group_size =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-353"><a href="#cb19-353" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_shrink, <span class="at">re_formula =</span> <span class="cn">NULL</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-354"><a href="#cb19-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean_qi</span>(.epred, <span class="at">.width =</span> <span class="fl">0.95</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-355"><a href="#cb19-355" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">shrunk_rate =</span> .epred, <span class="at">lower =</span> .lower, <span class="at">upper =</span> .upper)</span>
+<span id="cb19-356"><a href="#cb19-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-357"><a href="#cb19-357" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="ot">&lt;-</span> managers <span class="sc">|&gt;</span></span>
+<span id="cb19-358"><a href="#cb19-358" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(employee_id, city, group_size, transfers, raw_rate,</span>
+<span id="cb19-359"><a href="#cb19-359" aria-hidden="true" tabindex="-1"></a>         performance_group) <span class="sc">|&gt;</span></span>
+<span id="cb19-360"><a href="#cb19-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(shrunk <span class="sc">|&gt;</span> <span class="fu">select</span>(employee_id, shrunk_rate, lower, upper),</span>
+<span id="cb19-361"><a href="#cb19-361" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="st">"employee_id"</span>)</span>
+<span id="cb19-362"><a href="#cb19-362" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-363"><a href="#cb19-363" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(shrunk_rate)) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">10</span>)</span>
+<span id="cb19-364"><a href="#cb19-364" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-365"><a href="#cb19-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-366"><a href="#cb19-366" aria-hidden="true" tabindex="-1"></a><span class="fu">### See the shrinkage</span></span>
+<span id="cb19-367"><a href="#cb19-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-368"><a href="#cb19-368" aria-hidden="true" tabindex="-1"></a><span class="in">```{r shrinkage-plot}</span></span>
+<span id="cb19-369"><a href="#cb19-369" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(managers_compare, <span class="fu">aes</span>(<span class="at">x =</span> group_size)) <span class="sc">+</span></span>
+<span id="cb19-370"><a href="#cb19-370" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">sum</span>(managers<span class="sc">$</span>transfers) <span class="sc">/</span> <span class="fu">sum</span>(managers<span class="sc">$</span>group_size),</span>
+<span id="cb19-371"><a href="#cb19-371" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"#d32f2f"</span>) <span class="sc">+</span></span>
+<span id="cb19-372"><a href="#cb19-372" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> group_size, <span class="at">y =</span> raw_rate, <span class="at">yend =</span> shrunk_rate),</span>
+<span id="cb19-373"><a href="#cb19-373" aria-hidden="true" tabindex="-1"></a>               <span class="at">colour =</span> <span class="st">"grey70"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb19-374"><a href="#cb19-374" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> raw_rate), <span class="at">colour =</span> <span class="st">"grey50"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb19-375"><a href="#cb19-375" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> shrunk_rate), <span class="at">colour =</span> <span class="st">"#122a52"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb19-376"><a href="#cb19-376" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb19-377"><a href="#cb19-377" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.4</span>)) <span class="sc">+</span></span>
+<span id="cb19-378"><a href="#cb19-378" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-379"><a href="#cb19-379" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Shrinkage across all 571 managers"</span>,</span>
+<span id="cb19-380"><a href="#cb19-380" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Grey = raw rate, navy = model estimate, red dashed = org-wide rate"</span>,</span>
+<span id="cb19-381"><a href="#cb19-381" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Group size (log scale)"</span>, <span class="at">y =</span> <span class="st">"Transfers per person managed"</span></span>
+<span id="cb19-382"><a href="#cb19-382" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-383"><a href="#cb19-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb19-384"><a href="#cb19-384" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-385"><a href="#cb19-385" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb19-386"><a href="#cb19-386" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three practical fixes for the deck</span></span>
-<span id="cb19-387"><a href="#cb19-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-388"><a href="#cb19-388" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Show the credible interval, not just a point estimate.** A</span>
-<span id="cb19-389"><a href="#cb19-389" aria-hidden="true" tabindex="-1"></a>    manager whose 95% interval overlaps ten other managers' intervals</span>
-<span id="cb19-390"><a href="#cb19-390" aria-hidden="true" tabindex="-1"></a>    is not meaningfully different from them — say so, rather than</span>
-<span id="cb19-391"><a href="#cb19-391" aria-hidden="true" tabindex="-1"></a>    presenting rank 14 as distinct from rank 24.</span>
-<span id="cb19-392"><a href="#cb19-392" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Report team size alongside the rank.** "Rank 3 of 571 (team of</span>
-<span id="cb19-393"><a href="#cb19-393" aria-hidden="true" tabindex="-1"></a>    6)" reads very differently from "Rank 3 of 571 (team of 84)" —</span>
-<span id="cb19-394"><a href="#cb19-394" aria-hidden="true" tabindex="-1"></a>    let the audience see the input to their own scepticism.</span>
-<span id="cb19-395"><a href="#cb19-395" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Group into tiers, not individual ranks.** "Clearly above</span>
-<span id="cb19-396"><a href="#cb19-396" aria-hidden="true" tabindex="-1"></a>    organisational average," "not distinguishable from average,"</span>
-<span id="cb19-397"><a href="#cb19-397" aria-hidden="true" tabindex="-1"></a>    "clearly below average" — based on whether the credible interval</span>
-<span id="cb19-398"><a href="#cb19-398" aria-hidden="true" tabindex="-1"></a>    excludes the organisation-wide rate — resists the false precision</span>
-<span id="cb19-399"><a href="#cb19-399" aria-hidden="true" tabindex="-1"></a>    of rank 47 vs. rank 48.</span>
-<span id="cb19-400"><a href="#cb19-400" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-401"><a href="#cb19-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-402"><a href="#cb19-402" aria-hidden="true" tabindex="-1"></a><span class="in">```{r tiering}</span></span>
-<span id="cb19-403"><a href="#cb19-403" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span></span>
-<span id="cb19-404"><a href="#cb19-404" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb19-405"><a href="#cb19-405" aria-hidden="true" tabindex="-1"></a>    <span class="at">org_rate =</span> <span class="fu">sum</span>(managers<span class="sc">$</span>transfers) <span class="sc">/</span> <span class="fu">sum</span>(managers<span class="sc">$</span>group_size),</span>
-<span id="cb19-406"><a href="#cb19-406" aria-hidden="true" tabindex="-1"></a>    <span class="at">tier =</span> <span class="fu">case_when</span>(</span>
-<span id="cb19-407"><a href="#cb19-407" aria-hidden="true" tabindex="-1"></a>      lower <span class="sc">&gt;</span> org_rate <span class="sc">~</span> <span class="st">"Clearly above average"</span>,</span>
-<span id="cb19-408"><a href="#cb19-408" aria-hidden="true" tabindex="-1"></a>      upper <span class="sc">&lt;</span> org_rate <span class="sc">~</span> <span class="st">"Clearly below average"</span>,</span>
-<span id="cb19-409"><a href="#cb19-409" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Not distinguishable from average"</span></span>
-<span id="cb19-410"><a href="#cb19-410" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb19-411"><a href="#cb19-411" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb19-412"><a href="#cb19-412" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(tier)</span>
-<span id="cb19-413"><a href="#cb19-413" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb19-414"><a href="#cb19-414" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-415"><a href="#cb19-415" aria-hidden="true" tabindex="-1"></a>This single table is usually the most useful thing you can hand a</span>
-<span id="cb19-416"><a href="#cb19-416" aria-hidden="true" tabindex="-1"></a>senior stakeholder: most managers, once you're honest about</span>
-<span id="cb19-417"><a href="#cb19-417" aria-hidden="true" tabindex="-1"></a>uncertainty, are **not distinguishable from average** — and that's a</span>
-<span id="cb19-418"><a href="#cb19-418" aria-hidden="true" tabindex="-1"></a>finding, not a disappointment.</span>
-<span id="cb19-419"><a href="#cb19-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-420"><a href="#cb19-420" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb19-421"><a href="#cb19-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-422"><a href="#cb19-422" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
-<span id="cb19-423"><a href="#cb19-423" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-424"><a href="#cb19-424" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
-<span id="cb19-425"><a href="#cb19-425" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
-<span id="cb19-426"><a href="#cb19-426" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-427"><a href="#cb19-427" aria-hidden="true" tabindex="-1"></a>Any time you're asked to rank people-metrics across managers, teams,</span>
-<span id="cb19-428"><a href="#cb19-428" aria-hidden="true" tabindex="-1"></a>stores, or offices of different sizes — attrition, engagement,</span>
-<span id="cb19-429"><a href="#cb19-429" aria-hidden="true" tabindex="-1"></a>complaints, absence, sales per head — this chapter's approach applies</span>
-<span id="cb19-430"><a href="#cb19-430" aria-hidden="true" tabindex="-1"></a>directly. Publishing the raw league table is the single most common</span>
-<span id="cb19-431"><a href="#cb19-431" aria-hidden="true" tabindex="-1"></a>statistical mistake in People Analytics reporting, and it's an easy one</span>
-<span id="cb19-432"><a href="#cb19-432" aria-hidden="true" tabindex="-1"></a>to fix once you know to look for it: check whether the extremes cluster</span>
-<span id="cb19-433"><a href="#cb19-433" aria-hidden="true" tabindex="-1"></a>among the smallest groups. If they do, shrink before you share.</span>
-<span id="cb19-434"><a href="#cb19-434" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-435"><a href="#cb19-435" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-436"><a href="#cb19-436" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
-<span id="cb19-437"><a href="#cb19-437" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-438"><a href="#cb19-438" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
-<span id="cb19-439"><a href="#cb19-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-440"><a href="#cb19-440" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb19-441"><a href="#cb19-441" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
-<span id="cb19-442"><a href="#cb19-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-443"><a href="#cb19-443" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Raw per-manager rates are least trustworthy exactly where team size</span>
-<span id="cb19-444"><a href="#cb19-444" aria-hidden="true" tabindex="-1"></a>    is smallest — and those are usually the ones that end up at the</span>
-<span id="cb19-445"><a href="#cb19-445" aria-hidden="true" tabindex="-1"></a>    extremes of a league table.</span>
-<span id="cb19-446"><a href="#cb19-446" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>A Poisson model with <span class="in">`group_size`</span> as an **offset** and a varying</span>
-<span id="cb19-447"><a href="#cb19-447" aria-hidden="true" tabindex="-1"></a>    intercept per manager lets you partially pool rates across an</span>
-<span id="cb19-448"><a href="#cb19-448" aria-hidden="true" tabindex="-1"></a>    entire population of managers, even with one row per manager.</span>
-<span id="cb19-449"><a href="#cb19-449" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Shrinkage** pulls small-team managers' rates toward the</span>
-<span id="cb19-450"><a href="#cb19-450" aria-hidden="true" tabindex="-1"></a>    organisation-wide average, by an amount the model — not you —</span>
-<span id="cb19-451"><a href="#cb19-451" aria-hidden="true" tabindex="-1"></a>    decides.</span>
-<span id="cb19-452"><a href="#cb19-452" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Comparing shrunk estimates to an existing performance rating is a</span>
-<span id="cb19-453"><a href="#cb19-453" aria-hidden="true" tabindex="-1"></a>    useful sanity check, and often reveals that small-team managers</span>
-<span id="cb19-454"><a href="#cb19-454" aria-hidden="true" tabindex="-1"></a>    were being mis-ranked.</span>
-<span id="cb19-455"><a href="#cb19-455" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>You can still hand over a league table — just report **uncertainty</span>
-<span id="cb19-456"><a href="#cb19-456" aria-hidden="true" tabindex="-1"></a>    and team size alongside rank**, or replace individual ranks with</span>
-<span id="cb19-457"><a href="#cb19-457" aria-hidden="true" tabindex="-1"></a>    tiers.</span>
-<span id="cb19-458"><a href="#cb19-458" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb19-459"><a href="#cb19-459" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-460"><a href="#cb19-460" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
-<span id="cb19-461"><a href="#cb19-461" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-462"><a href="#cb19-462" aria-hidden="true" tabindex="-1"></a>**Hierarchical models for pay and variance** — we take the same</span>
-<span id="cb19-463"><a href="#cb19-463" aria-hidden="true" tabindex="-1"></a>partial-pooling machinery and point it at a different, equally</span>
-<span id="cb19-464"><a href="#cb19-464" aria-hidden="true" tabindex="-1"></a>sensitive question: how much pay variation actually sits at the level,</span>
-<span id="cb19-465"><a href="#cb19-465" aria-hidden="true" tabindex="-1"></a>function, or location layer, versus being individual noise?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb19-385"><a href="#cb19-385" aria-hidden="true" tabindex="-1"></a>Small-team managers move the furthest — often dramatically — while</span>
+<span id="cb19-386"><a href="#cb19-386" aria-hidden="true" tabindex="-1"></a>large-team managers barely move, because their own data is already</span>
+<span id="cb19-387"><a href="#cb19-387" aria-hidden="true" tabindex="-1"></a>trustworthy.</span>
+<span id="cb19-388"><a href="#cb19-388" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-389"><a href="#cb19-389" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb19-390"><a href="#cb19-390" aria-hidden="true" tabindex="-1"></a>The manager with 3 reports and a 33% raw rate is not "the worst manager</span>
+<span id="cb19-391"><a href="#cb19-391" aria-hidden="true" tabindex="-1"></a>in the company" once you shrink properly — their small-team estimate</span>
+<span id="cb19-392"><a href="#cb19-392" aria-hidden="true" tabindex="-1"></a>gets pulled hard toward the organisational average, because three</span>
+<span id="cb19-393"><a href="#cb19-393" aria-hidden="true" tabindex="-1"></a>observations tell you almost nothing on their own.</span>
+<span id="cb19-394"><a href="#cb19-394" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-395"><a href="#cb19-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-396"><a href="#cb19-396" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-397"><a href="#cb19-397" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-398"><a href="#cb19-398" aria-hidden="true" tabindex="-1"></a><span class="fu">## Does the shrunk ranking agree with the official rating?</span></span>
+<span id="cb19-399"><a href="#cb19-399" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-400"><a href="#cb19-400" aria-hidden="true" tabindex="-1"></a><span class="in">`managers`</span> also has a <span class="in">`performance_group`</span> label (Bottom / Middle / Top</span>
+<span id="cb19-401"><a href="#cb19-401" aria-hidden="true" tabindex="-1"></a>performer) from an actual review process. A useful sanity check: where</span>
+<span id="cb19-402"><a href="#cb19-402" aria-hidden="true" tabindex="-1"></a>does the shrunk transfer-rate ranking disagree with that rating, and is</span>
+<span id="cb19-403"><a href="#cb19-403" aria-hidden="true" tabindex="-1"></a>disagreement more common for small-team managers?</span>
+<span id="cb19-404"><a href="#cb19-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-405"><a href="#cb19-405" aria-hidden="true" tabindex="-1"></a><span class="in">```{r vs-performance-group}</span></span>
+<span id="cb19-406"><a href="#cb19-406" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span></span>
+<span id="cb19-407"><a href="#cb19-407" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(performance_group) <span class="sc">|&gt;</span></span>
+<span id="cb19-408"><a href="#cb19-408" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb19-409"><a href="#cb19-409" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb19-410"><a href="#cb19-410" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_raw =</span> <span class="fu">mean</span>(raw_rate),</span>
+<span id="cb19-411"><a href="#cb19-411" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_shrunk =</span> <span class="fu">mean</span>(shrunk_rate),</span>
+<span id="cb19-412"><a href="#cb19-412" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_group_size =</span> <span class="fu">mean</span>(group_size)</span>
+<span id="cb19-413"><a href="#cb19-413" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-414"><a href="#cb19-414" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-415"><a href="#cb19-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-416"><a href="#cb19-416" aria-hidden="true" tabindex="-1"></a><span class="in">```{r disagreement-plot}</span></span>
+<span id="cb19-417"><a href="#cb19-417" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span></span>
+<span id="cb19-418"><a href="#cb19-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gap =</span> <span class="fu">abs</span>(raw_rate <span class="sc">-</span> shrunk_rate)) <span class="sc">|&gt;</span></span>
+<span id="cb19-419"><a href="#cb19-419" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> group_size, <span class="at">y =</span> gap, <span class="at">colour =</span> performance_group)) <span class="sc">+</span></span>
+<span id="cb19-420"><a href="#cb19-420" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb19-421"><a href="#cb19-421" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb19-422"><a href="#cb19-422" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-423"><a href="#cb19-423" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Raw vs. shrunk gap, by team size and performance rating"</span>,</span>
+<span id="cb19-424"><a href="#cb19-424" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The gap that shrinkage corrects is concentrated among small teams"</span>,</span>
+<span id="cb19-425"><a href="#cb19-425" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Group size (log scale)"</span>, <span class="at">y =</span> <span class="st">"|raw rate − shrunk rate|"</span>,</span>
+<span id="cb19-426"><a href="#cb19-426" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Performance rating"</span></span>
+<span id="cb19-427"><a href="#cb19-427" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-428"><a href="#cb19-428" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-429"><a href="#cb19-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-430"><a href="#cb19-430" aria-hidden="true" tabindex="-1"></a>::: callout-caution</span>
+<span id="cb19-431"><a href="#cb19-431" aria-hidden="true" tabindex="-1"></a><span class="fu">## Try it yourself</span></span>
+<span id="cb19-432"><a href="#cb19-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-433"><a href="#cb19-433" aria-hidden="true" tabindex="-1"></a>Filter to managers where the raw rate would have put them in the</span>
+<span id="cb19-434"><a href="#cb19-434" aria-hidden="true" tabindex="-1"></a>"worst 10%" of the league table, but the shrunk rate does not. How many</span>
+<span id="cb19-435"><a href="#cb19-435" aria-hidden="true" tabindex="-1"></a>are there, and what does their <span class="in">`performance_group`</span> say? This is</span>
+<span id="cb19-436"><a href="#cb19-436" aria-hidden="true" tabindex="-1"></a>precisely the group a naive league table would have unfairly flagged.</span>
+<span id="cb19-437"><a href="#cb19-437" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-438"><a href="#cb19-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-439"><a href="#cb19-439" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-440"><a href="#cb19-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-441"><a href="#cb19-441" aria-hidden="true" tabindex="-1"></a>::: callout-tip</span>
+<span id="cb19-442"><a href="#cb19-442" aria-hidden="true" tabindex="-1"></a><span class="fu">## For the ML/DS crowd</span></span>
+<span id="cb19-443"><a href="#cb19-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-444"><a href="#cb19-444" aria-hidden="true" tabindex="-1"></a>This exact problem — stabilising an estimate for an entity with too</span>
+<span id="cb19-445"><a href="#cb19-445" aria-hidden="true" tabindex="-1"></a>little of its own data, by borrowing strength from everyone else's — is</span>
+<span id="cb19-446"><a href="#cb19-446" aria-hidden="true" tabindex="-1"></a>also how production recommender systems handle new or low-activity</span>
+<span id="cb19-447"><a href="#cb19-447" aria-hidden="true" tabindex="-1"></a>users and items. A user with two ratings gets their predicted</span>
+<span id="cb19-448"><a href="#cb19-448" aria-hidden="true" tabindex="-1"></a>preferences shrunk toward the population average; one with two thousand</span>
+<span id="cb19-449"><a href="#cb19-449" aria-hidden="true" tabindex="-1"></a>ratings is trusted almost entirely on their own history. It's the same</span>
+<span id="cb19-450"><a href="#cb19-450" aria-hidden="true" tabindex="-1"></a>partial-pooling logic as this chapter, usually fitted with matrix</span>
+<span id="cb19-451"><a href="#cb19-451" aria-hidden="true" tabindex="-1"></a>factorisation and a regularisation term rather than <span class="in">`brms`</span>, but solving</span>
+<span id="cb19-452"><a href="#cb19-452" aria-hidden="true" tabindex="-1"></a>an identical problem: don't let sparse data pretend to be confident.</span>
+<span id="cb19-453"><a href="#cb19-453" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-454"><a href="#cb19-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-455"><a href="#cb19-455" aria-hidden="true" tabindex="-1"></a><span class="fu">## Presenting this to a business audience that wants a league table anyway</span></span>
+<span id="cb19-456"><a href="#cb19-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-457"><a href="#cb19-457" aria-hidden="true" tabindex="-1"></a>Stakeholders often want exactly the artefact this chapter argues</span>
+<span id="cb19-458"><a href="#cb19-458" aria-hidden="true" tabindex="-1"></a>against: a ranked list. You don't have to refuse — you have to change</span>
+<span id="cb19-459"><a href="#cb19-459" aria-hidden="true" tabindex="-1"></a>*what the list shows*.</span>
+<span id="cb19-460"><a href="#cb19-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-461"><a href="#cb19-461" aria-hidden="true" tabindex="-1"></a>The deeper fix is to change what the list is *for*. A ranking invites</span>
+<span id="cb19-462"><a href="#cb19-462" aria-hidden="true" tabindex="-1"></a>the question "who is worst?"; a decision invites "who should we act on,</span>
+<span id="cb19-463"><a href="#cb19-463" aria-hidden="true" tabindex="-1"></a>and is acting worth it?" Chapter 24 takes these same posteriors and</span>
+<span id="cb19-464"><a href="#cb19-464" aria-hidden="true" tabindex="-1"></a>answers the second question, including the uncomfortable part — how</span>
+<span id="cb19-465"><a href="#cb19-465" aria-hidden="true" tabindex="-1"></a>many of the managers you pick will turn out to have been the wrong</span>
+<span id="cb19-466"><a href="#cb19-466" aria-hidden="true" tabindex="-1"></a>choice.</span>
+<span id="cb19-467"><a href="#cb19-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-468"><a href="#cb19-468" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb19-469"><a href="#cb19-469" aria-hidden="true" tabindex="-1"></a><span class="fu">## Three practical fixes for the deck</span></span>
+<span id="cb19-470"><a href="#cb19-470" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-471"><a href="#cb19-471" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>**Show the credible interval, not just a point estimate.** A</span>
+<span id="cb19-472"><a href="#cb19-472" aria-hidden="true" tabindex="-1"></a>    manager whose 95% interval overlaps ten other managers' intervals</span>
+<span id="cb19-473"><a href="#cb19-473" aria-hidden="true" tabindex="-1"></a>    is not meaningfully different from them — say so, rather than</span>
+<span id="cb19-474"><a href="#cb19-474" aria-hidden="true" tabindex="-1"></a>    presenting rank 14 as distinct from rank 24.</span>
+<span id="cb19-475"><a href="#cb19-475" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>**Report team size alongside the rank.** "Rank 3 of 571 (team of</span>
+<span id="cb19-476"><a href="#cb19-476" aria-hidden="true" tabindex="-1"></a>    6)" reads very differently from "Rank 3 of 571 (team of 84)" —</span>
+<span id="cb19-477"><a href="#cb19-477" aria-hidden="true" tabindex="-1"></a>    let the audience see the input to their own scepticism.</span>
+<span id="cb19-478"><a href="#cb19-478" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Group into tiers, not individual ranks.** "Clearly above</span>
+<span id="cb19-479"><a href="#cb19-479" aria-hidden="true" tabindex="-1"></a>    organisational average," "not distinguishable from average,"</span>
+<span id="cb19-480"><a href="#cb19-480" aria-hidden="true" tabindex="-1"></a>    "clearly below average" — based on whether the credible interval</span>
+<span id="cb19-481"><a href="#cb19-481" aria-hidden="true" tabindex="-1"></a>    excludes the organisation-wide rate — resists the false precision</span>
+<span id="cb19-482"><a href="#cb19-482" aria-hidden="true" tabindex="-1"></a>    of rank 47 vs. rank 48.</span>
+<span id="cb19-483"><a href="#cb19-483" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-484"><a href="#cb19-484" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-485"><a href="#cb19-485" aria-hidden="true" tabindex="-1"></a><span class="in">```{r tiering}</span></span>
+<span id="cb19-486"><a href="#cb19-486" aria-hidden="true" tabindex="-1"></a>managers_compare <span class="sc">|&gt;</span></span>
+<span id="cb19-487"><a href="#cb19-487" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-488"><a href="#cb19-488" aria-hidden="true" tabindex="-1"></a>    <span class="at">org_rate =</span> <span class="fu">sum</span>(managers<span class="sc">$</span>transfers) <span class="sc">/</span> <span class="fu">sum</span>(managers<span class="sc">$</span>group_size),</span>
+<span id="cb19-489"><a href="#cb19-489" aria-hidden="true" tabindex="-1"></a>    <span class="at">tier =</span> <span class="fu">case_when</span>(</span>
+<span id="cb19-490"><a href="#cb19-490" aria-hidden="true" tabindex="-1"></a>      lower <span class="sc">&gt;</span> org_rate <span class="sc">~</span> <span class="st">"Clearly above average"</span>,</span>
+<span id="cb19-491"><a href="#cb19-491" aria-hidden="true" tabindex="-1"></a>      upper <span class="sc">&lt;</span> org_rate <span class="sc">~</span> <span class="st">"Clearly below average"</span>,</span>
+<span id="cb19-492"><a href="#cb19-492" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Not distinguishable from average"</span></span>
+<span id="cb19-493"><a href="#cb19-493" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-494"><a href="#cb19-494" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb19-495"><a href="#cb19-495" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(tier)</span>
+<span id="cb19-496"><a href="#cb19-496" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb19-497"><a href="#cb19-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-498"><a href="#cb19-498" aria-hidden="true" tabindex="-1"></a>This single table is usually the most useful thing you can hand a</span>
+<span id="cb19-499"><a href="#cb19-499" aria-hidden="true" tabindex="-1"></a>senior stakeholder: most managers, once you're honest about</span>
+<span id="cb19-500"><a href="#cb19-500" aria-hidden="true" tabindex="-1"></a>uncertainty, are **not distinguishable from average** — and that's a</span>
+<span id="cb19-501"><a href="#cb19-501" aria-hidden="true" tabindex="-1"></a>finding, not a disappointment.</span>
+<span id="cb19-502"><a href="#cb19-502" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-503"><a href="#cb19-503" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-504"><a href="#cb19-504" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-505"><a href="#cb19-505" aria-hidden="true" tabindex="-1"></a><span class="fu">## On the job {.unnumbered}</span></span>
+<span id="cb19-506"><a href="#cb19-506" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-507"><a href="#cb19-507" aria-hidden="true" tabindex="-1"></a>::: callout-important</span>
+<span id="cb19-508"><a href="#cb19-508" aria-hidden="true" tabindex="-1"></a><span class="fu">## Why this matters day to day</span></span>
+<span id="cb19-509"><a href="#cb19-509" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-510"><a href="#cb19-510" aria-hidden="true" tabindex="-1"></a>Any time you're asked to rank people-metrics across managers, teams,</span>
+<span id="cb19-511"><a href="#cb19-511" aria-hidden="true" tabindex="-1"></a>stores, or offices of different sizes — attrition, engagement,</span>
+<span id="cb19-512"><a href="#cb19-512" aria-hidden="true" tabindex="-1"></a>complaints, absence, sales per head — this chapter's approach applies</span>
+<span id="cb19-513"><a href="#cb19-513" aria-hidden="true" tabindex="-1"></a>directly. Publishing the raw league table is the single most common</span>
+<span id="cb19-514"><a href="#cb19-514" aria-hidden="true" tabindex="-1"></a>statistical mistake in People Analytics reporting, and it's an easy one</span>
+<span id="cb19-515"><a href="#cb19-515" aria-hidden="true" tabindex="-1"></a>to fix once you know to look for it: check whether the extremes cluster</span>
+<span id="cb19-516"><a href="#cb19-516" aria-hidden="true" tabindex="-1"></a>among the smallest groups. If they do, shrink before you share.</span>
+<span id="cb19-517"><a href="#cb19-517" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-518"><a href="#cb19-518" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-519"><a href="#cb19-519" aria-hidden="true" tabindex="-1"></a>------------------------------------------------------------------------</span>
+<span id="cb19-520"><a href="#cb19-520" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-521"><a href="#cb19-521" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary {.unnumbered}</span></span>
+<span id="cb19-522"><a href="#cb19-522" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-523"><a href="#cb19-523" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb19-524"><a href="#cb19-524" aria-hidden="true" tabindex="-1"></a><span class="fu">## Today you learned</span></span>
+<span id="cb19-525"><a href="#cb19-525" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-526"><a href="#cb19-526" aria-hidden="true" tabindex="-1"></a><span class="ss">1.  </span>Raw per-manager rates are least trustworthy exactly where team size</span>
+<span id="cb19-527"><a href="#cb19-527" aria-hidden="true" tabindex="-1"></a>    is smallest — and those are usually the ones that end up at the</span>
+<span id="cb19-528"><a href="#cb19-528" aria-hidden="true" tabindex="-1"></a>    extremes of a league table.</span>
+<span id="cb19-529"><a href="#cb19-529" aria-hidden="true" tabindex="-1"></a><span class="ss">2.  </span>A Poisson model with <span class="in">`group_size`</span> as an **offset** and a varying</span>
+<span id="cb19-530"><a href="#cb19-530" aria-hidden="true" tabindex="-1"></a>    intercept per manager lets you partially pool rates across an</span>
+<span id="cb19-531"><a href="#cb19-531" aria-hidden="true" tabindex="-1"></a>    entire population of managers, even with one row per manager.</span>
+<span id="cb19-532"><a href="#cb19-532" aria-hidden="true" tabindex="-1"></a><span class="ss">3.  </span>**Shrinkage** pulls small-team managers' rates toward the</span>
+<span id="cb19-533"><a href="#cb19-533" aria-hidden="true" tabindex="-1"></a>    organisation-wide average, by an amount the model — not you —</span>
+<span id="cb19-534"><a href="#cb19-534" aria-hidden="true" tabindex="-1"></a>    decides.</span>
+<span id="cb19-535"><a href="#cb19-535" aria-hidden="true" tabindex="-1"></a><span class="ss">4.  </span>Comparing shrunk estimates to an existing performance rating is a</span>
+<span id="cb19-536"><a href="#cb19-536" aria-hidden="true" tabindex="-1"></a>    useful sanity check, and often reveals that small-team managers</span>
+<span id="cb19-537"><a href="#cb19-537" aria-hidden="true" tabindex="-1"></a>    were being mis-ranked.</span>
+<span id="cb19-538"><a href="#cb19-538" aria-hidden="true" tabindex="-1"></a><span class="ss">5.  </span>You can still hand over a league table — just report **uncertainty</span>
+<span id="cb19-539"><a href="#cb19-539" aria-hidden="true" tabindex="-1"></a>    and team size alongside rank**, or replace individual ranks with</span>
+<span id="cb19-540"><a href="#cb19-540" aria-hidden="true" tabindex="-1"></a>    tiers.</span>
+<span id="cb19-541"><a href="#cb19-541" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb19-542"><a href="#cb19-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-543"><a href="#cb19-543" aria-hidden="true" tabindex="-1"></a><span class="fu">## Next chapter {.unnumbered}</span></span>
+<span id="cb19-544"><a href="#cb19-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-545"><a href="#cb19-545" aria-hidden="true" tabindex="-1"></a>**Hierarchical models for pay and variance** — we take the same</span>
+<span id="cb19-546"><a href="#cb19-546" aria-hidden="true" tabindex="-1"></a>partial-pooling machinery and point it at a different, equally</span>
+<span id="cb19-547"><a href="#cb19-547" aria-hidden="true" tabindex="-1"></a>sensitive question: how much pay variation actually sits at the level,</span>
+<span id="cb19-548"><a href="#cb19-548" aria-hidden="true" tabindex="-1"></a>function, or location layer, versus being individual noise?</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
@@ -1932,8 +2060,8 @@ Important
 <p>Bayesian Thinking for People Analytics</p>
 </div>   
     <div class="nav-footer-center">
-      &nbsp;
-    </div>
+<p>© 2026 Andrew Marritt · Text <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> · Code MIT</p>
+</div>
     <div class="nav-footer-right">
 <p>Built with <a href="https://quarto.org">Quarto</a></p>
 </div>
